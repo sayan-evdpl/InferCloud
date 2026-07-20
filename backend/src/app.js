@@ -1,0 +1,30 @@
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import { rateLimiter } from "./middlewares/rateLimiter.js";
+
+const app = express();
+
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "*",
+    methods: ["PUT", "PATCH", "DELETE", "GET", "POST", "QUERY", "OPTIONS"],
+    credentials: true,
+  }),
+);
+
+app.use(express.static("../public"));
+
+app.use(express.json({ limit: "16kb" }));
+
+app.use(express.urlencoded({ limit: "16kb", extended: true }));
+
+app.use(cookieParser());
+
+import healthRoute from "./routes/health.routes.js";
+import gpuRoute from "./routes/gpu.routes.js";
+
+app.use("/api/v1", healthRoute);
+app.use("/api/v1/gpus", rateLimiter(60, 60000), gpuRoute);
+
+export default app;

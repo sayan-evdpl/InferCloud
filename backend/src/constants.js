@@ -1,0 +1,1 @@
+export const db_name = process.env.DB_NAME || "mydatabase";
