@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 import DockNavbar from "./components/DockNavbar";
 import HeroSection from "./components/HeroSection";
 import SearchOverlay from "./components/SearchOverlay";

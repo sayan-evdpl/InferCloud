@@ -44,9 +44,8 @@ export default function DetailModal({ item, onClose }) {
     const uniqueProvidersCount = new Set(allOffers.map(o => o.provider.toLowerCase())).size;
     const cheapestOffer = secureOffers.length > 0 ? secureOffers[0] : (allOffers.length > 0 ? allOffers[0] : null);
     const cheapestProvider = cheapestOffer ? cheapestOffer.provider : "";
-    const sourceDomain = cheapestOffer && cheapestOffer.sourceUrl !== "#"
-      ? new URL(cheapestOffer.sourceUrl).hostname.replace("www.", "")
-      : "gpurentalprices.com";
+    
+    const sourceDomain = cheapestOffer ? (cheapestOffer.sourceDomain || "gpurentalprices.com") : "gpurentalprices.com";
 
     const verifiedDate = item.verifiedDate || new Date().toISOString().split("T")[0];
 
@@ -204,7 +203,7 @@ export default function DetailModal({ item, onClose }) {
   }
 
   // Render dynamic comparison logic with all three ways
-  const renderIntegrationComparison = () => {
+  function renderIntegrationComparison() {
     if (item.category === "local") {
       const annualPowerAndMaint = 25000;
       const wsCost = item.priceMin || 300000;
@@ -347,7 +346,7 @@ export default function DetailModal({ item, onClose }) {
     );
   };
 
-  const renderExternalSpecsSection = () => {
+  function renderExternalSpecsSection() {
     if (loadingSpecs) {
       return (
         <div style={{ marginTop: 24, padding: 16, border: "1px solid var(--colors-hairline)", borderRadius: 8, background: "var(--colors-surface-soft)", textAlign: "center" }}>
