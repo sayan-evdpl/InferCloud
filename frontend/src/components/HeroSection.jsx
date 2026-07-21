@@ -81,6 +81,7 @@ export default function HeroSection({ onSearchOpen }) {
           </div>
 
           <div
+            id="telemetry-card"
             className="product-mockup-card-dark panel-entrance"
             style={{
               padding: 32,

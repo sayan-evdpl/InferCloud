@@ -62,3 +62,11 @@ export const getBandwidthData = async () => {
 export const getExternalSpecs = async (name) => {
   return requestWithCache("/external-specs", { name });
 };
+
+export const sendChatMessage = async (messages, token) => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const { data } = await axios.post(`${backendUrl}/api/v1/chat`, { messages }, { headers });
+  return data.data;
+};
+
