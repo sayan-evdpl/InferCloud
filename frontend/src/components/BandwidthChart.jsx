@@ -42,7 +42,7 @@ export default function BandwidthChart() {
   }
 
   return (
-    <div className="chart-container" style={{ background: "var(--colors-canvas)", border: "1px solid var(--colors-hairline)" }}>
+    <div id="bandwidth-chart" className="chart-container" style={{ background: "var(--colors-canvas)", border: "1px solid var(--colors-hairline)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>
           <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 6 }}>Memory Bandwidth Capacity</h3>

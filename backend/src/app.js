@@ -23,8 +23,10 @@ app.use(cookieParser());
 
 import healthRoute from "./routes/health.routes.js";
 import gpuRoute from "./routes/gpu.routes.js";
+import chatRoute from "./routes/chat.routes.js";
 
 app.use("/api/v1", healthRoute);
 app.use("/api/v1/gpus", rateLimiter(60, 60000), gpuRoute);
+app.use("/api/v1/chat", rateLimiter(60, 60000), chatRoute);
 
 export default app;

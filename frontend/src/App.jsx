@@ -11,6 +11,7 @@ import TcoAnalysis from "./components/TcoAnalysis";
 import StrategicDirectives from "./components/StrategicDirectives";
 import DetailModal from "./components/DetailModal";
 import CompareModal from "./components/CompareModal";
+import ChatWidget from "./components/ChatWidget";
 import "./index.css";
 
 function SiliconLandscape() {
@@ -110,7 +111,7 @@ function Footer() {
           *
         </div>
         <p style={{ fontSize: 14, color: "var(--colors-on-dark)", fontFamily: "var(--font-sans)", fontWeight: 500 }}>
-          Silicon Scale
+          GPU Scout
         </p>
         <p style={{ fontSize: 12, color: "var(--colors-on-dark-soft)", marginTop: 8 }}>
           Powered by GSAP & Recharts · Claude Warm Editorial Design System
@@ -225,6 +226,8 @@ export default function App() {
           onClose={() => setCompareOpen(false)}
         />
       )}
+
+      <ChatWidget searchOpen={searchOpen} />
     </>
   );
 }

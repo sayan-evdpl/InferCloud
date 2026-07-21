@@ -201,7 +201,7 @@ const getExternalSpecsFallback = (name) => {
   };
 };
 
-const scrapeTechPowerUp = async (name) => {
+export const scrapeTechPowerUp = async (name) => {
   try {
     const searchUrl = `https://www.techpowerup.com/gpu-specs/?q=${encodeURIComponent(name)}`;
     const res = await fetch(searchUrl, {
