@@ -140,6 +140,7 @@ export default function DeploymentTabs({ onSelectCard, compareList, onToggleComp
                 {/* Search Bar for Local GPUs */}
                 <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap", alignItems: "center" }}>
                   <input
+                    id="procurement-search"
                     type="search"
                     placeholder="Search any physical GPU (e.g. RTX 3080, GTX 1080)..."
                     value={localSearch}
