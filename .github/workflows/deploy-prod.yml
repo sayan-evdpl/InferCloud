@@ -1,9 +1,11 @@
 name: Deploy Production
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Release
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -19,6 +21,7 @@ env:
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Build & Deploy Production
     runs-on: ubuntu-latest
 
@@ -26,11 +29,45 @@ jobs:
       name: Production
 
     steps:
+      ##################################################
+      # Checkout Released Commit
+      ##################################################
+
       - name: Checkout Repository
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      ##################################################
+      # Fetch Git Tags
+      ##################################################
+
+      - name: Fetch Tags
+        run: |
+          git fetch --force --tags
+
+      ##################################################
+      # Get Latest Release Version
+      ##################################################
+
+      - name: Get Release Version
+        id: version
+        run: |
+          VERSION=$(git describe --tags --abbrev=0)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      ##################################################
+      # Setup Docker Buildx
+      ##################################################
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
+
+      ##################################################
+      # Login to Docker Hub
+      ##################################################
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -38,13 +75,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Generate Version
-        id: version
-        run: |
-          echo "VERSION=${GITHUB_SHA::7}" >> $GITHUB_ENV
-
       ##################################################
-      # Backend
+      # Build & Push Backend
       ##################################################
 
       - name: Build and Push Backend
@@ -60,7 +92,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       ##################################################
-      # Frontend
+      # Build & Push Frontend
       ##################################################
 
       - name: Build and Push Frontend
@@ -94,7 +126,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: gpuscoutbackend
-          images: ${{ env.BACKEND_IMAGE }}:latest
+          images: ${{ env.BACKEND_IMAGE }}:${{ env.VERSION }}
 
       ##################################################
       # Deploy Frontend
@@ -104,7 +136,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: gpuscoutfrontend
-          images: ${{ env.FRONTEND_IMAGE }}:latest
+          images: ${{ env.FRONTEND_IMAGE }}:${{ env.VERSION }}
 
       ##################################################
       # Deployment Summary
@@ -113,6 +145,15 @@ jobs:
       - name: Deployment Summary
         run: |
           echo "🚀 Production Deployment Successful"
-          echo "Backend Image : ${{ env.BACKEND_IMAGE }}:latest"
-          echo "Frontend Image: ${{ env.FRONTEND_IMAGE }}:latest"
-          echo "Version       : ${{ env.VERSION }}"
+          echo ""
+          echo "Release Version : ${{ env.VERSION }}"
+          echo "Backend Image   : ${{ env.BACKEND_IMAGE }}:${{ env.VERSION }}"
+          echo "Frontend Image  : ${{ env.FRONTEND_IMAGE }}:${{ env.VERSION }}"
+          echo ""
+          echo "Docker Tags:"
+          echo "  - latest"
+          echo "  - ${{ env.VERSION }}"
+          echo ""
+          echo "Azure Apps:"
+          echo "  - Backend : gpuscoutbackend"
+          echo "  - Frontend: gpuscoutfrontend"
