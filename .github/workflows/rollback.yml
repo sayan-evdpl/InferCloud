@@ -1,0 +1,80 @@
+name: Rollback Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Docker image tag to deploy (example: v1.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rollback-production
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  BACKEND_IMAGE: codeit09/gpuscoutbackend
+  FRONTEND_IMAGE: codeit09/gpuscoutfrontend
+
+jobs:
+  rollback:
+    name: Rollback Production
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Production
+
+    steps:
+      ##################################################
+      # Azure Login
+      ##################################################
+
+      - name: Azure Login
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      ##################################################
+      # Rollback Backend
+      ##################################################
+
+      - name: Rollback Backend
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: gpuscoutbackend
+          images: ${{ env.BACKEND_IMAGE }}:${{ github.event.inputs.version }}
+
+      ##################################################
+      # Rollback Frontend
+      ##################################################
+
+      - name: Rollback Frontend
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: gpuscoutfrontend
+          images: ${{ env.FRONTEND_IMAGE }}:${{ github.event.inputs.version }}
+
+      ##################################################
+      # Summary
+      ##################################################
+
+      - name: Rollback Summary
+        run: |
+          echo "======================================"
+          echo "Production Rollback Complete"
+          echo "======================================"
+          echo "Version : ${{ github.event.inputs.version }}"
+          echo ""
+          echo "Backend:"
+          echo "${{ env.BACKEND_IMAGE }}:${{ github.event.inputs.version }}"
+          echo ""
+          echo "Frontend:"
+          echo "${{ env.FRONTEND_IMAGE }}:${{ github.event.inputs.version }}"
+          echo ""
+          echo "Azure Apps:"
+          echo "Backend  : gpuscoutbackend"
+          echo "Frontend : gpuscoutfrontend"
