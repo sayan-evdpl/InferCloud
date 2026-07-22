@@ -164,29 +164,71 @@ Be the cognitive backbone of this platform:
 
 Keep your tone professional, concise, and technically authoritative.`;
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
-    systemInstruction,
-    tools
-  });
+  const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash"];
 
-  // Map messages to Gemini's format
-  // Roles in Gemini must alternate user -> model -> user -> model.
-  const chatHistory = messages.map(msg => {
-    return {
-      role: msg.role === "assistant" ? "model" : "user",
-      parts: [{ text: msg.content }]
-    };
-  });
+  const getWorkingModel = (modelName) => {
+    return genAI.getGenerativeModel({
+      model: modelName,
+      systemInstruction,
+      tools
+    });
+  };
+
+  let model = getWorkingModel(FALLBACK_MODELS[0]);
+
+  // Map messages to Gemini's format. Roles must strictly alternate: user -> model -> user -> model.
+  const chatHistory = [];
+  for (const msg of messages) {
+    if (!msg || typeof msg.content !== "string" || !msg.content.trim()) continue;
+    const role = msg.role === "assistant" ? "model" : "user";
+    
+    // Skip leading model messages until we find the first user message
+    if (chatHistory.length === 0 && role !== "user") continue;
+    
+    // Merge consecutive messages with the same role
+    if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === role) {
+      chatHistory[chatHistory.length - 1].parts[0].text += "\n" + msg.content;
+    } else {
+      chatHistory.push({
+        role,
+        parts: [{ text: msg.content }]
+      });
+    }
+  }
+
+  if (chatHistory.length === 0) {
+    throw new ApiError(400, "No valid user message found in conversation.");
+  }
+
+  const safeGenerate = async (history) => {
+    let lastErr = null;
+    for (const mName of FALLBACK_MODELS) {
+      try {
+        const m = getWorkingModel(mName);
+        return await m.generateContent({ contents: history });
+      } catch (err) {
+        lastErr = err;
+        const isQuotaOrTransient = err.status === 429 || err.status === 503 || 
+          err.message?.includes("429") || err.message?.includes("503") || 
+          err.message?.includes("Quota exceeded") || err.message?.includes("unavailable");
+        if (isQuotaOrTransient) {
+          console.warn(`Model ${mName} hit transient error (${err.message?.split('\n')[0]}), trying fallback model...`);
+          continue;
+        }
+        throw err;
+      }
+    }
+    throw lastErr;
+  };
 
   try {
-    let response = await model.generateContent({ contents: chatHistory });
+    let response = await safeGenerate(chatHistory);
     let responseText = "";
 
     // Process potential tool calls in a loop (up to a depth of 5 calls)
     let depth = 0;
     while (depth < 5) {
-      const functionCalls = response.response.functionCalls;
+      const functionCalls = response.response.functionCalls();
       if (!functionCalls || functionCalls.length === 0) {
         responseText = response.response.text();
         break;
@@ -195,33 +237,45 @@ Keep your tone professional, concise, and technically authoritative.`;
       // Handle function calls
       const toolResults = [];
       for (const call of functionCalls) {
-        const resultData = await executeTool(call.name, call.args);
+        let resultData;
+        try {
+          resultData = await executeTool(call.name, call.args);
+        } catch (err) {
+          resultData = { error: err.message };
+        }
+        const fnResponse = {
+          name: call.name,
+          response: { result: resultData }
+        };
+        if (call.id) {
+          fnResponse.id = call.id;
+        }
         toolResults.push({
-          functionResponse: {
-            name: call.name,
-            response: { result: resultData }
-          }
+          functionResponse: fnResponse
         });
       }
 
-      // Append user's original message history, the model's tool calls response, and then the tool results
-      // Then generate content again
-      chatHistory.push({
-        role: "model",
-        parts: functionCalls.map(call => ({
-          functionCall: {
-            name: call.name,
-            args: call.args
-          }
-        }))
-      });
+      // Append model's complete candidate content turn and the user's tool results turn to history
+      if (response.response.candidates && response.response.candidates[0]) {
+        chatHistory.push(response.response.candidates[0].content);
+      } else {
+        chatHistory.push({
+          role: "model",
+          parts: functionCalls.map(call => ({
+            functionCall: {
+              name: call.name,
+              args: call.args
+            }
+          }))
+        });
+      }
 
       chatHistory.push({
         role: "user",
         parts: toolResults
       });
 
-      response = await model.generateContent({ contents: chatHistory });
+      response = await safeGenerate(chatHistory);
       depth++;
     }
 
