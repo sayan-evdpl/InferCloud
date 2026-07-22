@@ -25,7 +25,7 @@ export default function ChatWidget({ searchOpen }) {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(() => localStorage.getItem("flash_token"));
+  const [token, setToken] = useState(() => localStorage.getItem("flash_token") || "flashonn");
 
   // Positioning states: "docked" | "telemetry" | "procurement" | "graph" | "overlay"
   const [botState, setBotState] = useState("docked");
@@ -352,11 +352,13 @@ export default function ChatWidget({ searchOpen }) {
       const response = await sendChatMessage(newMessages, "flashonn");
       setMessages([...newMessages, { role: "assistant", content: response.text }]);
     } catch (err) {
+      console.error("ChatWidget send error:", err);
+      const serverMessage = err.response?.data?.message || err.message;
       setMessages([
         ...newMessages,
         {
           role: "assistant",
-          content: "Sorry, I encountered an error communicating with Gemini. Make sure `GEMINI_API_KEY` is configured in your `.env` file.",
+          content: `Sorry, I encountered an error communicating with the backend: **${serverMessage}**. Please make sure the backend server is running on port 3000.`,
         },
       ]);
     } finally {
