@@ -157,7 +157,7 @@ export default function TcoAnalysis() {
             )}
           </div>
 
-          <div className="responsive-tco-chart">
+          <div id="tco-graph" className="responsive-tco-chart">
             {loading ? (
               <div style={{ height: 350, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--colors-muted)", fontFamily: "var(--font-sans)", fontSize: 13 }}>
                 Calculating economic paths...

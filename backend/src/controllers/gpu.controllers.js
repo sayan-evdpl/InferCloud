@@ -71,6 +71,15 @@ const groupOffersByGpu = (offers) => {
       };
     }
 
+    let sourceDomain = "gpurentalprices.com";
+    if (offer.source_url && offer.source_url !== "#") {
+      try {
+        sourceDomain = new URL(offer.source_url).hostname.replace("www.", "");
+      } catch (err) {
+        // Fallback
+      }
+    }
+
     groups[gpuKey].offers.push({
       variant: offer.gpu.toUpperCase(),
       provider: offer.provider.charAt(0).toUpperCase() + offer.provider.slice(1),
@@ -78,6 +87,7 @@ const groupOffersByGpu = (offers) => {
       usdHr: offer.usd_hr,
       kind: offer.kind || "secure",
       sourceUrl: offer.source_url || "#",
+      sourceDomain,
       fetchedAt: offer.fetched_at || new Date().toISOString()
     });
 
@@ -191,7 +201,7 @@ const getExternalSpecsFallback = (name) => {
   };
 };
 
-const scrapeTechPowerUp = async (name) => {
+export const scrapeTechPowerUp = async (name) => {
   try {
     const searchUrl = `https://www.techpowerup.com/gpu-specs/?q=${encodeURIComponent(name)}`;
     const res = await fetch(searchUrl, {
