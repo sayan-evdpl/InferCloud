@@ -20,12 +20,12 @@ export default function ChatWidget({ searchOpen }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hello! I am **Flash**, your AI infrastructure architect. Ask me anything about GPU specifications, TCO economics, live cloud rates, or what hardware fits your workload best!",
+      content: "Hello! Flash is currently locked. Please enter the password to unlock AI assistance.",
     },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(() => localStorage.getItem("flash_token") || "flashonn");
+  const [token, setToken] = useState(null);
 
   // Positioning states: "docked" | "telemetry" | "procurement" | "graph" | "overlay"
   const [botState, setBotState] = useState("docked");
@@ -309,11 +309,10 @@ export default function ChatWidget({ searchOpen }) {
     // Intercept activation command
     if (text.trim().toLowerCase() === "flashonn") {
       setToken("flashonn");
-      localStorage.setItem("flash_token", "flashonn");
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        { role: "assistant", content: "Flash has been successfully activated. How can I help you today?" }
+        { role: "assistant", content: "Flash has been successfully activated! How can I help you today with GPU specs, cloud rates, or TCO economics?" }
       ];
       setMessages(newMsgList);
       return;
@@ -322,11 +321,10 @@ export default function ChatWidget({ searchOpen }) {
     // Intercept deactivation command
     if (text.trim().toLowerCase() === "flashoff") {
       setToken(null);
-      localStorage.removeItem("flash_token");
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        { role: "assistant", content: "Flash has been deactivated." }
+        { role: "assistant", content: "Flash has been locked. Please enter the password to unlock again." }
       ];
       setMessages(newMsgList);
       return;
@@ -337,7 +335,7 @@ export default function ChatWidget({ searchOpen }) {
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        { role: "assistant", content: "Flash is currently offline." }
+        { role: "assistant", content: "Flash is currently locked. Please enter the password to unlock." }
       ];
       setMessages(newMsgList);
       return;
@@ -349,7 +347,7 @@ export default function ChatWidget({ searchOpen }) {
 
     try {
       // Send message history along with Bearer token
-      const response = await sendChatMessage(newMessages, "flashonn");
+      const response = await sendChatMessage(newMessages, token);
       setMessages([...newMessages, { role: "assistant", content: response.text }]);
     } catch (err) {
       console.error("ChatWidget send error:", err);
@@ -774,11 +772,11 @@ export default function ChatWidget({ searchOpen }) {
                     fontFamily: "var(--font-mono)",
                     fontSize: 11,
                     fontWeight: 600,
-                    color: "var(--colors-ink)",
+                    color: token === "flashonn" ? "var(--colors-ink)" : "var(--colors-muted)",
                     letterSpacing: "0.05em",
                   }}
                 >
-                  FLASH // ONLINE
+                  {token === "flashonn" ? "FLASH // ACTIVE ⚡" : "FLASH // LOCKED 🔒"}
                 </span>
               </div>
               <button
@@ -913,7 +911,7 @@ export default function ChatWidget({ searchOpen }) {
             >
               <input
                 type="text"
-                placeholder="Ask Flash..."
+                placeholder={token === "flashonn" ? "Ask Flash..." : "Please enter password to unlock..."}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
