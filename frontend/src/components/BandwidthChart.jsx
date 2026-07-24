@@ -6,18 +6,18 @@ const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div style={{
-      background: "var(--colors-surface-dark)",
-      border: "1px solid rgba(255,255,255,0.08)",
-      borderRadius: 8,
-      padding: "14px 18px",
-      fontFamily: "var(--font-sans)",
-      boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-    }}>
-      <div style={{ fontWeight: 600, fontSize: 13, color: "var(--colors-on-dark)", marginBottom: 4 }}>{d.fullName}</div>
-      <div style={{ fontSize: 11, color: "var(--colors-on-dark-soft)", marginBottom: 8 }}>ARCH: {d.arch} · {d.gpuClass}</div>
-      <div style={{ fontSize: 16, fontWeight: 700, color: "var(--colors-primary)" }}>{d.bandwidth} TB/s</div>
-      <div style={{ fontSize: 11, color: "var(--colors-on-dark-soft)", marginTop: 4 }}>Memory: {d.vramGb} GB VRAM</div>
+    <div
+      className="card-paper-white"
+      style={{
+        padding: "12px 16px",
+        borderRadius: "12px",
+        boxShadow: "var(--shadow-subtle-3)",
+      }}
+    >
+      <div style={{ fontWeight: 700, fontSize: 15, color: "var(--color-ink-black)", marginBottom: 2 }}>{d.fullName}</div>
+      <div className="caption-text" style={{ marginBottom: 6 }}>ARCH: {d.arch} · {d.gpuClass}</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: "var(--color-electric-violet)" }}>{d.bandwidth} TB/s</div>
+      <div style={{ fontSize: 12, color: "var(--color-charcoal-stone)", marginTop: 2 }}>Memory: {d.vramGb} GB VRAM</div>
     </div>
   );
 };
@@ -35,44 +35,48 @@ export default function BandwidthChart() {
 
   if (loading) {
     return (
-      <div className="chart-container" style={{ height: 350, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ color: "var(--colors-muted)", fontFamily: "var(--font-sans)", fontSize: 13 }}>Loading bandwidth specifications...</div>
+      <div className="card-paper-white" style={{ height: 350, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ color: "var(--color-ash-gray)", fontFamily: "var(--font-nunito-sans)", fontSize: 14 }}>
+          Loading bandwidth throughput specifications...
+        </div>
       </div>
     );
   }
 
   return (
-    <div id="bandwidth-chart" className="chart-container" style={{ background: "var(--colors-canvas)", border: "1px solid var(--colors-hairline)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
-        <div>
-          <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 6 }}>Memory Bandwidth Capacity</h3>
-          <p style={{ fontSize: 13, color: "var(--colors-muted)" }}>
-            Token generation speeds scale with memory interfaces. Higher bandwidth enables faster pipelines.
-          </p>
-        </div>
-        <span className="badge badge-rose">TB/S</span>
+    <div className="card-paper-white" style={{ padding: "24px" }}>
+      <div style={{ marginBottom: 24 }}>
+        <span className="pill-tag pill-tag-violet" style={{ marginBottom: 6 }}>
+          ✦ HARDWARE CAPACITY
+        </span>
+        <h3 style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", marginTop: 6, marginBottom: 4, color: "var(--color-ink-black)" }}>
+          Memory Bandwidth Capacity
+        </h3>
+        <p style={{ fontSize: 14, color: "var(--color-charcoal-stone)", maxWidth: 540 }}>
+          Token generation speeds scale with memory interfaces. Higher bandwidth enables faster pipelines.
+        </p>
       </div>
 
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--colors-hairline-soft)" vertical={false} />
+      <ResponsiveContainer width="100%" height={280}>
+        <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-sand-gray)" vertical={false} />
           <XAxis
             dataKey="name"
-            tick={{ fill: "var(--colors-muted)", fontSize: 10, fontFamily: "var(--font-sans)" }}
-            axisLine={{ stroke: "var(--colors-hairline)" }}
-            tickLine={false}
-          />
-          <YAxis
-            tick={{ fill: "var(--colors-muted)", fontSize: 10, fontFamily: "var(--font-sans)" }}
+            tick={{ fill: "var(--color-charcoal-stone)", fontSize: 12, fontFamily: "var(--font-nunito-sans)" }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--colors-surface-soft)" }} />
-          <Bar dataKey="bandwidth" radius={[4, 4, 0, 0]} maxBarSize={48}>
+          <YAxis
+            tick={{ fill: "var(--color-charcoal-stone)", fontSize: 12, fontFamily: "var(--font-nunito-sans)" }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-parchment-cream)" }} />
+          <Bar dataKey="bandwidth" radius={[6, 6, 0, 0]} maxBarSize={40}>
             {data.map((entry, i) => {
               const isBlackwell = entry.arch.includes("Blackwell");
               const isHopper = entry.arch.includes("Hopper");
-              const fill = isBlackwell ? "var(--colors-primary)" : isHopper ? "var(--colors-ink)" : "var(--colors-muted)";
+              const fill = isBlackwell ? "var(--color-electric-violet)" : isHopper ? "var(--color-tangerine)" : "var(--color-aqua-teal)";
               return <Cell key={i} fill={fill} />;
             })}
           </Bar>

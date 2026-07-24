@@ -1,59 +1,59 @@
 import { motion } from "framer-motion";
 
-const getArchBadgeClass = (arch) => {
-  if (arch.includes("Blackwell")) return "badge-rose";
-  if (arch.includes("Hopper")) return "badge-cyan";
-  return "badge-slate";
-};
-
 export default function GpuCard({ gpu, index }) {
-  const badgeClass = getArchBadgeClass(gpu.arch);
-
   return (
     <motion.div
-      className="gpu-card"
+      className="card-paper-white"
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: index * 0.08, duration: 0.4 }}
-      style={{ paddingLeft: 40 }} // Room for compare checkbox
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ delay: index * 0.06, duration: 0.35 }}
+      style={{
+        padding: "20px",
+        position: "relative",
+      }}
     >
       <div>
-        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-          <span className={`badge ${badgeClass}`}>{gpu.gpuClass}</span>
-          {gpu.features?.ecc && <span className="badge badge-slate">ECC</span>}
-          {gpu.features?.nvlink && <span className="badge badge-slate">NVLink</span>}
+        <div className="pill-tag pill-tag-violet" style={{ marginBottom: "10px" }}>
+          {gpu.gpuClass} · {gpu.arch}
         </div>
 
-        <h4 style={{ fontSize: 22, fontWeight: 500, marginBottom: 4, fontFamily: "var(--font-display)" }}>{gpu.name}</h4>
-        <p style={{ fontSize: 12, color: "var(--colors-muted)", fontFamily: "var(--font-mono)", marginBottom: 20 }}>{gpu.arch}</p>
+        <h4
+          style={{
+            fontSize: "20px",
+            fontWeight: "700",
+            fontFamily: "var(--font-nunito-sans)",
+            color: "var(--color-ink-black)",
+            lineHeight: "1.25",
+            marginBottom: "12px",
+          }}
+        >
+          {gpu.name}
+        </h4>
 
-        <div>
-          <div className="spec-row">
-            <span className="spec-label">Memory</span>
-            <span className="spec-value">{gpu.vram}</span>
+        <div style={{ margin: "12px 0" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: "14px", borderBottom: "1px solid var(--color-sand-gray)" }}>
+            <span style={{ color: "var(--color-ash-gray)" }}>VRAM</span>
+            <span style={{ color: "var(--color-ink-black)", fontWeight: "600", fontFamily: "var(--font-mono)" }}>{gpu.vram}</span>
           </div>
-          <div className="spec-row">
-            <span className="spec-label">Bandwidth</span>
-            <span className="spec-value" style={{ color: "var(--colors-primary)" }}>{gpu.bandwidth}</span>
+
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: "14px", borderBottom: "1px solid var(--color-sand-gray)" }}>
+            <span style={{ color: "var(--color-ash-gray)" }}>Bandwidth</span>
+            <span style={{ color: "var(--color-deep-violet)", fontWeight: "600", fontFamily: "var(--font-mono)" }}>{gpu.bandwidth}</span>
           </div>
-          <div className="spec-row">
-            <span className="spec-label">Power (TGP)</span>
-            <span className="spec-value" style={{ color: "var(--colors-accent-amber)", display: "flex", alignItems: "center", gap: 4 }}>
-              <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clipRule="evenodd"/>
-              </svg>
-              {gpu.tgp}
-            </span>
+
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: "14px" }}>
+            <span style={{ color: "var(--color-ash-gray)" }}>Power (TGP)</span>
+            <span style={{ color: "var(--color-charcoal-stone)", fontFamily: "var(--font-mono)" }}>{gpu.tgp}</span>
           </div>
         </div>
       </div>
 
-      <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--colors-hairline-soft)" }}>
-        <div style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--colors-muted)", marginBottom: 4 }}>
-          India Pricing Est.
-        </div>
-        <div style={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--font-sans)", color: "var(--colors-ink)" }}>{gpu.price}</div>
+      <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid var(--color-sand-gray)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span className="caption-text">MSRP / Market</span>
+        <span style={{ fontSize: "18px", fontWeight: "700", color: "var(--color-ink-black)" }}>
+          {gpu.price}
+        </span>
       </div>
     </motion.div>
   );
