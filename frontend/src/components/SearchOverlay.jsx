@@ -30,78 +30,105 @@ export default function SearchOverlay({ isOpen, onClose, onSelectCard }) {
     onClose();
   };
 
-  const getCategoryBadge = (cat) => {
-    if (cat === "local") return <span className="badge badge-amber">LOCAL GPU</span>;
-    if (cat === "cloud") return <span className="badge badge-cyan">CLOUD INSTANCE</span>;
-    return <span className="badge badge-rose">INTEGRATED</span>;
-  };
-
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="search-overlay"
+          className="modal-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: 0.2 }}
           onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+          style={{ paddingTop: "12vh", alignItems: "flex-start" }}
         >
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            style={{ width: "100%", maxWidth: 720, padding: "0 24px" }}
+            transition={{ duration: 0.25 }}
+            style={{ width: "100%", maxWidth: 680, padding: "0 24px" }}
           >
-            <div className="search-input-wrapper">
-              <svg className="search-icon" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
-              </svg>
-               <input
-                id="overlay-search"
-                ref={inputRef}
-                className="search-input"
-                type="text"
-                placeholder="INPUT QUERY [e.g. 5090, Hopper, Lambda]..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <div
-                style={{ position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)" }}
-                onClick={onClose}
-              >
-                <span className="kbd" style={{ cursor: "pointer" }}>ESC</span>
+            <div style={{ position: "relative", width: "100%", marginBottom: "12px" }}>
+              <div className="ai-prompt-container" style={{ padding: "12px 18px", backgroundColor: "var(--color-paper-white)" }}>
+                <input
+                  id="overlay-search"
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Search GPUs, architectures, or cloud providers..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="ai-prompt-input"
+                  style={{ fontSize: "16px" }}
+                />
+                <button
+                  onClick={onClose}
+                  style={{
+                    border: "none",
+                    background: "var(--color-linen-beige)",
+                    borderRadius: "8px",
+                    padding: "4px 8px",
+                    fontSize: "12px",
+                    color: "var(--color-charcoal-stone)",
+                    cursor: "pointer",
+                    fontFamily: "var(--font-nunito-sans)",
+                    fontWeight: 600,
+                  }}
+                >
+                  ESC
+                </button>
               </div>
             </div>
 
-            <div className="search-results">
+            <div
+              className="card-paper-white"
+              style={{
+                width: "100%",
+                maxHeight: "55vh",
+                overflowY: "auto",
+                padding: "16px",
+              }}
+            >
               {loading && (
-                <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)", fontFamily: "var(--font-mono)", fontSize: 12 }}>
-                  RUNNING QUERY...
+                <div style={{ padding: 20, textAlign: "center", color: "var(--color-ash-gray)", fontSize: 13 }}>
+                  Searching database...
                 </div>
               )}
 
               {!loading && query && results.total === 0 && (
-                <div style={{ padding: 32, textAlign: "center", color: "var(--text-secondary)", fontFamily: "var(--font-mono)", fontSize: 12 }}>
-                  NO ALIGNING METRICS FOUND FOR: "{query.toUpperCase()}"
+                <div style={{ padding: 20, textAlign: "center", color: "var(--color-ash-gray)", fontSize: 13 }}>
+                  No hardware matches for "{query.toUpperCase()}"
                 </div>
               )}
 
               {!loading && results.gpus.length > 0 && (
                 <>
-                  <div className="search-category-label">LOCAL PHYSICAL SILICON</div>
+                  <span className="caption-text" style={{ padding: "6px 10px", display: "block", fontWeight: 600 }}>
+                    PHYSICAL GPUS
+                  </span>
                   {results.gpus.map((gpu) => (
-                    <div key={gpu._id} className="search-result-item" onClick={() => handleItemClick(gpu)}>
-                      <div className="search-result-icon" style={{ borderColor: "rgba(245, 158, 11, 0.3)", color: "var(--accent-amber)" }}>⚡</div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 700, fontSize: 14 }}>{gpu.name.toUpperCase()}</div>
-                        <div style={{ fontSize: 11, color: "var(--text-secondary)", fontFamily: "var(--font-mono)", marginTop: 4 }}>
-                          ARCH: {gpu.arch} · BW: {gpu.bandwidth} · PRICE: {gpu.price}
+                    <div
+                      key={gpu._id}
+                      onClick={() => handleItemClick(gpu)}
+                      style={{
+                        padding: "10px 14px",
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        transition: "background-color 0.15s ease",
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-parchment-cream)"}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                    >
+                      <div>
+                        <div style={{ fontSize: 15, fontWeight: 600, color: "var(--color-ink-black)" }}>{gpu.name}</div>
+                        <div style={{ fontSize: 12, color: "var(--color-ash-gray)", marginTop: 2 }}>
+                          {gpu.arch} · {gpu.bandwidth} · {gpu.vram}
                         </div>
                       </div>
-                      {getCategoryBadge("local")}
+                      <span style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink-black)" }}>{gpu.price}</span>
                     </div>
                   ))}
                 </>
@@ -109,35 +136,34 @@ export default function SearchOverlay({ isOpen, onClose, onSelectCard }) {
 
               {!loading && results.cloud.length > 0 && (
                 <>
-                  <div className="search-category-label">RENTAL INSTANCES</div>
+                  <span className="caption-text" style={{ padding: "6px 10px", marginTop: 10, display: "block", fontWeight: 600 }}>
+                    CLOUD RENTALS
+                  </span>
                   {results.cloud.map((cp) => (
-                    <div key={cp._id} className="search-result-item" onClick={() => handleItemClick(cp)}>
-                      <div className="search-result-icon" style={{ borderColor: "rgba(34, 211, 238, 0.3)", color: "#22d3ee" }}>☁️</div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 700, fontSize: 14 }}>{cp.gpu}</div>
-                        <div style={{ fontSize: 11, color: "var(--text-secondary)", fontFamily: "var(--font-mono)", marginTop: 4 }}>
-                          ON-DEMAND FROM: {cp.onDemandUsd ? `$${cp.onDemandUsd.toFixed(2)}/hr` : "N/A"} · SPOT FROM: {cp.spotUsd ? `$${cp.spotUsd.toFixed(2)}/hr` : "N/A"} · PROVIDERS: {cp.offers.length}
+                    <div
+                      key={cp._id}
+                      onClick={() => handleItemClick(cp)}
+                      style={{
+                        padding: "10px 14px",
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        transition: "background-color 0.15s ease",
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-parchment-cream)"}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                    >
+                      <div>
+                        <div style={{ fontSize: 15, fontWeight: 600, color: "var(--color-ink-black)" }}>{cp.gpu}</div>
+                        <div style={{ fontSize: 12, color: "var(--color-ash-gray)", marginTop: 2 }}>
+                          {cp.offers?.length || 0} Cloud Providers Available
                         </div>
                       </div>
-                      {getCategoryBadge("cloud")}
-                    </div>
-                  ))}
-                </>
-              )}
-
-              {!loading && results.systems.length > 0 && (
-                <>
-                  <div className="search-category-label">INTEGRATED HARDWARE SYSTEMS</div>
-                  {results.systems.map((sys) => (
-                    <div key={sys._id} className="search-result-item" onClick={() => handleItemClick(sys)}>
-                      <div className="search-result-icon" style={{ borderColor: "rgba(244, 63, 94, 0.3)", color: "var(--accent-rose)" }}>{sys.icon}</div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 700, fontSize: 14 }}>{sys.type.toUpperCase()}</div>
-                        <div style={{ fontSize: 11, color: "var(--text-secondary)", fontFamily: "var(--font-mono)", marginTop: 4 }}>
-                          SPEC: {sys.specs} · EST: {sys.price}
-                        </div>
-                      </div>
-                      {getCategoryBadge("system")}
+                      <span style={{ fontSize: 14, fontWeight: 600, color: "var(--color-electric-violet)" }}>
+                        FROM {cp.spotUsd ? `$${cp.spotUsd.toFixed(2)}/hr` : "On-Demand"}
+                      </span>
                     </div>
                   ))}
                 </>

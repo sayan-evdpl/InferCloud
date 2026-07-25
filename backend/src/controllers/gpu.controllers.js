@@ -125,8 +125,29 @@ const groupOffersByGpu = (offers) => {
   });
 };
 
-// Helper to fetch live raw cloud rental prices
+// In-memory server-side TTL cache
+const serverCache = new Map();
+
+const getCached = (key) => {
+  const entry = serverCache.get(key);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    serverCache.delete(key);
+    return null;
+  }
+  return entry.data;
+};
+
+const setCached = (key, data, ttlMs) => {
+  serverCache.set(key, { data, expiresAt: Date.now() + ttlMs });
+};
+
+// Helper to fetch live raw cloud rental prices (cached for 5 minutes)
 const fetchRawLiveCloudData = async () => {
+  const cacheKey = "live_raw_cloud_data";
+  const cached = getCached(cacheKey);
+  if (cached) return cached;
+
   try {
     const res = await fetch("https://gpurentalprices.com/api/latest.json", {
       signal: AbortSignal.timeout(5000),
@@ -134,6 +155,7 @@ const fetchRawLiveCloudData = async () => {
     if (!res.ok) throw new Error("Failed to fetch live rental data");
     const data = await res.json();
     if (!data || !data.offers) return [];
+    setCached(cacheKey, data.offers, 300000); // 5 minute TTL
     return data.offers;
   } catch (err) {
     console.error("Live raw cloud fetch failed, falling back to static seed:", err.message);
@@ -164,7 +186,16 @@ const getExternalSpecsFallback = (name) => {
   let pros = "Cost-efficient, widely available.";
   let cons = "Higher memory access latency.";
 
-  if (clean.includes("LAPTOP") || clean.includes("MOBILE")) {
+  if (clean.includes("5090")) {
+    vram = "32 GB";
+    shaders = "21760 CUDA Cores";
+    memType = "GDDR7";
+    bus = "512-bit";
+    rating = "9.6/10";
+    verdict = "The undisputed consumer flagship with 1.79 TB/s GDDR7 bandwidth across a 512-bit bus.";
+    pros = "1.79 TB/s GDDR7 bandwidth, 32GB VRAM capacity.";
+    cons = "575W TGP requirement, lacks NVLink.";
+  } else if (clean.includes("LAPTOP") || clean.includes("MOBILE")) {
     vram = "16 GB";
     shaders = "7424 CUDA Cores";
     memType = "GDDR6";
@@ -202,6 +233,10 @@ const getExternalSpecsFallback = (name) => {
 };
 
 export const scrapeTechPowerUp = async (name) => {
+  const cacheKey = `tpu_specs_${name.toLowerCase().trim()}`;
+  const cached = getCached(cacheKey);
+  if (cached) return cached;
+
   try {
     const searchUrl = `https://www.techpowerup.com/gpu-specs/?q=${encodeURIComponent(name)}`;
     const res = await fetch(searchUrl, {
@@ -247,7 +282,7 @@ export const scrapeTechPowerUp = async (name) => {
     const tmusRops = `${parseField("TMUs") || "512"} / ${parseField("ROPs") || "176"}`;
     const tensorCores = parseField("Tensor Cores") || "512";
 
-    return {
+    const result = {
       releaseDate,
       process,
       transistors,
@@ -262,9 +297,14 @@ export const scrapeTechPowerUp = async (name) => {
       pros: `Directly fetched from database, verified specs.`,
       cons: `N/A`
     };
+
+    setCached(cacheKey, result, 1800000); // 30 min TTL
+    return result;
   } catch (err) {
     console.warn(`Real-time TechPowerUp fetch for "${name}" failed, using generator fallback:`, err.message);
-    return getExternalSpecsFallback(name);
+    const fallback = getExternalSpecsFallback(name);
+    setCached(cacheKey, fallback, 600000); // 10 min TTL for fallback
+    return fallback;
   }
 };
 

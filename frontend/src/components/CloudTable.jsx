@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export default function CloudTable({ cloudData, onSelectCard }) {
   const [tier, setTier] = useState("all");
-  const [selectedProvider, setSelectedProvider] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [unit, setUnit] = useState("hr"); // "hr", "day", "mo", "pergb"
+  const [unit, setUnit] = useState("hr");
+  const [sortBy, setSortBy] = useState("default");
 
   const items = cloudData?.items || [];
   const stats = cloudData?.stats || {
@@ -15,294 +14,213 @@ export default function CloudTable({ cloudData, onSelectCard }) {
     gpuModelsCount: 29,
     livePricePointsCount: 221
   };
-  const providersList = cloudData?.providersList || [];
 
-  // Helper to format rate according to unit
   const formatRate = (usdVal, vramGb) => {
     if (usdVal === null || usdVal === undefined) return "–";
     let calculated = usdVal;
-    if (unit === "day") {
-      calculated = usdVal * 24;
-      return `$${calculated.toFixed(2)}`;
-    }
-    if (unit === "mo") {
-      calculated = usdVal * 730;
-      return `$${calculated.toFixed(0)}`;
-    }
-    if (unit === "pergb") {
-      calculated = usdVal / (vramGb || 1);
-      return `$${calculated.toFixed(4)}`;
-    }
+    if (unit === "day") calculated = usdVal * 24;
+    if (unit === "mo") calculated = usdVal * 730;
+    if (unit === "pergb") calculated = usdVal / (vramGb || 1);
+    
+    if (unit === "mo") return `$${calculated.toFixed(0)}`;
+    if (unit === "pergb") return `$${calculated.toFixed(4)}`;
     return `$${calculated.toFixed(2)}`;
   };
 
-  // Filter items based on selected tier, provider, and search query
   const filteredItems = items.filter((item) => {
-    // Tier filter
     if (tier !== "all" && item.tier !== tier) return false;
-
-    // Provider filter
-    if (selectedProvider) {
-      const hasProvider = item.offers.some(
-        (o) => o.provider.toLowerCase() === selectedProvider.toLowerCase()
-      );
-      if (!hasProvider) return false;
-    }
-
-    // Search query filter
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const matchesGpu = item.gpu.toLowerCase().includes(q);
       const matchesProvider = item.offers.some((o) => o.provider.toLowerCase().includes(q));
       if (!matchesGpu && !matchesProvider) return false;
     }
-
     return true;
   });
 
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    if (sortBy === "price_asc") return (a.onDemandUsd || 999) - (b.onDemandUsd || 999);
+    if (sortBy === "price_desc") return (b.onDemandUsd || 0) - (a.onDemandUsd || 0);
+    if (sortBy === "spot_asc") return (a.spotUsd || 999) - (b.spotUsd || 999);
+    if (sortBy === "vram_desc") return (b.vramGbMin || 0) - (a.vramGbMin || 0);
+    return 0;
+  });
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-      {/* Statistics Cards Grid */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-        gap: 20
-      }}>
-        <div className="glass-panel" style={{ padding: "20px 24px", background: "var(--colors-surface-card)" }}>
-          <div style={{ fontSize: 24, fontWeight: 600, fontFamily: "var(--font-sans)", color: "var(--colors-primary)" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      
+      {/* Metric Cards Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+        <div className="card-paper-white" style={{ padding: "16px 20px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)" }}>
             ${stats.cheapestH100Rate.toFixed(2)}/hr
           </div>
-          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--colors-muted)", marginTop: 6, fontWeight: 600 }}>
+          <div className="caption-text" style={{ marginTop: 2 }}>
             Cheapest H100 · {stats.cheapestH100Provider}
           </div>
         </div>
 
-        <div className="glass-panel" style={{ padding: "20px 24px", background: "var(--colors-surface-card)" }}>
-          <div style={{ fontSize: 24, fontWeight: 600, fontFamily: "var(--font-sans)", color: "var(--colors-ink)" }}>
+        <div className="card-paper-white" style={{ padding: "16px 20px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)" }}>
             {stats.providersCount}
           </div>
-          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--colors-muted)", marginTop: 6, fontWeight: 600 }}>
-            Providers Checked Daily
+          <div className="caption-text" style={{ marginTop: 2 }}>
+            Tracked Providers
           </div>
         </div>
 
-        <div className="glass-panel" style={{ padding: "20px 24px", background: "var(--colors-surface-card)" }}>
-          <div style={{ fontSize: 24, fontWeight: 600, fontFamily: "var(--font-sans)", color: "var(--colors-ink)" }}>
+        <div className="card-paper-white" style={{ padding: "16px 20px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)" }}>
             {stats.gpuModelsCount}
           </div>
-          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--colors-muted)", marginTop: 6, fontWeight: 600 }}>
-            GPU Models Tracked
+          <div className="caption-text" style={{ marginTop: 2 }}>
+            GPU Architectures
           </div>
         </div>
 
-        <div className="glass-panel" style={{ padding: "20px 24px", background: "var(--colors-surface-card)" }}>
-          <div style={{ fontSize: 24, fontWeight: 600, fontFamily: "var(--font-sans)", color: "var(--colors-ink)" }}>
+        <div className="card-paper-white" style={{ padding: "16px 20px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-electric-violet)" }}>
             {stats.livePricePointsCount}
           </div>
-          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--colors-muted)", marginTop: 6, fontWeight: 600 }}>
-            Live Price Points Today
+          <div className="caption-text" style={{ marginTop: 2 }}>
+            Live Spot Offers Today
           </div>
         </div>
       </div>
 
-      {/* Real-time Filters Panel */}
-      <div style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 16,
-        alignItems: "center",
-        justifyContent: "space-between",
-        background: "var(--colors-surface-soft)",
-        padding: 16,
-        borderRadius: "var(--radius-lg)",
-        border: "1px solid var(--colors-hairline)"
-      }}>
-        {/* Tier Buttons */}
-        <div style={{ display: "flex", gap: 6 }}>
+      {/* Filter & Control Bar */}
+      <div
+        className="card-paper-white"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 12,
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: 12,
+        }}
+      >
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {["all", "datacenter", "workstation", "consumer"].map((t) => (
             <button
               key={t}
               onClick={() => setTier(t)}
+              className={tier === t ? "btn-filled-dark" : "btn-outlined-violet"}
               style={{
-                fontFamily: "var(--font-sans)",
                 fontSize: 12,
-                fontWeight: 600,
-                textTransform: "capitalize",
-                padding: "6px 12px",
-                borderRadius: "var(--radius-pill)",
-                border: "1px solid",
-                borderColor: tier === t ? "var(--colors-primary)" : "var(--colors-hairline)",
-                background: tier === t ? "var(--colors-primary)" : "var(--colors-canvas)",
-                color: tier === t ? "var(--colors-on-primary)" : "var(--colors-muted)",
-                cursor: "pointer",
-                transition: "all 0.15s ease"
+                height: 32,
+                padding: "0 12px",
               }}
             >
-              {t}
+              {t.toUpperCase()}
             </button>
           ))}
         </div>
 
-        {/* Provider dropdown */}
-        <select
-          value={selectedProvider}
-          onChange={(e) => setSelectedProvider(e.target.value)}
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: 13,
-            padding: "6px 12px",
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--colors-hairline)",
-            background: "var(--colors-canvas)",
-            color: "var(--colors-ink)",
-            outline: "none",
-            cursor: "pointer"
-          }}
-        >
-          <option value="">All providers</option>
-          {providersList.map((p) => (
-            <option key={p} value={p.toLowerCase()}>{p}</option>
-          ))}
-        </select>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <input
+            type="search"
+            placeholder="Search GPU..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="ai-prompt-input"
+            style={{
+              padding: "6px 12px",
+              border: "1px solid var(--color-sand-gray)",
+              borderRadius: "12px",
+              width: "160px",
+              fontSize: "13px",
+              backgroundColor: "var(--color-parchment-cream)",
+            }}
+          />
 
-        {/* Search Field */}
-        <input
-          type="search"
-          placeholder="Search GPU (h100, 4090...)"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: 13,
-            padding: "6px 12px",
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--colors-hairline)",
-            background: "var(--colors-canvas)",
-            color: "var(--colors-ink)",
-            outline: "none",
-            width: "100%",
-            maxWidth: "200px"
-          }}
-        />
-
-        {/* Unit Toggles */}
-        <div style={{ display: "flex", gap: 4 }}>
-          {[
-            { id: "hr", label: "$/hr" },
-            { id: "day", label: "$/day" },
-            { id: "mo", label: "$/mo" },
-            { id: "pergb", label: "$/GB VRAM" }
-          ].map((u) => (
-            <button
-              key={u.id}
-              onClick={() => setUnit(u.id)}
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: 11,
-                fontWeight: 600,
-                padding: "6px 10px",
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid",
-                borderColor: unit === u.id ? "var(--colors-primary)" : "var(--colors-hairline)",
-                background: unit === u.id ? "var(--colors-primary)" : "var(--colors-canvas)",
-                color: unit === u.id ? "var(--colors-on-primary)" : "var(--colors-muted)",
-                cursor: "pointer",
-                transition: "all 0.15s ease"
-              }}
-            >
-              {u.label}
-            </button>
-          ))}
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            style={{
+              fontFamily: "var(--font-nunito-sans)",
+              fontSize: "12px",
+              padding: "6px 12px",
+              borderRadius: "12px",
+              border: "1px solid var(--color-sand-gray)",
+              backgroundColor: "var(--color-parchment-cream)",
+              color: "var(--color-ink-black)",
+              outline: "none",
+              cursor: "pointer",
+            }}
+          >
+            <option value="default">Default Order</option>
+            <option value="price_asc">Price: Low → High</option>
+            <option value="price_desc">Price: High → Low</option>
+            <option value="spot_asc">Spot Rate: Low → High</option>
+            <option value="vram_desc">VRAM: High → Low</option>
+          </select>
         </div>
       </div>
 
-      {/* Table grid */}
-      <div className="glass-panel" style={{ overflow: "hidden" }}>
-        <div style={{ overflowX: "auto" }}>
-          <table className="cloud-table" style={{ minWidth: 900 }}>
-            <thead>
+      {/* Cloud Table Surface */}
+      <div className="card-paper-white" style={{ padding: 0, overflow: "hidden" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, textAlign: "left" }}>
+          <thead>
+            <tr style={{ backgroundColor: "var(--color-parchment-cream)", borderBottom: "1px solid var(--color-sand-gray)" }}>
+              <th style={{ padding: "14px 16px", color: "var(--color-charcoal-stone)", fontWeight: 600, fontSize: 12 }}>GPU ARCHITECTURE</th>
+              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>VRAM</th>
+              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>ON-DEMAND ({unit.toUpperCase()})</th>
+              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>SPOT FROM</th>
+              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>PRIMARY PROVIDER</th>
+              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>VERIFIED</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedItems.length === 0 ? (
               <tr>
-                <th style={{ fontFamily: "var(--font-sans)" }}>GPU</th>
-                <th style={{ fontFamily: "var(--font-sans)" }} className="num">VRAM</th>
-                <th style={{ fontFamily: "var(--font-sans)" }} className="num">On-demand {unit === "hr" ? "$/hr" : unit === "day" ? "$/day" : unit === "mo" ? "$/mo" : "$/GB VRAM"}</th>
-                <th style={{ fontFamily: "var(--font-sans)" }} className="num">Spot/community from</th>
-                <th style={{ fontFamily: "var(--font-sans)" }}>Where</th>
-                <th style={{ fontFamily: "var(--font-sans)" }}>Tier</th>
-                <th style={{ fontFamily: "var(--font-sans)" }}>Verified</th>
+                <td colSpan="6" style={{ textAlign: "center", color: "var(--color-ash-gray)", padding: 32 }}>
+                  No cloud providers align with current query.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredItems.length === 0 ? (
-                <tr>
-                  <td colSpan="7" style={{ textAlign: "center", color: "var(--colors-muted)", padding: 40, fontFamily: "var(--font-sans)" }}>
-                    No GPUs matching the selected filters.
+            ) : (
+              sortedItems.map((cp) => (
+                <tr
+                  key={cp._id}
+                  onClick={() => onSelectCard(cp)}
+                  style={{
+                    borderBottom: "1px solid var(--color-sand-gray)",
+                    cursor: "pointer",
+                    transition: "background-color 0.15s ease",
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-parchment-cream)"}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                >
+                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--color-ink-black)", fontSize: 15 }}>
+                    {cp.gpu}
+                  </td>
+                  <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--color-charcoal-stone)" }}>
+                    {cp.vram}
+                  </td>
+                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--color-ink-black)", fontFamily: "var(--font-mono)" }}>
+                    {formatRate(cp.onDemandUsd, cp.vramGbMin)}
+                  </td>
+                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--color-forest-green)", fontFamily: "var(--font-mono)" }}>
+                    {formatRate(cp.spotUsd, cp.vramGbMin)}
+                  </td>
+                  <td style={{ padding: "14px 16px", color: "var(--color-ink-black)" }}>
+                    {cp.where}
+                    {cp.offers.length > 1 && (
+                      <span style={{ marginLeft: 6, fontSize: 11, color: "var(--color-ash-gray)" }}>
+                        (+{cp.offers.length - 1} more)
+                      </span>
+                    )}
+                  </td>
+                  <td style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontSize: 12, fontFamily: "var(--font-mono)" }}>
+                    {cp.verifiedDate}
                   </td>
                 </tr>
-              ) : (
-                filteredItems.map((cp, i) => (
-                  <motion.tr
-                    key={cp._id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: Math.min(i * 0.03, 0.3), duration: 0.2 }}
-                    onClick={() => onSelectCard(cp)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <td>
-                      <span style={{ fontWeight: 600, fontFamily: "var(--font-display)", fontSize: 16, color: "var(--colors-ink)" }}>
-                        {cp.gpu}
-                      </span>
-                    </td>
-                    <td className="num">
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 13 }}>
-                        {cp.vram}
-                      </span>
-                    </td>
-                    <td className="num">
-                      <span style={{ fontWeight: 700, color: "var(--colors-ink)", fontSize: 14 }}>
-                        {formatRate(cp.onDemandUsd, cp.vramGbMin)}
-                      </span>
-                    </td>
-                    <td className="num">
-                      <span style={{ color: "var(--colors-muted)", fontSize: 14 }}>
-                        {formatRate(cp.spotUsd, cp.vramGbMin)}
-                      </span>
-                    </td>
-                    <td>
-                      <div>
-                        <span style={{ fontWeight: 500 }}>{cp.where}</span>
-                        {cp.offers.length > 1 && (
-                          <span style={{
-                            marginLeft: 8,
-                            fontSize: 10,
-                            color: "var(--colors-primary)",
-                            background: "rgba(204, 120, 92, 0.1)",
-                            padding: "2px 6px",
-                            borderRadius: 4,
-                            fontWeight: 600
-                          }}>
-                            +{cp.offers.length - 1} more
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`badge badge-slate`} style={{ textTransform: "capitalize" }}>
-                        {cp.tier}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="badge badge-rose" style={{ fontSize: 10 }}>
-                        {cp.verifiedDate}
-                      </span>
-                    </td>
-                  </motion.tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
+
     </div>
   );
 }
