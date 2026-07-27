@@ -8,7 +8,8 @@ import { scrapeTechPowerUp } from "./gpu.controllers.js";
 // Helper functions for tools
 const localSearchGpus = (query) => {
   if (!query) return { local: localGpus, cloud: cloudProviders, systems: integratedSystems };
-  const regex = new RegExp(query.trim(), "i");
+  const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(escaped, "i");
   const matchedLocal = localGpus.filter(g => regex.test(g.name) || regex.test(g.arch) || regex.test(g.gpuClass));
   const matchedCloud = cloudProviders.filter(c => regex.test(c.gpu) || regex.test(c.provider));
   const matchedSystems = integratedSystems.filter(s => regex.test(s.type) || regex.test(s.gpu));
