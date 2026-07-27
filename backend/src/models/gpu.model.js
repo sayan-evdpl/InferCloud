@@ -20,7 +20,7 @@ const gpuSchema = new mongoose.Schema(
       memoryType: { type: String },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 gpuSchema.index({ name: "text", arch: "text", gpuClass: "text" });
