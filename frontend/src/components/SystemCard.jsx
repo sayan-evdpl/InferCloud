@@ -3,38 +3,50 @@ import { motion } from "framer-motion";
 export default function SystemCard({ system, index }) {
   return (
     <motion.div
-      className="system-card"
+      className="card-paper-white"
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: index * 0.1, duration: 0.4 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ delay: index * 0.08, duration: 0.35 }}
       style={{
-        border: "1px solid var(--colors-hairline)",
-        background: "var(--colors-canvas)",
-        paddingLeft: 40, // Room for compare checkbox
+        padding: "20px",
+        position: "relative",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-        <div className="system-icon" style={{ borderColor: "var(--colors-hairline)", color: "var(--colors-primary)" }}>{system.icon}</div>
-        <div>
-          <h4 style={{ fontSize: 18, fontWeight: 500, fontFamily: "var(--font-display)", color: "var(--colors-ink)" }}>{system.type}</h4>
-          <div style={{ fontSize: 13, color: "var(--colors-primary)", fontWeight: 500, marginTop: 3 }}>{system.gpu}</div>
+      <div className="pill-tag pill-tag-violet" style={{ marginBottom: "10px" }}>
+        {system.icon || "WORKSTATION"}
+      </div>
+
+      <h4
+        style={{
+          fontSize: "20px",
+          fontWeight: "700",
+          fontFamily: "var(--font-nunito-sans)",
+          color: "var(--color-ink-black)",
+          lineHeight: "1.25",
+          marginBottom: "4px",
+        }}
+      >
+        {system.type}
+      </h4>
+      <div style={{ fontSize: "14px", color: "var(--color-ash-gray)", fontWeight: "500", marginBottom: "12px" }}>
+        {system.gpu}
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <div style={{ padding: "6px 0", borderBottom: "1px solid var(--color-sand-gray)" }}>
+          <div className="caption-text" style={{ marginBottom: "2px" }}>Specifications</div>
+          <div style={{ fontSize: "14px", color: "var(--color-ink-black)" }}>{system.specs}</div>
+        </div>
+
+        <div style={{ padding: "6px 0" }}>
+          <div className="caption-text" style={{ marginBottom: "2px" }}>Investment</div>
+          <div style={{ fontSize: "18px", fontWeight: "700", color: "var(--color-ink-black)" }}>{system.price}</div>
         </div>
       </div>
 
-      <div style={{ flex: 1, marginBottom: 16 }}>
-        <div style={{ borderLeft: "2px solid var(--colors-primary)", paddingLeft: 12, marginBottom: 12 }}>
-          <div style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--colors-muted)", marginBottom: 4 }}>Specs</div>
-          <div style={{ fontSize: 14, fontWeight: 500 }}>{system.specs}</div>
-        </div>
-        <div style={{ borderLeft: "2px solid var(--colors-primary)", paddingLeft: 12 }}>
-          <div style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--colors-muted)", marginBottom: 4 }}>Price Range</div>
-          <div style={{ fontSize: 18, fontWeight: 600, color: "var(--colors-ink)" }}>{system.price}</div>
-        </div>
-      </div>
-
-      <div className="constraint-box" style={{ background: "rgba(244, 63, 94, 0.04)", border: "1px solid rgba(244, 63, 94, 0.12)", color: "var(--colors-error)" }}>
-        <strong style={{ display: "block", marginBottom: 4 }}>Constraint:</strong>
+      <div style={{ marginTop: "12px", padding: "10px 12px", backgroundColor: "var(--color-parchment-cream)", borderRadius: "8px", color: "var(--color-charcoal-stone)", fontSize: "12px" }}>
+        <strong style={{ fontWeight: 600, color: "var(--color-ink-black)", marginRight: "4px" }}>Note:</strong>
         {system.limit}
       </div>
     </motion.div>

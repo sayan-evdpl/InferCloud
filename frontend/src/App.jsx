@@ -2,16 +2,23 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-import DockNavbar from "./components/DockNavbar";
-import HeroSection from "./components/HeroSection";
+
+import NavigationHeader from "./components/DockNavbar";
+import HeroSection, { ThinkingPartnerSection } from "./components/HeroSection";
+import LandingFooter from "./components/LandingFooter";
 import SearchOverlay from "./components/SearchOverlay";
+import GpuRatesModal from "./components/GpuRatesModal";
+import GetAccessModal from "./components/GetAccessModal";
+import StoryBenefitsModal from "./components/StoryBenefitsModal";
 import BandwidthChart from "./components/BandwidthChart";
 import DeploymentTabs from "./components/DeploymentTabs";
 import TcoAnalysis from "./components/TcoAnalysis";
 import StrategicDirectives from "./components/StrategicDirectives";
+import BentoTelemetryGrid from "./components/BentoTelemetryGrid";
 import DetailModal from "./components/DetailModal";
 import CompareModal from "./components/CompareModal";
 import ChatWidget from "./components/ChatWidget";
+import GpuSplashScreen from "./components/GpuSplashScreen";
 import "./index.css";
 
 function SiliconLandscape() {
@@ -36,48 +43,57 @@ function SiliconLandscape() {
   }, []);
 
   return (
-    <section ref={containerRef} id="landscape" className="section-spacing" style={{ scrollMarginTop: 80, background: "var(--colors-canvas)" }}>
+    <section ref={containerRef} id="landscape" className="section-spacing bg-parchment">
       <div className="section-container">
-        <div style={{ marginBottom: 48 }} className="animate-slide-up">
-          <h2 className="section-title">
-            The <span className="gradient-text">Silicon</span> Landscape
-          </h2>
-          <p className="section-subtitle">
-            LLM throughput is memory bandwidth-bound. The transition to Blackwell and Hopper architectures represents a tectonic shift.
-          </p>
+        
+        {/* Section Header */}
+        <div style={{ marginBottom: "48px" }} className="animate-slide-up">
+          <span className="pill-tag pill-tag-violet" style={{ marginBottom: "12px" }}>
+            ✦ SILICON ARCHITECTURE
+          </span>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "36px", alignItems: "flex-start", marginTop: "8px" }}>
+            <h2 className="heading-lg" style={{ color: "var(--color-ink-black)" }}>
+              The Silicon Landscape
+            </h2>
+            <div>
+              <p className="subheading" style={{ fontSize: "18px", lineHeight: 1.5 }}>
+                LLM throughput is memory bandwidth-bound. The transition to Blackwell and Hopper architectures represents a tectonic shift.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="responsive-landscape-grid animate-slide-up">
-          <BandwidthChart />
+        <div className="grid-2col animate-slide-up" style={{ alignItems: "flex-start", gap: "24px", marginBottom: "48px" }}>
+          <div>
+            <BandwidthChart />
+          </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div
-              className="glass-panel"
-              style={{ flex: 1, padding: 24, borderLeft: "3px solid var(--colors-primary)" }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--colors-primary)" }} />
-                <h4 style={{ fontSize: 18, fontWeight: 500 }}>The Blackwell Paradox</h4>
-              </div>
-              <p style={{ fontSize: 13, color: "var(--colors-body)", lineHeight: 1.7 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div className="card-paper-white">
+              <div className="caption-text" style={{ marginBottom: "6px" }}>PARADOX ANALYSIS // BLACKWELL</div>
+              <h4 style={{ fontSize: "20px", fontWeight: "700", fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)", marginBottom: "8px" }}>
+                The Blackwell Paradox
+              </h4>
+              <p style={{ fontSize: "15px", color: "var(--color-charcoal-stone)", lineHeight: 1.5 }}>
                 The RTX 5090 is a consumer marvel with 1.79 TB/s bandwidth. However, it completely lacks NVLink and ECC memory — perfect for localized QLoRA fine-tuning but creates severe latency penalties for massive distributed training.
               </p>
             </div>
 
-            <div
-              className="glass-panel"
-              style={{ flex: 1, padding: 24, borderLeft: "3px solid var(--colors-accent-teal)" }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--colors-accent-teal)" }} />
-                <h4 style={{ fontSize: 18, fontWeight: 500 }}>Hopper Maturity</h4>
-              </div>
-              <p style={{ fontSize: 13, color: "var(--colors-body)", lineHeight: 1.7 }}>
+            <div className="card-paper-white">
+              <div className="caption-text" style={{ marginBottom: "6px" }}>ENTERPRISE SCALING // HOPPER</div>
+              <h4 style={{ fontSize: "20px", fontWeight: "700", fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)", marginBottom: "8px" }}>
+                Hopper Maturity
+              </h4>
+              <p style={{ fontSize: "15px", color: "var(--color-charcoal-stone)", lineHeight: 1.5 }}>
                 The H200 addresses H100 bottlenecks with 141 GB of HBM3e. By fitting entire 400B parameter models on fewer nodes, it drastically reduces tensor parallel communication overhead.
               </p>
             </div>
           </div>
         </div>
+
+        {/* Rainbow Accent Telemetry Grid */}
+        <BentoTelemetryGrid />
+
       </div>
     </section>
   );
@@ -86,69 +102,76 @@ function SiliconLandscape() {
 function Footer() {
   return (
     <footer style={{
-      background: "var(--colors-surface-dark)",
-      color: "var(--colors-on-dark-soft)",
-      borderTop: "1px solid var(--colors-hairline)",
-      padding: "80px 0 120px",
+      background: "linear-gradient(180deg, #fdf8fd 0%, #f4eff8 100%)",
+      color: "var(--color-charcoal-stone)",
+      padding: "64px 0 80px",
       textAlign: "center",
-      position: "relative",
+      borderTop: "1px solid rgba(178, 107, 245, 0.2)",
     }}>
       <div className="section-container">
-        <div style={{
-          width: 40,
-          height: 40,
-          borderRadius: "50%",
-          background: "var(--colors-surface-dark-elevated)",
-          border: "1px solid rgba(255,255,255,0.05)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: "0 auto 20px",
-          fontWeight: 800,
-          fontSize: 14,
-          color: "var(--colors-primary)",
-        }}>
-          *
-        </div>
-        <p style={{ fontSize: 14, color: "var(--colors-on-dark)", fontFamily: "var(--font-sans)", fontWeight: 500 }}>
+        <img
+          src="/logo_choice_3.png"
+          alt="GPU Scout Logo"
+          style={{
+            width: "44px",
+            height: "44px",
+            borderRadius: "12px",
+            objectFit: "cover",
+            boxShadow: "0 4px 16px rgba(178, 107, 245, 0.35)",
+            marginBottom: "16px",
+          }}
+        />
+
+        <p style={{ fontSize: 18, fontWeight: 700, color: "var(--color-ink-black)", fontFamily: "var(--font-nunito-sans)" }}>
           GPU Scout
         </p>
-        <p style={{ fontSize: 12, color: "var(--colors-on-dark-soft)", marginTop: 8 }}>
-          Powered by GSAP & Recharts · Claude Warm Editorial Design System
+        <p style={{ fontSize: 14, color: "var(--color-ash-gray)", marginTop: 4 }}>
+          Powered by GPU Scout
         </p>
+
+        <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 16 }}>
+          <a href="#hero" className="btn-outlined-violet" style={{ textDecoration: "none", height: "36px", fontSize: "13px" }}>
+            Back to top ↑
+          </a>
+        </div>
       </div>
     </footer>
   );
 }
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const [showFullPlatform, setShowFullPlatform] = useState(false);
+
   const [searchOpen, setSearchOpen] = useState(false);
+  const [ratesOpen, setRatesOpen] = useState(false);
+  const [accessOpen, setAccessOpen] = useState(false);
+  const [storyOpen, setStoryOpen] = useState(false);
   
   // Selected detail overlay and compare list states
   const [selectedItem, setSelectedItem] = useState(null);
   const [compareList, setCompareList] = useState([]);
   const [compareOpen, setCompareOpen] = useState(false);
 
-  const handleSearchOpen = useCallback(() => setSearchOpen(true), []);
-  const handleSearchClose = useCallback(() => setSearchOpen(false), []);
-
-  // Clear session storage cache on reload / mount
-  useEffect(() => {
-    sessionStorage.clear();
-    console.log("Session cache cleared upon reload.");
+  const handleSplashComplete = useCallback(() => {
+    setShowSplash(false);
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      gsap.to(".starfield", {
-        y: scrollY * 0.1,
-        ease: "none",
-        duration: 0.1,
-      });
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  const handleSearchOpen = useCallback(() => setSearchOpen(true), []);
+  const handleSearchClose = useCallback(() => setSearchOpen(false), []);
+  const handleRatesOpen = useCallback(() => setRatesOpen(true), []);
+  const handleAccessOpen = useCallback(() => setAccessOpen(true), []);
+  const handleStoryOpen = useCallback(() => setStoryOpen(true), []);
+
+  const handleRevealPlatform = useCallback(() => {
+    setShowFullPlatform(true);
+    setTimeout(() => {
+      const el = document.getElementById("thinking-partner");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 120);
   }, []);
 
   const handleToggleCompare = (item) => {
@@ -166,47 +189,85 @@ export default function App() {
   };
 
   return (
-    <>
-      <div className="starfield" />
-      
-      <HeroSection onSearchOpen={handleSearchOpen} />
-      <SiliconLandscape />
-      
-      <DeploymentTabs
-        onSelectCard={setSelectedItem}
-        compareList={compareList}
-        onToggleCompare={handleToggleCompare}
+    <div style={{ backgroundColor: "var(--color-parchment-cream)", color: "var(--color-ink-black)", minHeight: "100vh", position: "relative" }}>
+      {showSplash && <GpuSplashScreen onComplete={handleSplashComplete} />}
+
+      <NavigationHeader
+        onSearchOpen={handleSearchOpen}
+        onAccessOpen={handleAccessOpen}
       />
-      
-      <TcoAnalysis />
-      <StrategicDirectives />
-      <Footer />
-      
-      <DockNavbar onSearchOpen={handleSearchOpen} />
-      
+
+      {/* Initial AI Factory Landing View */}
+      <HeroSection onRevealPlatform={handleRevealPlatform} />
+
+      {!showFullPlatform && (
+        <LandingFooter onExplorePlatform={handleRevealPlatform} />
+      )}
+
+      {/* Revealed Full Twilight GPU Thinking Partner Platform */}
+      {showFullPlatform && (
+        <>
+          <main>
+            <ThinkingPartnerSection
+              onSearchOpen={handleSearchOpen}
+              onRatesOpen={handleRatesOpen}
+            />
+
+            <SiliconLandscape />
+            
+            <DeploymentTabs
+              onSelectCard={setSelectedItem}
+              compareList={compareList}
+              onToggleCompare={handleToggleCompare}
+            />
+            
+            <TcoAnalysis />
+            <StrategicDirectives />
+          </main>
+
+          <Footer />
+        </>
+      )}
+
       <SearchOverlay
         isOpen={searchOpen}
         onClose={handleSearchClose}
         onSelectCard={setSelectedItem}
       />
 
+      <GpuRatesModal
+        isOpen={ratesOpen}
+        onClose={() => setRatesOpen(false)}
+      />
+
+      <GetAccessModal
+        isOpen={accessOpen}
+        onClose={() => setAccessOpen(false)}
+      />
+
+      <StoryBenefitsModal
+        isOpen={storyOpen}
+        onClose={() => setStoryOpen(false)}
+        onExplorePlatform={handleRevealPlatform}
+      />
+
       {/* Floating comparison trigger bar */}
       {compareList.length > 0 && (
-        <div className="compare-tray" style={{ border: "1px solid var(--colors-hairline)", background: "var(--colors-canvas)", color: "var(--colors-ink)" }}>
-          <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--colors-muted)", fontWeight: 500 }}>
-            COMPARE // {compareList.length} SELECTED
+        <div className="compare-tray">
+          <span style={{ fontSize: 14, fontFamily: "var(--font-nunito-sans)" }}>
+            Compare: {compareList.length} selected
           </span>
           <button
-            className="button-primary"
+            className="btn-filled-white"
             onClick={() => setCompareOpen(true)}
-            style={{ height: 32, padding: "0 14px", fontSize: 12, background: "var(--colors-primary)" }}
+            style={{ padding: "0 14px", height: "32px", fontSize: 13 }}
           >
-            Compare Grid
+            Compare grid
           </button>
           <button
-            className="button-secondary"
+            className="btn-outlined-violet"
             onClick={() => setCompareList([])}
-            style={{ height: 32, padding: "0 14px", fontSize: 12 }}
+            style={{ padding: "0 12px", height: "32px", fontSize: 13, backgroundColor: "transparent", color: "var(--color-paper-white)", borderColor: "rgba(255,255,255,0.4)" }}
           >
             Clear
           </button>
@@ -228,6 +289,6 @@ export default function App() {
       )}
 
       <ChatWidget searchOpen={searchOpen} />
-    </>
+    </div>
   );
 }
