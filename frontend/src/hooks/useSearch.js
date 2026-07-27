@@ -3,7 +3,12 @@ import { searchGpus } from "../api/gpuApi";
 
 export function useSearch(delay = 300) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState({ gpus: [], cloud: [], systems: [], total: 0 });
+  const [results, setResults] = useState({
+    gpus: [],
+    cloud: [],
+    systems: [],
+    total: 0,
+  });
   const [loading, setLoading] = useState(false);
   const timerRef = useRef(null);
 

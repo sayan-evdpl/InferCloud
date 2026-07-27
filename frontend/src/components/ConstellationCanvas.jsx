@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 
-export default function ConstellationCanvas({ width = "100%", height = "600px" }) {
+export default function ConstellationCanvas({
+  width = "100%",
+  height = "600px",
+}) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +26,10 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
     // Track scroll progress for scroll-driven morphing
     let scrollProgress = 0;
     const handleScroll = () => {
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const maxScroll = Math.max(
+        1,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
       scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
     };
     window.addEventListener("scroll", handleScroll);
@@ -46,7 +52,7 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
 
     for (let i = 0; i < numBrainParticles; i++) {
       const hemisphere = Math.random() > 0.5 ? 1 : -1;
-      
+
       const u = Math.random();
       const v = Math.random();
       const theta = u * 2.0 * Math.PI;
@@ -57,7 +63,8 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
       let rz = Math.sin(phi) * Math.sin(theta);
 
       rx = rx * 0.85 + hemisphere * 0.38;
-      const wrinkle = Math.sin(rx * 14) * Math.cos(ry * 14) * Math.sin(rz * 14) * 0.14;
+      const wrinkle =
+        Math.sin(rx * 14) * Math.cos(ry * 14) * Math.sin(rz * 14) * 0.14;
 
       const scale = (0.75 + wrinkle) * brainRadius;
       const x = rx * scale;
@@ -153,7 +160,16 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
 
     let time = 0;
 
-    const drawOutlinedTriangle = (ctx, x, y, size, angle, color, alpha = 1.0, glow = false) => {
+    const drawOutlinedTriangle = (
+      ctx,
+      x,
+      y,
+      size,
+      angle,
+      color,
+      alpha = 1.0,
+      glow = false,
+    ) => {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(angle);
@@ -187,7 +203,7 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
         10,
         widthPx / 2,
         heightPx / 2 - 15,
-        brainRadius * (1.3 + scrollProgress * 0.4)
+        brainRadius * (1.3 + scrollProgress * 0.4),
       );
       auraGrad.addColorStop(0, "rgba(128, 82, 255, 0.14)");
       auraGrad.addColorStop(0.6, "rgba(255, 184, 41, 0.04)");
@@ -199,8 +215,10 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
       currentAngleX += (targetAngleX - currentAngleX) * 0.06;
 
       // Scroll progress drives rotation & morph expansion
-      const autoAngleY = time * 0.22 + scrollProgress * Math.PI * 2 + currentAngleY;
-      const autoAngleX = Math.sin(time * 0.16) * 0.12 + scrollProgress * 0.5 + currentAngleX;
+      const autoAngleY =
+        time * 0.22 + scrollProgress * Math.PI * 2 + currentAngleY;
+      const autoAngleX =
+        Math.sin(time * 0.16) * 0.12 + scrollProgress * 0.5 + currentAngleX;
 
       const cosY = Math.cos(autoAngleY);
       const sinY = Math.sin(autoAngleY);
@@ -217,15 +235,18 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
         const p = brainParticles[i];
 
         if (isHovering) {
-          const projectedBaseX = (p.baseX * morphScale) * cosY - (p.baseZ * morphScale) * sinY;
-          const projectedBaseY = (p.baseY * morphScale) * cosX - ((p.baseZ * morphScale) * cosY + (p.baseX * morphScale) * sinY) * sinX;
+          const projectedBaseX =
+            p.baseX * morphScale * cosY - p.baseZ * morphScale * sinY;
+          const projectedBaseY =
+            p.baseY * morphScale * cosX -
+            (p.baseZ * morphScale * cosY + p.baseX * morphScale * sinY) * sinX;
           const dx = projectedBaseX - mouseX;
           const dy = projectedBaseY - mouseY;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 120 && dist > 0) {
             const push = (1 - dist / 120) * 25;
-            p.dispX += ( (dx / dist) * push - p.dispX ) * 0.1;
-            p.dispY += ( (dy / dist) * push - p.dispY ) * 0.1;
+            p.dispX += ((dx / dist) * push - p.dispX) * 0.1;
+            p.dispY += ((dy / dist) * push - p.dispY) * 0.1;
           } else {
             p.dispX *= 0.92;
             p.dispY *= 0.92;
@@ -235,8 +256,10 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
           p.dispY *= 0.92;
         }
 
-        let x1 = (p.baseX * morphScale + p.dispX) * cosY - (p.baseZ * morphScale) * sinY;
-        let z1 = (p.baseZ * morphScale) * cosY + (p.baseX * morphScale + p.dispX) * sinY;
+        let x1 =
+          (p.baseX * morphScale + p.dispX) * cosY - p.baseZ * morphScale * sinY;
+        let z1 =
+          p.baseZ * morphScale * cosY + (p.baseX * morphScale + p.dispX) * sinY;
 
         let y1 = (p.baseY * morphScale + p.dispY) * cosX - z1 * sinX;
         let z2 = z1 * cosX + (p.baseY * morphScale + p.dispY) * sinX;
@@ -257,7 +280,7 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
           p.rotation,
           p.color,
           alpha,
-          perspective > 1.15
+          perspective > 1.15,
         );
 
         if (z2 < 140) {
@@ -307,7 +330,7 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
           p.size,
           p.rotation,
           p.color,
-          p.opacity * 0.6
+          p.opacity * 0.6,
         );
       }
 
@@ -331,7 +354,7 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
           b.rotation,
           b.color,
           b.life,
-          true
+          true,
         );
       }
 
@@ -351,8 +374,24 @@ export default function ConstellationCanvas({ width = "100%", height = "600px" }
   }, []);
 
   return (
-    <div style={{ width, height, position: "relative", overflow: "hidden", background: "#000000" }}>
-      <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: "100%", cursor: "crosshair" }} />
+    <div
+      style={{
+        width,
+        height,
+        position: "relative",
+        overflow: "hidden",
+        background: "#000000",
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          display: "block",
+          width: "100%",
+          height: "100%",
+          cursor: "crosshair",
+        }}
+      />
     </div>
   );
 }

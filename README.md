@@ -32,9 +32,10 @@
 
 ## 🔭 Overview
 
-In the rapidly evolving AI infrastructure landscape, decision-makers face complex trade-offs between **CapEx (direct physical hardware procurement)** and **OpEx (on-demand cloud rentals)**. 
+In the rapidly evolving AI infrastructure landscape, decision-makers face complex trade-offs between **CapEx (direct physical hardware procurement)** and **OpEx (on-demand cloud rentals)**.
 
 InferCloud bridges this gap by unifying:
+
 1. **Live Cloud Offer Aggregation**: Real-time pricing from neoclouds (RunPod, Vast.ai, Lambda Labs, E2E Networks, Cyfuture, AceCloud).
 2. **Physical Hardware Telemetry**: Specs and pricing metrics for consumer flagship GPUs (RTX 5090, RTX 4090) and enterprise accelerators (H100, H200, B200, L40S).
 3. **Live TechPowerUp Engine**: Scrapes and parses hardware specs and TechSpot review metadata on-the-fly for any searched GPU model.
@@ -69,15 +70,15 @@ graph TD
 
 ### Core Technologies
 
-| Layer | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Frontend Framework** | React 19, Vite 8 | Ultra-fast client-side application bundle |
-| **Styling & Motion** | Vanilla CSS, Framer Motion, GSAP (ScrollTrigger) | Modern editorial canvas aesthetic & animations |
-| **Visualization** | Recharts | Interactive bandwidth and TCO chart visualizations |
-| **Backend Runtime** | Node.js (ES Modules), Express 5 | High-throughput asynchronous backend server |
-| **Data Fetching & Cache** | Axios, SessionStorage | Local client caching with invalidation on refresh |
-| **Containerization** | Docker, Nginx | Multi-container setup for production deployment |
-| **Release Management** | Semantic Release, GitHub Actions | Automated versioning and release notes |
+| Layer                     | Technology                                       | Purpose                                            |
+| :------------------------ | :----------------------------------------------- | :------------------------------------------------- |
+| **Frontend Framework**    | React 19, Vite 8                                 | Ultra-fast client-side application bundle          |
+| **Styling & Motion**      | Vanilla CSS, Framer Motion, GSAP (ScrollTrigger) | Modern editorial canvas aesthetic & animations     |
+| **Visualization**         | Recharts                                         | Interactive bandwidth and TCO chart visualizations |
+| **Backend Runtime**       | Node.js (ES Modules), Express 5                  | High-throughput asynchronous backend server        |
+| **Data Fetching & Cache** | Axios, SessionStorage                            | Local client caching with invalidation on refresh  |
+| **Containerization**      | Docker, Nginx                                    | Multi-container setup for production deployment    |
+| **Release Management**    | Semantic Release, GitHub Actions                 | Automated versioning and release notes             |
 
 ---
 
@@ -118,35 +119,41 @@ InferCloud/
 ### Prerequisites
 
 Ensure you have the following installed locally:
+
 - **Node.js**: `v18.0.0` or higher
 - **npm**: `v9.0.0` or higher
-- **Docker & Docker Compose** *(Optional, for containerized run)*
+- **Docker & Docker Compose** _(Optional, for containerized run)_
 
 ### Local Development Setup
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/sayan-evdpl/InferCloud.git
    cd InferCloud
    ```
 
 2. **Setup and run the Backend**:
+
    ```bash
    cd backend
    cp .env.example .env
    npm install
    npm run dev
    ```
-   *The backend server starts on `http://localhost:3000`.*
+
+   _The backend server starts on `http://localhost:3000`._
 
 3. **Setup and run the Frontend** (in a new terminal):
+
    ```bash
    cd frontend
    cp .env.example .env
    npm install
    npm run dev
    ```
-   *The frontend dev server starts on `http://localhost:5173`.*
+
+   _The frontend dev server starts on `http://localhost:5173`._
 
 4. Open your browser and navigate to `http://localhost:5173`.
 
@@ -157,6 +164,7 @@ Ensure you have the following installed locally:
 To run the full stack via Docker containers:
 
 #### Backend Container
+
 ```bash
 cd backend
 docker build -t infercloud-backend .
@@ -164,6 +172,7 @@ docker run -d -p 3000:3000 --name backend infercloud-backend
 ```
 
 #### Frontend Container (Nginx)
+
 ```bash
 cd frontend
 docker build -t infercloud-frontend .
@@ -176,16 +185,16 @@ docker run -d -p 80:80 --name frontend infercloud-frontend
 
 ### Backend Environment Variables (`backend/.env`)
 
-| Variable | Default Value | Description |
-| :--- | :--- | :--- |
-| `PORT` | `3000` | Port for Express HTTP server |
+| Variable      | Default Value           | Description                               |
+| :------------ | :---------------------- | :---------------------------------------- |
+| `PORT`        | `3000`                  | Port for Express HTTP server              |
 | `CORS_ORIGIN` | `http://localhost:5173` | Allowed CORS origin for frontend requests |
-| `NODE_ENV` | `development` | Runtime environment mode |
+| `NODE_ENV`    | `development`           | Runtime environment mode                  |
 
 ### Frontend Environment Variables (`frontend/.env`)
 
-| Variable | Default Value | Description |
-| :--- | :--- | :--- |
+| Variable           | Default Value           | Description               |
+| :----------------- | :---------------------- | :------------------------ |
 | `VITE_BACKEND_URL` | `http://localhost:3000` | Base URL for API requests |
 
 ---
@@ -194,21 +203,22 @@ docker run -d -p 80:80 --name frontend infercloud-frontend
 
 Base Endpoint: `/api/v1/gpus`
 
-| Method | Endpoint | Description | Query Parameters |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/search` | Global search across local GPUs, cloud offers, and systems | `q` *(string)* |
-| `GET` | `/local` | Returns physical GPUs with in-memory filtering & TPU scraper fallback | `page`, `limit`, `sort`, `arch`, `minVram`, `q` |
-| `GET` | `/cloud` | Returns grouped live cloud rental offers & provider metrics | `page`, `limit` |
-| `GET` | `/systems` | Returns workstations, OEM desktops, and mobile compute | `page`, `limit`, `formFactor` |
-| `GET` | `/tco` | Computes TCO graph data and CapEx breakeven analysis | `hours` *(number, default: 8)* |
-| `GET` | `/bandwidth` | Returns memory bandwidth comparison dataset | None |
-| `GET` | `/external-specs` | Scrapes real-time hardware specs & reviews from TechPowerUp/TechSpot | `name` *(string, required)* |
+| Method | Endpoint          | Description                                                           | Query Parameters                                |
+| :----- | :---------------- | :-------------------------------------------------------------------- | :---------------------------------------------- |
+| `GET`  | `/search`         | Global search across local GPUs, cloud offers, and systems            | `q` _(string)_                                  |
+| `GET`  | `/local`          | Returns physical GPUs with in-memory filtering & TPU scraper fallback | `page`, `limit`, `sort`, `arch`, `minVram`, `q` |
+| `GET`  | `/cloud`          | Returns grouped live cloud rental offers & provider metrics           | `page`, `limit`                                 |
+| `GET`  | `/systems`        | Returns workstations, OEM desktops, and mobile compute                | `page`, `limit`, `formFactor`                   |
+| `GET`  | `/tco`            | Computes TCO graph data and CapEx breakeven analysis                  | `hours` _(number, default: 8)_                  |
+| `GET`  | `/bandwidth`      | Returns memory bandwidth comparison dataset                           | None                                            |
+| `GET`  | `/external-specs` | Scrapes real-time hardware specs & reviews from TechPowerUp/TechSpot  | `name` _(string, required)_                     |
 
 ---
 
 ## 🎨 Frontend Design System
 
 InferCloud follows Anthropic's editorial design philosophy:
+
 - **Canvas Color**: Warm Tinted Cream (`#faf9f5`)
 - **Primary Brand Accent**: Warm Coral (`#cc785c`)
 - **Typography**: Slab Serif Display paired with StyreneB / Inter body sans.
@@ -219,6 +229,7 @@ InferCloud follows Anthropic's editorial design philosophy:
 ## 🔄 CI/CD & Release Pipeline
 
 The repository integrates automated semantic release and versioning via **GitHub Actions**:
+
 - **Automated Changelogs**: Generates `CHANGELOG.md` upon every release commit.
 - **Semantic Versioning**: Formats version tags based on Conventional Commits (`fix:`, `feat:`, `feat!:`, `chore:`).
 
@@ -227,6 +238,7 @@ The repository integrates automated semantic release and versioning via **GitHub
 ## 🤝 Contributing
 
 We welcome community contributions! Follow these steps:
+
 1. Fork the project repository.
 2. Create your feature branch (`git checkout -b feature/amazing-feature`).
 3. Commit your changes using Conventional Commit messages (`git commit -m 'feat: add GPU memory comparison filter'`).

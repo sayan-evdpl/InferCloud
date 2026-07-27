@@ -20,6 +20,7 @@ The **InferCloud Frontend** is a modern React 19 application built with Vite. It
 ## 🎨 Overview
 
 The user interface delivers an editorial, publishing-grade experience:
+
 - **Canvas Base**: Tinted Warm Cream (`#faf9f5`) counter-positioned against cool-gray AI themes.
 - **Brand Voltage**: Warm Coral (`#cc785c`) used for primary CTAs and interactive highlights.
 - **Typography**: Tiempos / Copernicus slab-serif headers paired with StyreneB / Inter sans.
@@ -29,23 +30,24 @@ The user interface delivers an editorial, publishing-grade experience:
 
 ## 💎 Key Components
 
-| Component | File | Description |
-| :--- | :--- | :--- |
-| **Dock Navbar** | `DockNavbar.jsx` | Centered floating MacOS-style navigation navbar wrapped to isolate Framer Motion transforms. |
-| **Hero Section** | `HeroSection.jsx` | Responsive hero layout featuring dynamic stats badges and headline copy. |
-| **Deployment Tabs** | `DeploymentTabs.jsx` | Tabbed view for Local Physical GPUs, Cloud Rentals, and Workstations with inline physical GPU search. |
-| **Cloud Table** | `CloudTable.jsx` | Rental table with tier selectors (All/Datacenter/Workstation/Consumer), provider filters, and unit toggles ($/hr, $/day, $/mo, $/GB VRAM). |
-| **Detail Modal** | `DetailModal.jsx` | Modal overlay displaying breadcrumbs, pricing cards, provider lists, TechPowerUp database specs, and TechSpot review cards. |
-| **Compare Modal** | `CompareModal.jsx` | Multi-GPU side-by-side comparison matrix showing specs, bandwidth, power, and price deltas. |
-| **TCO Analysis** | `TcoAnalysis.jsx` | Interactive daily execution slider modeling workstation CapEx breakeven schedules. |
-| **Bandwidth Chart** | `BandwidthChart.jsx` | Recharts bar visualization comparing bandwidth throughput (TB/s) across GPU architectures. |
-| **Search Overlay** | `SearchOverlay.jsx` | Global search modal querying local, cloud, and system datasets simultaneously. |
+| Component           | File                 | Description                                                                                                                                |
+| :------------------ | :------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Dock Navbar**     | `DockNavbar.jsx`     | Centered floating MacOS-style navigation navbar wrapped to isolate Framer Motion transforms.                                               |
+| **Hero Section**    | `HeroSection.jsx`    | Responsive hero layout featuring dynamic stats badges and headline copy.                                                                   |
+| **Deployment Tabs** | `DeploymentTabs.jsx` | Tabbed view for Local Physical GPUs, Cloud Rentals, and Workstations with inline physical GPU search.                                      |
+| **Cloud Table**     | `CloudTable.jsx`     | Rental table with tier selectors (All/Datacenter/Workstation/Consumer), provider filters, and unit toggles ($/hr, $/day, $/mo, $/GB VRAM). |
+| **Detail Modal**    | `DetailModal.jsx`    | Modal overlay displaying breadcrumbs, pricing cards, provider lists, TechPowerUp database specs, and TechSpot review cards.                |
+| **Compare Modal**   | `CompareModal.jsx`   | Multi-GPU side-by-side comparison matrix showing specs, bandwidth, power, and price deltas.                                                |
+| **TCO Analysis**    | `TcoAnalysis.jsx`    | Interactive daily execution slider modeling workstation CapEx breakeven schedules.                                                         |
+| **Bandwidth Chart** | `BandwidthChart.jsx` | Recharts bar visualization comparing bandwidth throughput (TB/s) across GPU architectures.                                                 |
+| **Search Overlay**  | `SearchOverlay.jsx`  | Global search modal querying local, cloud, and system datasets simultaneously.                                                             |
 
 ---
 
 ## 💾 Client Caching Architecture
 
 API calls are routed through `src/api/gpuApi.js` which manages a client-side `sessionStorage` cache:
+
 1. **Cache Writes**: Successful API responses are serialized into `sessionStorage` under `gpu_cache_<endpoint>_<params>`.
 2. **Instant Sub-Second Loads**: Subsequent calls to the same endpoint return instantly from browser storage.
 3. **Reload Invalidation**: On page refresh (`window.onload`), `App.jsx` automatically purges all `gpu_cache_` entries from `sessionStorage` to guarantee fresh telemetry.

@@ -37,7 +37,7 @@ app.use((err, req, res, next) => {
     statusCode,
     message,
     success: false,
-    errors: err.errors || []
+    errors: err.errors || [],
   });
 });
 

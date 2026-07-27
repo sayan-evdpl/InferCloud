@@ -16,12 +16,14 @@ const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
 export default function ChatWidget({ searchOpen }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showBubble, setShowBubble] = useState(true);
-  const [bubbleText, setBubbleText] = useState("Have a query? Don't worry, Flash is ready to help you!");
+  const [bubbleText, setBubbleText] = useState(
+    "Have a query? Don't worry, Flash is ready to help you!",
+  );
   const [isHovered, setIsHovered] = useState(false);
   const [isWaving, setIsWaving] = useState(false);
   const [isJumpingOut, setIsJumpingOut] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  
+
   // Persistent Bearer Token State
   const [token, setToken] = useState(() => {
     const savedToken = sessionStorage.getItem("flash_bearer_token");
@@ -40,9 +42,10 @@ export default function ChatWidget({ searchOpen }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: token === "flashonn"
-        ? "Welcome back! Flash is active. How can I help you today with GPU specs, cloud rates, or TCO economics?"
-        : "Hello! Flash is currently locked. Please enter the password to unlock AI assistance.",
+      content:
+        token === "flashonn"
+          ? "Welcome back! Flash is active. How can I help you today with GPU specs, cloud rates, or TCO economics?"
+          : "Hello! Flash is currently locked. Please enter the password to unlock AI assistance.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -69,10 +72,13 @@ export default function ChatWidget({ searchOpen }) {
   // Web Speech API Voice Recognition Toggle
   const toggleVoiceRecognition = () => {
     recordUserActivity();
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Speech recognition is not supported in your current browser. Please type your prompt.");
+      alert(
+        "Speech recognition is not supported in your current browser. Please type your prompt.",
+      );
       return;
     }
 
@@ -130,7 +136,8 @@ export default function ChatWidget({ searchOpen }) {
             ...prev,
             {
               role: "assistant",
-              content: "🔒 Flash has been automatically locked due to 15 minutes of inactivity. Please enter the password to unlock AI assistance.",
+              content:
+                "🔒 Flash has been automatically locked due to 15 minutes of inactivity. Please enter the password to unlock AI assistance.",
             },
           ]);
         }
@@ -200,7 +207,11 @@ export default function ChatWidget({ searchOpen }) {
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        { role: "assistant", content: "⚡ Flash has been successfully activated! (15-minute inactivity bearer timer started). How can I help you today with GPU specs, cloud rates, or TCO economics?" }
+        {
+          role: "assistant",
+          content:
+            "⚡ Flash has been successfully activated! (15-minute inactivity bearer timer started). How can I help you today with GPU specs, cloud rates, or TCO economics?",
+        },
       ];
       setMessages(newMsgList);
       return;
@@ -214,7 +225,11 @@ export default function ChatWidget({ searchOpen }) {
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        { role: "assistant", content: "🔒 Flash has been locked. Please enter the password to unlock again." }
+        {
+          role: "assistant",
+          content:
+            "🔒 Flash has been locked. Please enter the password to unlock again.",
+        },
       ];
       setMessages(newMsgList);
       return;
@@ -222,14 +237,21 @@ export default function ChatWidget({ searchOpen }) {
 
     // Check if token expired before sending
     const savedLastActive = sessionStorage.getItem("flash_last_activity");
-    if (savedLastActive && Date.now() - parseInt(savedLastActive, 10) >= FIFTEEN_MINUTES_MS) {
+    if (
+      savedLastActive &&
+      Date.now() - parseInt(savedLastActive, 10) >= FIFTEEN_MINUTES_MS
+    ) {
       setToken(null);
       sessionStorage.removeItem("flash_bearer_token");
       sessionStorage.removeItem("flash_last_activity");
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        { role: "assistant", content: "🔒 Session expired after 15 minutes of inactivity. Please enter the password to unlock again." }
+        {
+          role: "assistant",
+          content:
+            "🔒 Session expired after 15 minutes of inactivity. Please enter the password to unlock again.",
+        },
       ];
       setMessages(newMsgList);
       return;
@@ -240,7 +262,11 @@ export default function ChatWidget({ searchOpen }) {
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        { role: "assistant", content: "Flash is currently locked. Please enter the password to unlock." }
+        {
+          role: "assistant",
+          content:
+            "Flash is currently locked. Please enter the password to unlock.",
+        },
       ];
       setMessages(newMsgList);
       return;
@@ -257,7 +283,11 @@ export default function ChatWidget({ searchOpen }) {
     } catch (err) {
       setMessages([
         ...newMsgList,
-        { role: "assistant", content: "Sorry, I encountered an error retrieving data from the backend server." },
+        {
+          role: "assistant",
+          content:
+            "Sorry, I encountered an error retrieving data from the backend server.",
+        },
       ]);
     } finally {
       setLoading(false);
@@ -280,9 +310,16 @@ export default function ChatWidget({ searchOpen }) {
 
     while ((match = codeBlockRegex.exec(content)) !== null) {
       if (match.index > lastIndex) {
-        parts.push({ type: "text", value: content.substring(lastIndex, match.index) });
+        parts.push({
+          type: "text",
+          value: content.substring(lastIndex, match.index),
+        });
       }
-      parts.push({ type: "code", lang: match[1] || "code", value: match[2].trim() });
+      parts.push({
+        type: "code",
+        lang: match[1] || "code",
+        value: match[2].trim(),
+      });
       lastIndex = match.index + match[0].length;
     }
 
@@ -293,7 +330,14 @@ export default function ChatWidget({ searchOpen }) {
     return parts.map((part, i) => {
       if (part.type === "text") {
         return (
-          <div key={i} style={{ whiteSpace: "pre-wrap", fontSize: "14px", lineHeight: "1.5" }}>
+          <div
+            key={i}
+            style={{
+              whiteSpace: "pre-wrap",
+              fontSize: "14px",
+              lineHeight: "1.5",
+            }}
+          >
             {part.value}
           </div>
         );
@@ -438,7 +482,14 @@ export default function ChatWidget({ searchOpen }) {
                   maxWidth: "280px",
                 }}
               >
-                <span style={{ fontSize: 13, fontWeight: 500, fontFamily: "var(--font-nunito-sans)", lineHeight: 1.4 }}>
+                <span
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 500,
+                    fontFamily: "var(--font-nunito-sans)",
+                    lineHeight: 1.4,
+                  }}
+                >
                   {bubbleText}
                 </span>
                 <button
@@ -480,7 +531,8 @@ export default function ChatWidget({ searchOpen }) {
               borderRadius: "50%",
               background: "linear-gradient(135deg, #f472b6 0%, #b26bf5 100%)",
               border: "3px solid #ffffff",
-              boxShadow: "0 8px 24px rgba(244, 114, 182, 0.55), 0 0 20px rgba(178, 107, 245, 0.45)",
+              boxShadow:
+                "0 8px 24px rgba(244, 114, 182, 0.55), 0 0 20px rgba(178, 107, 245, 0.45)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -517,7 +569,8 @@ export default function ChatWidget({ searchOpen }) {
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.12), 0 0 30px rgba(244, 114, 182, 0.15)",
+              boxShadow:
+                "0 20px 50px rgba(0, 0, 0, 0.12), 0 0 30px rgba(244, 114, 182, 0.15)",
               backgroundColor: "#fcf8fd",
               backgroundImage: `
                 radial-gradient(circle at 10% 10%, rgba(244, 114, 182, 0.10) 0%, transparent 40%),
@@ -544,28 +597,61 @@ export default function ChatWidget({ searchOpen }) {
               }}
             >
               {/* Background Drifting Clouds */}
-              <div style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.4 }}>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  pointerEvents: "none",
+                  opacity: 0.4,
+                }}
+              >
                 <motion.div
                   animate={{ x: [-15, 15, -15] }}
-                  transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 12,
+                    ease: "easeInOut",
+                  }}
                   style={{ position: "absolute", top: "4px", left: "20%" }}
                 >
-                  <svg width="60" height="25" viewBox="0 0 60 25" fill="#ffffff">
+                  <svg
+                    width="60"
+                    height="25"
+                    viewBox="0 0 60 25"
+                    fill="#ffffff"
+                  >
                     <path d="M 5 20 C 0 20, 0 10, 8 8 C 12 2, 22 2, 28 8 C 34 2, 44 2, 48 8 C 55 10, 55 20, 50 20 Z" />
                   </svg>
                 </motion.div>
                 <motion.div
                   animate={{ x: [15, -15, 15] }}
-                  transition={{ repeat: Infinity, duration: 15, ease: "easeInOut" }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 15,
+                    ease: "easeInOut",
+                  }}
                   style={{ position: "absolute", top: "10px", right: "15%" }}
                 >
-                  <svg width="70" height="28" viewBox="0 0 70 28" fill="#ffffff">
+                  <svg
+                    width="70"
+                    height="28"
+                    viewBox="0 0 70 28"
+                    fill="#ffffff"
+                  >
                     <path d="M 6 22 C 0 22, 0 12, 10 10 C 15 3, 28 3, 34 10 C 42 3, 52 3, 58 10 C 66 12, 66 22, 60 22 Z" />
                   </svg>
                 </motion.div>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 2 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  position: "relative",
+                  zIndex: 2,
+                }}
+              >
                 {/* Robot Avatar Badge */}
                 <img
                   src="/chatbot_avatar.png"
@@ -588,7 +674,9 @@ export default function ChatWidget({ searchOpen }) {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  {token === "flashonn" ? "FLASH - ACTIVE ⚡" : "FLASH - LOCKED 🔒"}
+                  {token === "flashonn"
+                    ? "FLASH - ACTIVE ⚡"
+                    : "FLASH - LOCKED 🔒"}
                 </span>
               </div>
 
@@ -631,7 +719,8 @@ export default function ChatWidget({ searchOpen }) {
                   key={index}
                   style={{
                     display: "flex",
-                    justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+                    justifyContent:
+                      msg.role === "user" ? "flex-end" : "flex-start",
                   }}
                 >
                   <div
@@ -640,14 +729,15 @@ export default function ChatWidget({ searchOpen }) {
                       padding: msg.role === "user" ? "10px 18px" : "14px 16px",
                       borderRadius: msg.role === "user" ? "20px" : "18px",
                       backgroundColor:
-                        msg.role === "user"
-                          ? "#b26bf5"
-                          : "#ffffff",
+                        msg.role === "user" ? "#b26bf5" : "#ffffff",
                       background:
                         msg.role === "user"
                           ? "linear-gradient(135deg, #b26bf5 0%, #ec4899 100%)"
                           : "#ffffff",
-                      color: msg.role === "user" ? "#ffffff" : "var(--color-ink-black)",
+                      color:
+                        msg.role === "user"
+                          ? "#ffffff"
+                          : "var(--color-ink-black)",
                       border:
                         msg.role === "user"
                           ? "none"
@@ -696,10 +786,20 @@ export default function ChatWidget({ searchOpen }) {
                   gap: 8,
                 }}
               >
-                <span className="caption-text" style={{ fontWeight: 700, color: "var(--color-charcoal-stone)", fontSize: "11px", letterSpacing: "0.05em" }}>
+                <span
+                  className="caption-text"
+                  style={{
+                    fontWeight: 700,
+                    color: "var(--color-charcoal-stone)",
+                    fontSize: "11px",
+                    letterSpacing: "0.05em",
+                  }}
+                >
                   SUGGESTED QUERIES
                 </span>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                >
                   {SUGGESTIONS.map((s, idx) => (
                     <motion.button
                       key={idx}
@@ -744,13 +844,23 @@ export default function ChatWidget({ searchOpen }) {
                   backgroundColor: "#ffffff",
                   borderRadius: "9999px",
                   padding: "6px 8px 6px 16px",
-                  border: isListening ? "1.5px solid #ec4899" : "1px solid rgba(178, 107, 245, 0.3)",
-                  boxShadow: isListening ? "0 0 16px rgba(236, 72, 153, 0.35)" : "0 6px 20px rgba(0, 0, 0, 0.06)",
+                  border: isListening
+                    ? "1.5px solid #ec4899"
+                    : "1px solid rgba(178, 107, 245, 0.3)",
+                  boxShadow: isListening
+                    ? "0 0 16px rgba(236, 72, 153, 0.35)"
+                    : "0 6px 20px rgba(0, 0, 0, 0.06)",
                   transition: "all 0.2s ease",
                 }}
               >
                 {/* Left Attachment Icon */}
-                <span style={{ color: "var(--color-ash-gray)", fontSize: "16px", cursor: "pointer" }}>
+                <span
+                  style={{
+                    color: "var(--color-ash-gray)",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                  }}
+                >
                   📎
                 </span>
 
@@ -760,8 +870,8 @@ export default function ChatWidget({ searchOpen }) {
                     isListening
                       ? "Listening... speak now..."
                       : token === "flashonn"
-                      ? "Type your prompt here..."
-                      : "Enter password..."
+                        ? "Type your prompt here..."
+                        : "Enter password..."
                   }
                   value={input}
                   onChange={(e) => {
@@ -786,14 +896,22 @@ export default function ChatWidget({ searchOpen }) {
                 <motion.button
                   onClick={toggleVoiceRecognition}
                   animate={isListening ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-                  transition={isListening ? { repeat: Infinity, duration: 1 } : {}}
-                  title={isListening ? "Click to stop listening" : "Click for voice input"}
+                  transition={
+                    isListening ? { repeat: Infinity, duration: 1 } : {}
+                  }
+                  title={
+                    isListening
+                      ? "Click to stop listening"
+                      : "Click for voice input"
+                  }
                   style={{
                     width: "34px",
                     height: "34px",
                     borderRadius: "50%",
                     border: "none",
-                    backgroundColor: isListening ? "#ef4444" : "rgba(178, 107, 245, 0.12)",
+                    backgroundColor: isListening
+                      ? "#ef4444"
+                      : "rgba(178, 107, 245, 0.12)",
                     color: isListening ? "#ffffff" : "#b26bf5",
                     display: "flex",
                     alignItems: "center",
@@ -801,7 +919,9 @@ export default function ChatWidget({ searchOpen }) {
                     cursor: "pointer",
                     fontSize: "15px",
                     transition: "all 0.15s ease",
-                    boxShadow: isListening ? "0 2px 10px rgba(239, 68, 68, 0.4)" : "none",
+                    boxShadow: isListening
+                      ? "0 2px 10px rgba(239, 68, 68, 0.4)"
+                      : "none",
                   }}
                 >
                   🎙️
@@ -816,12 +936,14 @@ export default function ChatWidget({ searchOpen }) {
                     height: "36px",
                     borderRadius: "50%",
                     border: "none",
-                    background: "linear-gradient(135deg, #b26bf5 0%, #ec4899 100%)",
+                    background:
+                      "linear-gradient(135deg, #b26bf5 0%, #ec4899 100%)",
                     color: "#ffffff",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    cursor: loading || !input.trim() ? "not-allowed" : "pointer",
+                    cursor:
+                      loading || !input.trim() ? "not-allowed" : "pointer",
                     opacity: loading || !input.trim() ? 0.5 : 1,
                     fontSize: "16px",
                     boxShadow: "0 3px 12px rgba(236, 72, 153, 0.4)",

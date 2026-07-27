@@ -12,7 +12,7 @@ export default function CloudTable({ cloudData, onSelectCard }) {
     cheapestH100Provider: "Voltage Park",
     providersCount: 22,
     gpuModelsCount: 29,
-    livePricePointsCount: 221
+    livePricePointsCount: 221,
   };
 
   const formatRate = (usdVal, vramGb) => {
@@ -21,7 +21,7 @@ export default function CloudTable({ cloudData, onSelectCard }) {
     if (unit === "day") calculated = usdVal * 24;
     if (unit === "mo") calculated = usdVal * 730;
     if (unit === "pergb") calculated = usdVal / (vramGb || 1);
-    
+
     if (unit === "mo") return `$${calculated.toFixed(0)}`;
     if (unit === "pergb") return `$${calculated.toFixed(4)}`;
     return `$${calculated.toFixed(2)}`;
@@ -32,15 +32,19 @@ export default function CloudTable({ cloudData, onSelectCard }) {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const matchesGpu = item.gpu.toLowerCase().includes(q);
-      const matchesProvider = item.offers.some((o) => o.provider.toLowerCase().includes(q));
+      const matchesProvider = item.offers.some((o) =>
+        o.provider.toLowerCase().includes(q),
+      );
       if (!matchesGpu && !matchesProvider) return false;
     }
     return true;
   });
 
   const sortedItems = [...filteredItems].sort((a, b) => {
-    if (sortBy === "price_asc") return (a.onDemandUsd || 999) - (b.onDemandUsd || 999);
-    if (sortBy === "price_desc") return (b.onDemandUsd || 0) - (a.onDemandUsd || 0);
+    if (sortBy === "price_asc")
+      return (a.onDemandUsd || 999) - (b.onDemandUsd || 999);
+    if (sortBy === "price_desc")
+      return (b.onDemandUsd || 0) - (a.onDemandUsd || 0);
     if (sortBy === "spot_asc") return (a.spotUsd || 999) - (b.spotUsd || 999);
     if (sortBy === "vram_desc") return (b.vramGbMin || 0) - (a.vramGbMin || 0);
     return 0;
@@ -48,11 +52,23 @@ export default function CloudTable({ cloudData, onSelectCard }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      
       {/* Metric Cards Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: 16,
+        }}
+      >
         <div className="card-paper-white" style={{ padding: "16px 20px" }}>
-          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)" }}>
+          <div
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              fontFamily: "var(--font-nunito-sans)",
+              color: "var(--color-ink-black)",
+            }}
+          >
             ${stats.cheapestH100Rate.toFixed(2)}/hr
           </div>
           <div className="caption-text" style={{ marginTop: 2 }}>
@@ -61,7 +77,14 @@ export default function CloudTable({ cloudData, onSelectCard }) {
         </div>
 
         <div className="card-paper-white" style={{ padding: "16px 20px" }}>
-          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)" }}>
+          <div
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              fontFamily: "var(--font-nunito-sans)",
+              color: "var(--color-ink-black)",
+            }}
+          >
             {stats.providersCount}
           </div>
           <div className="caption-text" style={{ marginTop: 2 }}>
@@ -70,7 +93,14 @@ export default function CloudTable({ cloudData, onSelectCard }) {
         </div>
 
         <div className="card-paper-white" style={{ padding: "16px 20px" }}>
-          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)" }}>
+          <div
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              fontFamily: "var(--font-nunito-sans)",
+              color: "var(--color-ink-black)",
+            }}
+          >
             {stats.gpuModelsCount}
           </div>
           <div className="caption-text" style={{ marginTop: 2 }}>
@@ -79,7 +109,14 @@ export default function CloudTable({ cloudData, onSelectCard }) {
         </div>
 
         <div className="card-paper-white" style={{ padding: "16px 20px" }}>
-          <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-nunito-sans)", color: "var(--color-electric-violet)" }}>
+          <div
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              fontFamily: "var(--font-nunito-sans)",
+              color: "var(--color-electric-violet)",
+            }}
+          >
             {stats.livePricePointsCount}
           </div>
           <div className="caption-text" style={{ marginTop: 2 }}>
@@ -159,22 +196,98 @@ export default function CloudTable({ cloudData, onSelectCard }) {
       </div>
 
       {/* Cloud Table Surface */}
-      <div className="card-paper-white" style={{ padding: 0, overflow: "hidden" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, textAlign: "left" }}>
+      <div
+        className="card-paper-white"
+        style={{ padding: 0, overflow: "hidden" }}
+      >
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            fontSize: 14,
+            textAlign: "left",
+          }}
+        >
           <thead>
-            <tr style={{ backgroundColor: "var(--color-parchment-cream)", borderBottom: "1px solid var(--color-sand-gray)" }}>
-              <th style={{ padding: "14px 16px", color: "var(--color-charcoal-stone)", fontWeight: 600, fontSize: 12 }}>GPU ARCHITECTURE</th>
-              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>VRAM</th>
-              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>ON-DEMAND ({unit.toUpperCase()})</th>
-              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>SPOT FROM</th>
-              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>PRIMARY PROVIDER</th>
-              <th style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontWeight: 600, fontSize: 12 }}>VERIFIED</th>
+            <tr
+              style={{
+                backgroundColor: "var(--color-parchment-cream)",
+                borderBottom: "1px solid var(--color-sand-gray)",
+              }}
+            >
+              <th
+                style={{
+                  padding: "14px 16px",
+                  color: "var(--color-charcoal-stone)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                GPU ARCHITECTURE
+              </th>
+              <th
+                style={{
+                  padding: "14px 16px",
+                  color: "var(--color-ash-gray)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                VRAM
+              </th>
+              <th
+                style={{
+                  padding: "14px 16px",
+                  color: "var(--color-ash-gray)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                ON-DEMAND ({unit.toUpperCase()})
+              </th>
+              <th
+                style={{
+                  padding: "14px 16px",
+                  color: "var(--color-ash-gray)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                SPOT FROM
+              </th>
+              <th
+                style={{
+                  padding: "14px 16px",
+                  color: "var(--color-ash-gray)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                PRIMARY PROVIDER
+              </th>
+              <th
+                style={{
+                  padding: "14px 16px",
+                  color: "var(--color-ash-gray)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                VERIFIED
+              </th>
             </tr>
           </thead>
           <tbody>
             {sortedItems.length === 0 ? (
               <tr>
-                <td colSpan="6" style={{ textAlign: "center", color: "var(--color-ash-gray)", padding: 32 }}>
+                <td
+                  colSpan="6"
+                  style={{
+                    textAlign: "center",
+                    color: "var(--color-ash-gray)",
+                    padding: 32,
+                  }}
+                >
                   No cloud providers align with current query.
                 </td>
               </tr>
@@ -188,30 +301,80 @@ export default function CloudTable({ cloudData, onSelectCard }) {
                     cursor: "pointer",
                     transition: "background-color 0.15s ease",
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-parchment-cream)"}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor =
+                      "var(--color-parchment-cream)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = "transparent")
+                  }
                 >
-                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--color-ink-black)", fontSize: 15 }}>
+                  <td
+                    style={{
+                      padding: "14px 16px",
+                      fontWeight: 600,
+                      color: "var(--color-ink-black)",
+                      fontSize: 15,
+                    }}
+                  >
                     {cp.gpu}
                   </td>
-                  <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--color-charcoal-stone)" }}>
+                  <td
+                    style={{
+                      padding: "14px 16px",
+                      fontFamily: "var(--font-mono)",
+                      color: "var(--color-charcoal-stone)",
+                    }}
+                  >
                     {cp.vram}
                   </td>
-                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--color-ink-black)", fontFamily: "var(--font-mono)" }}>
+                  <td
+                    style={{
+                      padding: "14px 16px",
+                      fontWeight: 600,
+                      color: "var(--color-ink-black)",
+                      fontFamily: "var(--font-mono)",
+                    }}
+                  >
                     {formatRate(cp.onDemandUsd, cp.vramGbMin)}
                   </td>
-                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--color-forest-green)", fontFamily: "var(--font-mono)" }}>
+                  <td
+                    style={{
+                      padding: "14px 16px",
+                      fontWeight: 600,
+                      color: "var(--color-forest-green)",
+                      fontFamily: "var(--font-mono)",
+                    }}
+                  >
                     {formatRate(cp.spotUsd, cp.vramGbMin)}
                   </td>
-                  <td style={{ padding: "14px 16px", color: "var(--color-ink-black)" }}>
+                  <td
+                    style={{
+                      padding: "14px 16px",
+                      color: "var(--color-ink-black)",
+                    }}
+                  >
                     {cp.where}
                     {cp.offers.length > 1 && (
-                      <span style={{ marginLeft: 6, fontSize: 11, color: "var(--color-ash-gray)" }}>
+                      <span
+                        style={{
+                          marginLeft: 6,
+                          fontSize: 11,
+                          color: "var(--color-ash-gray)",
+                        }}
+                      >
                         (+{cp.offers.length - 1} more)
                       </span>
                     )}
                   </td>
-                  <td style={{ padding: "14px 16px", color: "var(--color-ash-gray)", fontSize: 12, fontFamily: "var(--font-mono)" }}>
+                  <td
+                    style={{
+                      padding: "14px 16px",
+                      color: "var(--color-ash-gray)",
+                      fontSize: 12,
+                      fontFamily: "var(--font-mono)",
+                    }}
+                  >
                     {cp.verifiedDate}
                   </td>
                 </tr>
@@ -220,7 +383,6 @@ export default function CloudTable({ cloudData, onSelectCard }) {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }
