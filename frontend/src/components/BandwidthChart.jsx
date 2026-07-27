@@ -74,8 +74,9 @@ export default function BandwidthChart() {
           <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-parchment-cream)" }} />
           <Bar dataKey="bandwidth" radius={[6, 6, 0, 0]} maxBarSize={40}>
             {data.map((entry, i) => {
-              const isBlackwell = entry.arch.includes("Blackwell");
-              const isHopper = entry.arch.includes("Hopper");
+              const arch = String(entry?.arch || "");
+              const isBlackwell = arch.includes("Blackwell");
+              const isHopper = arch.includes("Hopper");
               const fill = isBlackwell ? "var(--color-electric-violet)" : isHopper ? "var(--color-tangerine)" : "var(--color-aqua-teal)";
               return <Cell key={i} fill={fill} />;
             })}

@@ -550,6 +550,33 @@ h1, h2, h3 {
   gap: 24px;
 }
 
+/* GPU Splash Screen Particle Animations */
+.gpu-particle-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(168, 85, 247, 0.5), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(6, 182, 212, 0.6), transparent),
+    radial-gradient(2px 2px at 160px 120px, rgba(236, 72, 153, 0.4), transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: particleFloat 12s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes particleFloat {
+  0% { background-position: 0 0; }
+  100% { background-position: 200px 400px; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
 @media (max-width: 900px) {
   .grid-2col, .grid-3col {
     grid-template-columns: 1fr;

@@ -18,6 +18,7 @@ import BentoTelemetryGrid from "./components/BentoTelemetryGrid";
 import DetailModal from "./components/DetailModal";
 import CompareModal from "./components/CompareModal";
 import ChatWidget from "./components/ChatWidget";
+import GpuSplashScreen from "./components/GpuSplashScreen";
 import "./index.css";
 
 function SiliconLandscape() {
@@ -139,6 +140,8 @@ function Footer() {
 }
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
   const [showFullPlatform, setShowFullPlatform] = useState(false);
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -150,6 +153,10 @@ export default function App() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [compareList, setCompareList] = useState([]);
   const [compareOpen, setCompareOpen] = useState(false);
+
+  const handleSplashComplete = useCallback(() => {
+    setShowSplash(false);
+  }, []);
 
   const handleSearchOpen = useCallback(() => setSearchOpen(true), []);
   const handleSearchClose = useCallback(() => setSearchOpen(false), []);
@@ -165,10 +172,6 @@ export default function App() {
         el.scrollIntoView({ behavior: "smooth" });
       }
     }, 120);
-  }, []);
-
-  useEffect(() => {
-    sessionStorage.clear();
   }, []);
 
   const handleToggleCompare = (item) => {
@@ -187,6 +190,8 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: "var(--color-parchment-cream)", color: "var(--color-ink-black)", minHeight: "100vh", position: "relative" }}>
+      {showSplash && <GpuSplashScreen onComplete={handleSplashComplete} />}
+
       <NavigationHeader
         onSearchOpen={handleSearchOpen}
         onAccessOpen={handleAccessOpen}
