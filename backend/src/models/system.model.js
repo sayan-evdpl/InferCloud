@@ -12,7 +12,7 @@ const systemSchema = new mongoose.Schema(
     formFactor: { type: String, enum: ["laptop", "workstation", "desktop"] },
     category: { type: String, default: "system", enum: ["system"] },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 systemSchema.index({ type: "text", gpu: "text", specs: "text" });

@@ -21,7 +21,7 @@ const requestWithCache = async (url, params = {}) => {
   }
 
   const { data } = await api.get(url, { params });
-  
+
   try {
     sessionStorage.setItem(cacheKey, JSON.stringify(data.data));
   } catch (err) {
@@ -66,7 +66,10 @@ export const getExternalSpecs = async (name) => {
 export const sendChatMessage = async (messages, token) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  const { data } = await axios.post(`${backendUrl}/api/v1/chat`, { messages }, { headers });
+  const { data } = await axios.post(
+    `${backendUrl}/api/v1/chat`,
+    { messages },
+    { headers },
+  );
   return data.data;
 };
-

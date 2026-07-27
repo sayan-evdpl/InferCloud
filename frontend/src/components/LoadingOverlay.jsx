@@ -66,7 +66,12 @@ export default function LoadingOverlay() {
             letterSpacing: "-0.5px",
           }}
         >
-          GPU Scout <span style={{ color: "var(--color-silver-mist)", fontWeight: "200" }}>/ InferCloud</span>
+          GPU Scout{" "}
+          <span
+            style={{ color: "var(--color-silver-mist)", fontWeight: "200" }}
+          >
+            / InferCloud
+          </span>
         </span>
       </div>
 
@@ -81,10 +86,38 @@ export default function LoadingOverlay() {
             animation: "gpuscoutPreloaderSpin 3s linear infinite",
           }}
         >
-          <div style={{ width: 14, height: 14, backgroundColor: "#8052ff", borderRadius: 2 }} />
-          <div style={{ width: 14, height: 14, backgroundColor: "#ffb829", borderRadius: 2 }} />
-          <div style={{ width: 14, height: 14, backgroundColor: "#15846e", borderRadius: 2 }} />
-          <div style={{ width: 14, height: 14, backgroundColor: "#e056fd", borderRadius: 2 }} />
+          <div
+            style={{
+              width: 14,
+              height: 14,
+              backgroundColor: "#8052ff",
+              borderRadius: 2,
+            }}
+          />
+          <div
+            style={{
+              width: 14,
+              height: 14,
+              backgroundColor: "#ffb829",
+              borderRadius: 2,
+            }}
+          />
+          <div
+            style={{
+              width: 14,
+              height: 14,
+              backgroundColor: "#15846e",
+              borderRadius: 2,
+            }}
+          />
+          <div
+            style={{
+              width: 14,
+              height: 14,
+              backgroundColor: "#e056fd",
+              borderRadius: 2,
+            }}
+          />
         </div>
 
         <style>{`
@@ -109,7 +142,13 @@ export default function LoadingOverlay() {
       </div>
 
       {/* Bottom Statement */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+        }}
+      >
         <p
           style={{
             fontFamily: "var(--font-ppneuemontreal)",
@@ -121,7 +160,8 @@ export default function LoadingOverlay() {
             lineHeight: 1.4,
           }}
         >
-          Initializing GPU Scout Telemetry Engine... Calibrating Blackwell & Hopper spot rates.
+          Initializing GPU Scout Telemetry Engine... Calibrating Blackwell &
+          Hopper spot rates.
         </p>
 
         <span

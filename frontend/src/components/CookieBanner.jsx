@@ -49,23 +49,60 @@ export default function CookieBanner() {
         }
       `}</style>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--color-saffron-spark)", letterSpacing: "0.35px", textTransform: "uppercase" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "11px",
+            fontWeight: "600",
+            color: "var(--color-saffron-spark)",
+            letterSpacing: "0.35px",
+            textTransform: "uppercase",
+          }}
+        >
           GPU SCOUT TELEMETRY PREFERENCES
         </span>
         <button
           onClick={() => setVisible(false)}
-          style={{ background: "transparent", border: "none", color: "var(--color-silver-mist)", cursor: "pointer", fontSize: "14px" }}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "var(--color-silver-mist)",
+            cursor: "pointer",
+            fontSize: "14px",
+          }}
         >
           ✕
         </button>
       </div>
 
-      <p style={{ fontFamily: "var(--font-ppneuemontreal)", fontSize: "13px", fontWeight: "200", color: "var(--color-bone-white)", lineHeight: 1.4, margin: 0 }}>
-        Essential cookies enable hardware spot telemetry and node latency optimization.
+      <p
+        style={{
+          fontFamily: "var(--font-ppneuemontreal)",
+          fontSize: "13px",
+          fontWeight: "200",
+          color: "var(--color-bone-white)",
+          lineHeight: 1.4,
+          margin: 0,
+        }}
+      >
+        Essential cookies enable hardware spot telemetry and node latency
+        optimization.
       </p>
 
-      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginTop: "2px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          alignItems: "center",
+          marginTop: "2px",
+        }}
+      >
         <button
           className="button-violet-pill"
           onClick={handleAccept}
@@ -76,7 +113,11 @@ export default function CookieBanner() {
         <button
           className="ghost-link"
           onClick={handleDecline}
-          style={{ fontSize: "11px", padding: "4px 8px", color: "var(--color-bone-white)" }}
+          style={{
+            fontSize: "11px",
+            padding: "4px 8px",
+            color: "var(--color-bone-white)",
+          }}
         >
           DECLINE
         </button>

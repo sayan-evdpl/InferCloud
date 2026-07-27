@@ -23,7 +23,10 @@ export default function BackgroundConstellation() {
     // Scroll progress (0 to 1)
     let scrollProgress = 0;
     const handleScroll = () => {
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const maxScroll = Math.max(
+        1,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
       scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
     };
     window.addEventListener("scroll", handleScroll);
@@ -53,22 +56,32 @@ export default function BackgroundConstellation() {
         // Central 3D Die Matrix (21x21 grid)
         const cols = 21;
         const row = Math.floor((i / (numParticles * 0.55)) * cols);
-        const col = (i % cols);
+        const col = i % cols;
         const x = (col - 10) * 18;
         const y = (row - 10) * 18;
         const z = Math.sin(row * 0.35 + col * 0.35) * 25;
         return { x, y, z };
       } else if (isHbmStack) {
         // 4 Surrounding HBM3e Memory Cube Stacks
-        const stackIdx = (i % 4); // Top, Right, Bottom, Left
+        const stackIdx = i % 4; // Top, Right, Bottom, Left
         const layer = Math.floor(i / 4) % 6;
         const col = Math.floor(i / 24) % 3;
-        
-        let cx = 0, cy = 0;
-        if (stackIdx === 0) { cx = 0; cy = -230; }
-        else if (stackIdx === 1) { cx = 230; cy = 0; }
-        else if (stackIdx === 2) { cx = 0; cy = 230; }
-        else { cx = -230; cy = 0; }
+
+        let cx = 0,
+          cy = 0;
+        if (stackIdx === 0) {
+          cx = 0;
+          cy = -230;
+        } else if (stackIdx === 1) {
+          cx = 230;
+          cy = 0;
+        } else if (stackIdx === 2) {
+          cx = 0;
+          cy = 230;
+        } else {
+          cx = -230;
+          cy = 0;
+        }
 
         const x = cx + (col - 1) * 22;
         const y = cy + (layer - 2.5) * 16;
@@ -78,7 +91,11 @@ export default function BackgroundConstellation() {
         // Outer PCIe 5.0 / NVLink Interconnect Ring
         const angle = (i / (numParticles * 0.15)) * Math.PI * 2;
         const radius = 310;
-        return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, z: -15 };
+        return {
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * radius,
+          z: -15,
+        };
       }
     }
 
@@ -101,12 +118,20 @@ export default function BackgroundConstellation() {
       if (isRing) {
         const angle = (i / (numParticles * 0.2)) * Math.PI * 2;
         const radius = 290;
-        return { x: Math.cos(angle) * radius, y: Math.sin(angle) * 70, z: Math.sin(angle) * radius };
+        return {
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * 70,
+          z: Math.sin(angle) * radius,
+        };
       } else {
         const phi = Math.acos(-1 + (2 * i) / (numParticles * 0.8));
         const theta = Math.sqrt(numParticles * Math.PI) * phi;
         const r = 210;
-        return { x: r * Math.cos(theta) * Math.sin(phi), y: r * Math.sin(theta) * Math.sin(phi), z: r * Math.cos(phi) };
+        return {
+          x: r * Math.cos(theta) * Math.sin(phi),
+          y: r * Math.sin(theta) * Math.sin(phi),
+          z: r * Math.cos(phi),
+        };
       }
     }
 
@@ -243,12 +268,13 @@ export default function BackgroundConstellation() {
 
       // Determine current 3D GPU shape based on scrollProgress
       const shapeIndex = Math.min(4, Math.floor(scrollProgress * 4.99));
-      const shapeFraction = (scrollProgress * 4.99) - shapeIndex;
+      const shapeFraction = scrollProgress * 4.99 - shapeIndex;
 
       currentAngleY += (targetAngleY - currentAngleY) * 0.05;
       currentAngleX += (targetAngleX - currentAngleX) * 0.05;
 
-      const autoAngleY = time * 0.2 + scrollProgress * Math.PI * 2.2 + currentAngleY;
+      const autoAngleY =
+        time * 0.2 + scrollProgress * Math.PI * 2.2 + currentAngleY;
       const autoAngleX = Math.sin(time * 0.15) * 0.14 + currentAngleX;
 
       const cosY = Math.cos(autoAngleY);
@@ -257,7 +283,8 @@ export default function BackgroundConstellation() {
       const sinX = Math.sin(autoAngleX);
 
       // Center offset
-      const targetCenterX = scrollProgress < 0.15 ? widthPx * 0.72 : widthPx * 0.5;
+      const targetCenterX =
+        scrollProgress < 0.15 ? widthPx * 0.72 : widthPx * 0.5;
       const targetCenterY = heightPx * 0.5;
 
       const projectedPoints = [];
@@ -266,18 +293,32 @@ export default function BackgroundConstellation() {
         const p = particles[i];
 
         let s1, s2;
-        if (shapeIndex === 0) { s1 = getGpuPackageTarget(i); s2 = getTensorGridTarget(i); }
-        else if (shapeIndex === 1) { s1 = getTensorGridTarget(i); s2 = getTelemetrySphereTarget(i); }
-        else if (shapeIndex === 2) { s1 = getTelemetrySphereTarget(i); s2 = getServerRacksTarget(i); }
-        else if (shapeIndex === 3) { s1 = getServerRacksTarget(i); s2 = getMobiusLatticeTarget(i); }
-        else { s1 = getMobiusLatticeTarget(i); s2 = getGpuPackageTarget(i); }
+        if (shapeIndex === 0) {
+          s1 = getGpuPackageTarget(i);
+          s2 = getTensorGridTarget(i);
+        } else if (shapeIndex === 1) {
+          s1 = getTensorGridTarget(i);
+          s2 = getTelemetrySphereTarget(i);
+        } else if (shapeIndex === 2) {
+          s1 = getTelemetrySphereTarget(i);
+          s2 = getServerRacksTarget(i);
+        } else if (shapeIndex === 3) {
+          s1 = getServerRacksTarget(i);
+          s2 = getMobiusLatticeTarget(i);
+        } else {
+          s1 = getMobiusLatticeTarget(i);
+          s2 = getGpuPackageTarget(i);
+        }
 
         const rawTargetX = s1.x + (s2.x - s1.x) * shapeFraction;
         const rawTargetY = s1.y + (s2.y - s1.y) * shapeFraction;
         const rawTargetZ = s1.z + (s2.z - s1.z) * shapeFraction;
 
         // Organic wave pulse
-        const organicWave = Math.sin(time * 2.4 + rawTargetX * 0.02) * Math.cos(time * 1.8 + rawTargetY * 0.02) * 12;
+        const organicWave =
+          Math.sin(time * 2.4 + rawTargetX * 0.02) *
+          Math.cos(time * 1.8 + rawTargetY * 0.02) *
+          12;
 
         const targetX = rawTargetX;
         const targetY = rawTargetY + organicWave;
@@ -290,7 +331,8 @@ export default function BackgroundConstellation() {
         // Magnetic repulsion
         if (isHovering) {
           const projectedBaseX = (p.currX * cosY - p.currZ * sinY) * dpr;
-          const projectedBaseY = (p.currY * cosX - (p.currZ * cosY + p.currX * sinY) * sinX) * dpr;
+          const projectedBaseY =
+            (p.currY * cosX - (p.currZ * cosY + p.currX * sinY) * sinX) * dpr;
           const dx = projectedBaseX - mouseX;
           const dy = projectedBaseY - mouseY;
           const dist = Math.sqrt(dx * dx + dy * dy);
@@ -322,9 +364,19 @@ export default function BackgroundConstellation() {
         const projY = targetCenterY + y2 * perspective * dpr;
 
         p.rotation += p.rotSpeed;
-        const alpha = Math.min(0.98, Math.max(0.25, (perspective - 0.45) * 1.7));
+        const alpha = Math.min(
+          0.98,
+          Math.max(0.25, (perspective - 0.45) * 1.7),
+        );
 
-        drawCrispTriangle(projX, projY, p.size * perspective, p.rotation, p.color, alpha);
+        drawCrispTriangle(
+          projX,
+          projY,
+          p.size * perspective,
+          p.rotation,
+          p.color,
+          alpha,
+        );
 
         if (z3 < 140) {
           projectedPoints.push({ x: projX, y: projY, color: p.color, alpha });
@@ -371,7 +423,7 @@ export default function BackgroundConstellation() {
           p.size,
           p.rotation,
           p.color,
-          p.opacity * 0.6
+          p.opacity * 0.6,
         );
       }
 
@@ -387,7 +439,14 @@ export default function BackgroundConstellation() {
           continue;
         }
 
-        drawCrispTriangle(b.x, b.y, b.size * b.life, b.rotation, b.color, b.life);
+        drawCrispTriangle(
+          b.x,
+          b.y,
+          b.size * b.life,
+          b.rotation,
+          b.color,
+          b.life,
+        );
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -416,7 +475,10 @@ export default function BackgroundConstellation() {
         overflow: "hidden",
       }}
     >
-      <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: "100%" }} />
+      <canvas
+        ref={canvasRef}
+        style={{ display: "block", width: "100%", height: "100%" }}
+      />
     </div>
   );
 }
