@@ -10,6 +10,7 @@ This guide outlines our development workflow, conventional commit standards, cod
 
 - [Code of Conduct](#-code-of-conduct)
 - [Getting Started](#-getting-started)
+- [Quick Step-by-Step Contribution Process](#-quick-step-by-step-contribution-process)
 - [Branching Strategy](#-branching-strategy)
 - [Conventional Commit Standard](#-conventional-commit-standard)
   - [Commit Message Format](#commit-message-format)
@@ -51,6 +52,37 @@ We expect all contributors to maintain a respectful, welcoming, and collaborativ
    cd ../frontend && npm install
    cd ..
    ```
+
+---
+
+## ⚡ Quick Step-by-Step Contribution Process
+
+Follow this simple step-by-step workflow when contributing changes:
+
+1. **Update your forked repo's `main` branch** directly on GitHub.
+2. Open your terminal in your local project root folder.
+3. Fetch the latest changes:
+   ```bash
+   git fetch
+   ```
+4. Pull latest code to your local machine:
+   ```bash
+   git pull origin main
+   ```
+5. Make your code edits and improvements.
+6. Stage your changes:
+   ```bash
+   git add .
+   ```
+7. Commit your changes using a conventional commit message:
+   ```bash
+   git commit -m "convention: your message"
+   ```
+8. Push your changes to your forked repository:
+   ```bash
+   git push origin main
+   ```
+9. Go to your GitHub forked repository page and create a **Pull Request (PR)** targeting our `feature/release-automation` branch.
 
 ---
 
