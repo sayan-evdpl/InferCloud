@@ -18,10 +18,10 @@ export default function NoiseOverlay() {
 
       for (let i = 0; i < data.length; i += 4) {
         const noise = Math.random() * 255;
-        data[i] = noise; // R
+        data[i] = noise;     // R
         data[i + 1] = noise; // G
         data[i + 2] = noise; // B
-        data[i + 3] = 12; // Low opacity noise alpha
+        data[i + 3] = 12;    // Low opacity noise alpha
       }
 
       ctx.putImageData(imgData, 0, 0);
@@ -30,8 +30,7 @@ export default function NoiseOverlay() {
     let frame = 0;
     const loop = () => {
       frame++;
-      if (frame % 3 === 0) {
-        // Animate noise frame every 3 ticks
+      if (frame % 3 === 0) { // Animate noise frame every 3 ticks
         generateNoise();
       }
       animationFrameId = requestAnimationFrame(loop);

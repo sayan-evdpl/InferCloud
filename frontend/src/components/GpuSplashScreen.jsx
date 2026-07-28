@@ -80,8 +80,7 @@ export default function GpuSplashScreen({ onComplete }) {
             position: "fixed",
             inset: 0,
             zIndex: 9999,
-            background:
-              "linear-gradient(180deg, #eef4ff 0%, #f6f0fc 45%, #fdf8fe 100%)",
+            background: "linear-gradient(180deg, #eef4ff 0%, #f6f0fc 45%, #fdf8fe 100%)",
             color: "#1e162d",
             display: "flex",
             flexDirection: "column",
@@ -106,8 +105,7 @@ export default function GpuSplashScreen({ onComplete }) {
                 linear-gradient(rgba(147, 197, 253, 0.12) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(147, 197, 253, 0.12) 1px, transparent 1px)
               `,
-              backgroundSize:
-                "100% 100%, 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px",
+              backgroundSize: "100% 100%, 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px",
               pointerEvents: "none",
             }}
           />
@@ -123,8 +121,7 @@ export default function GpuSplashScreen({ onComplete }) {
               width: "360px",
               height: "220px",
               borderRadius: "50%",
-              background:
-                "radial-gradient(circle, rgba(255, 255, 255, 0.88) 0%, rgba(244, 114, 182, 0.25) 45%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(255, 255, 255, 0.88) 0%, rgba(244, 114, 182, 0.25) 45%, transparent 70%)",
               filter: "blur(26px)",
               pointerEvents: "none",
               zIndex: 2,
@@ -141,8 +138,7 @@ export default function GpuSplashScreen({ onComplete }) {
               width: "380px",
               height: "240px",
               borderRadius: "50%",
-              background:
-                "radial-gradient(circle, rgba(255, 255, 255, 0.88) 0%, rgba(147, 197, 253, 0.30) 45%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(255, 255, 255, 0.88) 0%, rgba(147, 197, 253, 0.30) 45%, transparent 70%)",
               filter: "blur(28px)",
               pointerEvents: "none",
               zIndex: 2,
@@ -191,15 +187,7 @@ export default function GpuSplashScreen({ onComplete }) {
                 GPU SCOUT SILICON ENGINE
               </span>
             </div>
-            <div
-              style={{
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: "0.18em",
-                color: "#8b5cf6",
-                textTransform: "uppercase",
-              }}
-            >
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", color: "#8b5cf6", textTransform: "uppercase" }}>
               FOUR LAYER CUBOID HARDWARE ARCHITECTURE
             </div>
           </motion.div>
@@ -242,8 +230,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     width: 10,
                     height: 240,
                     borderRadius: 5,
-                    background:
-                      "linear-gradient(180deg, #38bdf8 0%, #a855f7 50%, #ec4899 100%)",
+                    background: "linear-gradient(180deg, #38bdf8 0%, #a855f7 50%, #ec4899 100%)",
                     boxShadow: "0 0 18px rgba(56, 189, 248, 0.85)",
                     transformStyle: "preserve-3d",
                     transform: "translateZ(180px)",
@@ -262,8 +249,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     width: 10,
                     height: 240,
                     borderRadius: 5,
-                    background:
-                      "linear-gradient(180deg, #f472b6 0%, #c084fc 50%, #38bdf8 100%)",
+                    background: "linear-gradient(180deg, #f472b6 0%, #c084fc 50%, #38bdf8 100%)",
                     boxShadow: "0 0 18px rgba(244, 114, 182, 0.85)",
                     transformStyle: "preserve-3d",
                     transform: "translateZ(180px)",
@@ -279,18 +265,16 @@ export default function GpuSplashScreen({ onComplete }) {
                 animate={{
                   z: getBoxTargetZ(1),
                   scale: hoveredBox === 1 ? 1.03 : 1,
-                  boxShadow:
-                    hoveredBox === 1
-                      ? "0 0 70px rgba(178, 107, 245, 0.9)"
-                      : "0 0 45px rgba(178, 107, 245, 0.5)",
+                  boxShadow: hoveredBox === 1
+                    ? "0 0 70px rgba(178, 107, 245, 0.9)"
+                    : "0 0 45px rgba(178, 107, 245, 0.5)",
                 }}
                 transition={{ type: "spring", stiffness: 320, damping: 24 }}
                 style={{
                   position: "absolute",
                   inset: 0,
                   borderRadius: 24,
-                  background:
-                    "linear-gradient(145deg, #1f1f2c 0%, #0e0e18 100%)",
+                  background: "linear-gradient(145deg, #1f1f2c 0%, #0e0e18 100%)",
                   border: "2.5px solid rgba(178, 107, 245, 0.85)",
                   padding: 18,
                   transformStyle: "preserve-3d",
@@ -307,8 +291,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -2.5,
                     height: 55,
                     borderRadius: "0 0 22px 22px",
-                    background:
-                      "linear-gradient(180deg, #161624 0%, #06060a 100%)",
+                    background: "linear-gradient(180deg, #161624 0%, #06060a 100%)",
                     border: "2.5px solid rgba(178, 107, 245, 0.75)",
                     borderTop: "none",
                     transform: "rotateX(-90deg)",
@@ -320,35 +303,10 @@ export default function GpuSplashScreen({ onComplete }) {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: 9.5,
-                      fontWeight: 900,
-                      color: "#d8b4fe",
-                      letterSpacing: "0.12em",
-                    }}
-                  >
-                    LAYER 1 — FOUNDATION SUBSTRATE CHASSIS
-                  </span>
+                  <span style={{ fontSize: 9.5, fontWeight: 900, color: "#d8b4fe", letterSpacing: "0.12em" }}>LAYER 1 — FOUNDATION SUBSTRATE CHASSIS</span>
                   <div style={{ display: "flex", gap: 6 }}>
-                    <div
-                      style={{
-                        width: 7,
-                        height: 7,
-                        borderRadius: "50%",
-                        background: "#22c55e",
-                        boxShadow: "0 0 8px #22c55e",
-                      }}
-                    />
-                    <div
-                      style={{
-                        width: 7,
-                        height: 7,
-                        borderRadius: "50%",
-                        background: "#38bdf8",
-                        boxShadow: "0 0 8px #38bdf8",
-                      }}
-                    />
+                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 8px #22c55e" }} />
+                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#38bdf8", boxShadow: "0 0 8px #38bdf8" }} />
                   </div>
                 </div>
 
@@ -361,8 +319,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -55,
                     width: 55,
                     borderRadius: "0 22px 22px 0",
-                    background:
-                      "linear-gradient(90deg, #141420 0%, #050508 100%)",
+                    background: "linear-gradient(90deg, #141420 0%, #050508 100%)",
                     border: "2.5px solid rgba(178, 107, 245, 0.65)",
                     borderLeft: "none",
                     transform: "rotateY(90deg)",
@@ -375,75 +332,30 @@ export default function GpuSplashScreen({ onComplete }) {
                     gap: 6,
                   }}
                 >
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "rgba(178, 107, 245, 0.85)",
-                    }}
-                  />
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "rgba(6, 182, 212, 0.85)",
-                    }}
-                  />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "rgba(178, 107, 245, 0.85)" }} />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "rgba(6, 182, 212, 0.85)" }} />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      fontFamily: "var(--font-mono)",
-                      color: "#d8b4fe",
-                      letterSpacing: "0.14em",
-                    }}
-                  >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ fontSize: 10, fontWeight: 800, fontFamily: "var(--font-mono)", color: "#d8b4fe", letterSpacing: "0.14em" }}>
                     NEURAL FOUNDATION BASE
                   </div>
                   {hoveredBox === 1 && (
-                    <span
-                      style={{
-                        fontSize: 10,
-                        background: "rgba(178, 107, 245, 0.3)",
-                        border: "1px solid #d8b4fe",
-                        padding: "2px 8px",
-                        borderRadius: 8,
-                        color: "#f3e8ff",
-                      }}
-                    >
+                    <span style={{ fontSize: 10, background: "rgba(178, 107, 245, 0.3)", border: "1px solid #d8b4fe", padding: "2px 8px", borderRadius: 8, color: "#f3e8ff" }}>
                       MODELS ONLINE
                     </span>
                   )}
                 </div>
 
                 {/* 3 Prominent 3D Pedestals for OpenAI, DeepSeek, Claude */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: 20,
-                    gap: 10,
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20, gap: 10 }}>
                   <motion.div
                     whileHover={{ y: -6, scale: 1.06 }}
                     style={{
                       flex: 1,
                       height: 72,
                       borderRadius: 16,
-                      background:
-                        "linear-gradient(145deg, rgba(6, 182, 212, 0.32), rgba(6, 182, 212, 0.08))",
+                      background: "linear-gradient(145deg, rgba(6, 182, 212, 0.32), rgba(6, 182, 212, 0.08))",
                       border: "1.5px solid rgba(6, 182, 212, 0.8)",
                       display: "flex",
                       flexDirection: "column",
@@ -454,15 +366,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     }}
                   >
                     <span style={{ fontSize: 24 }}>🐋</span>
-                    <span
-                      style={{
-                        fontSize: 9.5,
-                        fontWeight: 900,
-                        color: "#67e8f9",
-                        marginTop: 4,
-                        letterSpacing: "0.05em",
-                      }}
-                    >
+                    <span style={{ fontSize: 9.5, fontWeight: 900, color: "#67e8f9", marginTop: 4, letterSpacing: "0.05em" }}>
                       DEEPSEEK R1
                     </span>
                   </motion.div>
@@ -473,8 +377,7 @@ export default function GpuSplashScreen({ onComplete }) {
                       flex: 1,
                       height: 72,
                       borderRadius: 16,
-                      background:
-                        "linear-gradient(145deg, rgba(244, 114, 182, 0.32), rgba(244, 114, 182, 0.08))",
+                      background: "linear-gradient(145deg, rgba(244, 114, 182, 0.32), rgba(244, 114, 182, 0.08))",
                       border: "1.5px solid rgba(244, 114, 182, 0.8)",
                       display: "flex",
                       flexDirection: "column",
@@ -485,15 +388,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     }}
                   >
                     <span style={{ fontSize: 24 }}>❇️</span>
-                    <span
-                      style={{
-                        fontSize: 9.5,
-                        fontWeight: 900,
-                        color: "#f472b6",
-                        marginTop: 4,
-                        letterSpacing: "0.05em",
-                      }}
-                    >
+                    <span style={{ fontSize: 9.5, fontWeight: 900, color: "#f472b6", marginTop: 4, letterSpacing: "0.05em" }}>
                       CLAUDE 3.5
                     </span>
                   </motion.div>
@@ -504,8 +399,7 @@ export default function GpuSplashScreen({ onComplete }) {
                       flex: 1,
                       height: 72,
                       borderRadius: 16,
-                      background:
-                        "linear-gradient(145deg, rgba(178, 107, 245, 0.32), rgba(178, 107, 245, 0.08))",
+                      background: "linear-gradient(145deg, rgba(178, 107, 245, 0.32), rgba(178, 107, 245, 0.08))",
                       border: "1.5px solid rgba(178, 107, 245, 0.8)",
                       display: "flex",
                       flexDirection: "column",
@@ -516,15 +410,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     }}
                   >
                     <span style={{ fontSize: 24 }}>✴️</span>
-                    <span
-                      style={{
-                        fontSize: 9.5,
-                        fontWeight: 900,
-                        color: "#c084fc",
-                        marginTop: 4,
-                        letterSpacing: "0.05em",
-                      }}
-                    >
+                    <span style={{ fontSize: 9.5, fontWeight: 900, color: "#c084fc", marginTop: 4, letterSpacing: "0.05em" }}>
                       OPENAI GPT
                     </span>
                   </motion.div>
@@ -538,18 +424,16 @@ export default function GpuSplashScreen({ onComplete }) {
                 animate={{
                   z: getBoxTargetZ(2),
                   scale: hoveredBox === 2 ? 1.03 : 1,
-                  boxShadow:
-                    step >= 2
-                      ? "0 0 70px rgba(6, 182, 212, 0.9)"
-                      : "0 0 45px rgba(6, 182, 212, 0.5)",
+                  boxShadow: step >= 2
+                    ? "0 0 70px rgba(6, 182, 212, 0.9)"
+                    : "0 0 45px rgba(6, 182, 212, 0.5)",
                 }}
                 transition={{ type: "spring", stiffness: 280, damping: 22 }}
                 style={{
                   position: "absolute",
                   inset: 0,
                   borderRadius: 24,
-                  background:
-                    "linear-gradient(135deg, rgba(16, 28, 52, 0.95) 0%, rgba(8, 14, 28, 0.98) 100%)",
+                  background: "linear-gradient(135deg, rgba(16, 28, 52, 0.95) 0%, rgba(8, 14, 28, 0.98) 100%)",
                   border: "2.5px solid rgba(6, 182, 212, 0.85)",
                   padding: 18,
                   transformStyle: "preserve-3d",
@@ -566,8 +450,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -2.5,
                     height: 55,
                     borderRadius: "0 0 22px 22px",
-                    background:
-                      "linear-gradient(180deg, #0e1e34 0%, #030812 100%)",
+                    background: "linear-gradient(180deg, #0e1e34 0%, #030812 100%)",
                     border: "2.5px solid rgba(6, 182, 212, 0.75)",
                     borderTop: "none",
                     transform: "rotateX(-90deg)",
@@ -579,25 +462,8 @@ export default function GpuSplashScreen({ onComplete }) {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: 9.5,
-                      fontWeight: 900,
-                      color: "#67e8f9",
-                      letterSpacing: "0.12em",
-                    }}
-                  >
-                    LAYER 2 — HBM3E COMPUTE ENGINE CHASSIS
-                  </span>
-                  <div
-                    style={{
-                      width: 10,
-                      height: 5,
-                      borderRadius: 3,
-                      background: "#06b6d4",
-                      boxShadow: "0 0 10px #06b6d4",
-                    }}
-                  />
+                  <span style={{ fontSize: 9.5, fontWeight: 900, color: "#67e8f9", letterSpacing: "0.12em" }}>LAYER 2 — HBM3E COMPUTE ENGINE CHASSIS</span>
+                  <div style={{ width: 10, height: 5, borderRadius: 3, background: "#06b6d4", boxShadow: "0 0 10px #06b6d4" }} />
                 </div>
 
                 {/* 2. RIGHT 3D CUBOID WALL (Height 55px) */}
@@ -609,8 +475,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -55,
                     width: 55,
                     borderRadius: "0 22px 22px 0",
-                    background:
-                      "linear-gradient(90deg, #0a1628 0%, #030812 100%)",
+                    background: "linear-gradient(90deg, #0a1628 0%, #030812 100%)",
                     border: "2.5px solid rgba(6, 182, 212, 0.65)",
                     borderLeft: "none",
                     transform: "rotateY(90deg)",
@@ -623,84 +488,32 @@ export default function GpuSplashScreen({ onComplete }) {
                     gap: 6,
                   }}
                 >
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "#06b6d4",
-                    }}
-                  />
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "#38bdf8",
-                    }}
-                  />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "#06b6d4" }} />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "#38bdf8" }} />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      fontFamily: "var(--font-mono)",
-                      color: "#06b6d4",
-                      letterSpacing: "0.14em",
-                    }}
-                  >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ fontSize: 10, fontWeight: 800, fontFamily: "var(--font-mono)", color: "#06b6d4", letterSpacing: "0.14em" }}>
                     COMPUTE & MEMORY STACK
                   </div>
                   {hoveredBox === 2 && (
-                    <span
-                      style={{
-                        fontSize: 10,
-                        background: "rgba(6, 182, 212, 0.3)",
-                        border: "1px solid #06b6d4",
-                        padding: "2px 8px",
-                        borderRadius: 8,
-                        color: "#a5f3fc",
-                      }}
-                    >
+                    <span style={{ fontSize: 10, background: "rgba(6, 182, 212, 0.3)", border: "1px solid #06b6d4", padding: "2px 8px", borderRadius: 8, color: "#a5f3fc" }}>
                       4.80 TB/s BUS
                     </span>
                   )}
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginTop: 16,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 4,
-                      width: 145,
-                    }}
-                  >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 4, width: 145 }}>
                     {[...Array(6)].map((_, i) => (
                       <div
                         key={i}
                         style={{
                           height: 7,
                           borderRadius: 3.5,
-                          background:
-                            i % 2 === 0
-                              ? "linear-gradient(90deg, #38bdf8, #818cf8)"
-                              : "linear-gradient(90deg, #ec4899, #c084fc)",
+                          background: i % 2 === 0
+                            ? "linear-gradient(90deg, #38bdf8, #818cf8)"
+                            : "linear-gradient(90deg, #ec4899, #c084fc)",
                           boxShadow: "0 0 12px rgba(56, 189, 248, 0.6)",
                         }}
                       />
@@ -713,27 +526,16 @@ export default function GpuSplashScreen({ onComplete }) {
                       width: 66,
                       height: 66,
                       borderRadius: "50%",
-                      background:
-                        "radial-gradient(circle, rgba(56, 189, 248, 0.95) 0%, rgba(178, 107, 245, 0.4) 60%, transparent 100%)",
+                      background: "radial-gradient(circle, rgba(56, 189, 248, 0.95) 0%, rgba(178, 107, 245, 0.4) 60%, transparent 100%)",
                       border: "2.5px solid #38bdf8",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      boxShadow:
-                        hoveredBox === 2
-                          ? "0 0 40px rgba(56, 189, 248, 0.95)"
-                          : "0 0 25px rgba(56, 189, 248, 0.8)",
+                      boxShadow: hoveredBox === 2 ? "0 0 40px rgba(56, 189, 248, 0.95)" : "0 0 25px rgba(56, 189, 248, 0.8)",
                       transform: "translateZ(24px)",
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: 30,
-                        animation: "spin 6s linear infinite",
-                      }}
-                    >
-                      🌐
-                    </span>
+                    <span style={{ fontSize: 30, animation: "spin 6s linear infinite" }}>🌐</span>
                   </div>
                 </div>
               </motion.div>
@@ -745,18 +547,16 @@ export default function GpuSplashScreen({ onComplete }) {
                 animate={{
                   z: getBoxTargetZ(3),
                   scale: hoveredBox === 3 ? 1.03 : 1,
-                  boxShadow:
-                    step >= 3
-                      ? "0 0 70px rgba(236, 72, 153, 0.9)"
-                      : "0 0 45px rgba(236, 72, 153, 0.5)",
+                  boxShadow: step >= 3
+                    ? "0 0 70px rgba(236, 72, 153, 0.9)"
+                    : "0 0 45px rgba(236, 72, 153, 0.5)",
                 }}
                 transition={{ type: "spring", stiffness: 280, damping: 22 }}
                 style={{
                   position: "absolute",
                   inset: 0,
                   borderRadius: 24,
-                  background:
-                    "linear-gradient(135deg, rgba(38, 18, 62, 0.95) 0%, rgba(18, 8, 32, 0.98) 100%)",
+                  background: "linear-gradient(135deg, rgba(38, 18, 62, 0.95) 0%, rgba(18, 8, 32, 0.98) 100%)",
                   border: "2.5px solid rgba(236, 72, 153, 0.85)",
                   padding: 18,
                   transformStyle: "preserve-3d",
@@ -773,8 +573,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -2.5,
                     height: 55,
                     borderRadius: "0 0 22px 22px",
-                    background:
-                      "linear-gradient(180deg, #260f38 0%, #060307 100%)",
+                    background: "linear-gradient(180deg, #260f38 0%, #060307 100%)",
                     border: "2.5px solid rgba(236, 72, 153, 0.75)",
                     borderTop: "none",
                     transform: "rotateX(-90deg)",
@@ -786,25 +585,8 @@ export default function GpuSplashScreen({ onComplete }) {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: 9.5,
-                      fontWeight: 900,
-                      color: "#f472b6",
-                      letterSpacing: "0.12em",
-                    }}
-                  >
-                    LAYER 3 — MULTIMODAL PIPELINES CHASSIS
-                  </span>
-                  <div
-                    style={{
-                      width: 10,
-                      height: 5,
-                      borderRadius: 3,
-                      background: "#ec4899",
-                      boxShadow: "0 0 10px #ec4899",
-                    }}
-                  />
+                  <span style={{ fontSize: 9.5, fontWeight: 900, color: "#f472b6", letterSpacing: "0.12em" }}>LAYER 3 — MULTIMODAL PIPELINES CHASSIS</span>
+                  <div style={{ width: 10, height: 5, borderRadius: 3, background: "#ec4899", boxShadow: "0 0 10px #ec4899" }} />
                 </div>
 
                 {/* 2. RIGHT 3D CUBOID WALL (Height 55px) */}
@@ -816,8 +598,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -55,
                     width: 55,
                     borderRadius: "0 22px 22px 0",
-                    background:
-                      "linear-gradient(90deg, #1d0a2c 0%, #060307 100%)",
+                    background: "linear-gradient(90deg, #1d0a2c 0%, #060307 100%)",
                     border: "2.5px solid rgba(236, 72, 153, 0.65)",
                     borderLeft: "none",
                     transform: "rotateY(90deg)",
@@ -830,67 +611,23 @@ export default function GpuSplashScreen({ onComplete }) {
                     gap: 6,
                   }}
                 >
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "#ec4899",
-                    }}
-                  />
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "#f472b6",
-                    }}
-                  />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "#ec4899" }} />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "#f472b6" }} />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      fontFamily: "var(--font-mono)",
-                      color: "#ec4899",
-                      letterSpacing: "0.14em",
-                    }}
-                  >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ fontSize: 10, fontWeight: 800, fontFamily: "var(--font-mono)", color: "#ec4899", letterSpacing: "0.14em" }}>
                     MULTIMODAL AI PIPELINES
                   </div>
                   {hoveredBox === 3 && (
-                    <span
-                      style={{
-                        fontSize: 10,
-                        background: "rgba(236, 72, 153, 0.3)",
-                        border: "1px solid #ec4899",
-                        padding: "2px 8px",
-                        borderRadius: 8,
-                        color: "#fbcfe8",
-                      }}
-                    >
+                    <span style={{ fontSize: 10, background: "rgba(236, 72, 153, 0.3)", border: "1px solid #ec4899", padding: "2px 8px", borderRadius: 8, color: "#fbcfe8" }}>
                       PIPELINES ACTIVE
                     </span>
                   )}
                 </div>
 
                 {/* 3 Prominent 3D Vertical Glass Cards */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-end",
-                    marginTop: 16,
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 16 }}>
                   <div style={{ display: "flex", gap: 10 }}>
                     <motion.div
                       whileHover={{ y: -6, scale: 1.08 }}
@@ -909,15 +646,7 @@ export default function GpuSplashScreen({ onComplete }) {
                       }}
                     >
                       <span style={{ fontSize: 18 }}>🎙️</span>
-                      <span
-                        style={{
-                          fontSize: 8.5,
-                          fontWeight: 900,
-                          color: "#93c5fd",
-                          marginTop: 3,
-                          letterSpacing: "0.05em",
-                        }}
-                      >
+                      <span style={{ fontSize: 8.5, fontWeight: 900, color: "#93c5fd", marginTop: 3, letterSpacing: "0.05em" }}>
                         AUDIO
                       </span>
                     </motion.div>
@@ -939,15 +668,7 @@ export default function GpuSplashScreen({ onComplete }) {
                       }}
                     >
                       <span style={{ fontSize: 18 }}>🎬</span>
-                      <span
-                        style={{
-                          fontSize: 8.5,
-                          fontWeight: 900,
-                          color: "#fbcfe8",
-                          marginTop: 3,
-                          letterSpacing: "0.05em",
-                        }}
-                      >
+                      <span style={{ fontSize: 8.5, fontWeight: 900, color: "#fbcfe8", marginTop: 3, letterSpacing: "0.05em" }}>
                         VIDEO
                       </span>
                     </motion.div>
@@ -969,15 +690,7 @@ export default function GpuSplashScreen({ onComplete }) {
                       }}
                     >
                       <span style={{ fontSize: 18 }}>🖼️</span>
-                      <span
-                        style={{
-                          fontSize: 8.5,
-                          fontWeight: 900,
-                          color: "#a7f3d0",
-                          marginTop: 3,
-                          letterSpacing: "0.05em",
-                        }}
-                      >
+                      <span style={{ fontSize: 8.5, fontWeight: 900, color: "#a7f3d0", marginTop: 3, letterSpacing: "0.05em" }}>
                         VISION
                       </span>
                     </motion.div>
@@ -1010,18 +723,16 @@ export default function GpuSplashScreen({ onComplete }) {
                 animate={{
                   z: getBoxTargetZ(4),
                   scale: hoveredBox === 4 ? 1.03 : 1,
-                  boxShadow:
-                    step === 4
-                      ? "0 0 85px rgba(178, 107, 245, 0.95)"
-                      : "0 0 50px rgba(178, 107, 245, 0.65)",
+                  boxShadow: step === 4
+                    ? "0 0 85px rgba(178, 107, 245, 0.95)"
+                    : "0 0 50px rgba(178, 107, 245, 0.65)",
                 }}
                 transition={{ type: "spring", stiffness: 280, damping: 22 }}
                 style={{
                   position: "absolute",
                   inset: 0,
                   borderRadius: 24,
-                  background:
-                    "linear-gradient(135deg, #3e3e4c 0%, #1c1c26 100%)",
+                  background: "linear-gradient(135deg, #3e3e4c 0%, #1c1c26 100%)",
                   border: "2.5px solid rgba(255, 255, 255, 0.75)",
                   padding: 18,
                   transformStyle: "preserve-3d",
@@ -1038,8 +749,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -2.5,
                     height: 55,
                     borderRadius: "0 0 22px 22px",
-                    background:
-                      "linear-gradient(180deg, #282836 0%, #0a0a0e 100%)",
+                    background: "linear-gradient(180deg, #282836 0%, #0a0a0e 100%)",
                     border: "2.5px solid rgba(255, 255, 255, 0.6)",
                     borderTop: "none",
                     transform: "rotateX(-90deg)",
@@ -1051,35 +761,10 @@ export default function GpuSplashScreen({ onComplete }) {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: 9.5,
-                      fontWeight: 900,
-                      color: "#ffffff",
-                      letterSpacing: "0.12em",
-                    }}
-                  >
-                    LAYER 4 — FLAGSHIP RTX 5090 FE CHASSIS
-                  </span>
+                  <span style={{ fontSize: 9.5, fontWeight: 900, color: "#ffffff", letterSpacing: "0.12em" }}>LAYER 4 — FLAGSHIP RTX 5090 FE CHASSIS</span>
                   <div style={{ display: "flex", gap: 6 }}>
-                    <div
-                      style={{
-                        width: 7,
-                        height: 7,
-                        borderRadius: "50%",
-                        background: "#22c55e",
-                        boxShadow: "0 0 8px #22c55e",
-                      }}
-                    />
-                    <div
-                      style={{
-                        width: 7,
-                        height: 7,
-                        borderRadius: "50%",
-                        background: "#38bdf8",
-                        boxShadow: "0 0 8px #38bdf8",
-                      }}
-                    />
+                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 8px #22c55e" }} />
+                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#38bdf8", boxShadow: "0 0 8px #38bdf8" }} />
                   </div>
                 </div>
 
@@ -1092,8 +777,7 @@ export default function GpuSplashScreen({ onComplete }) {
                     right: -55,
                     width: 55,
                     borderRadius: "0 22px 22px 0",
-                    background:
-                      "linear-gradient(90deg, #20202c 0%, #09090e 100%)",
+                    background: "linear-gradient(90deg, #20202c 0%, #09090e 100%)",
                     border: "2.5px solid rgba(255, 255, 255, 0.55)",
                     borderLeft: "none",
                     transform: "rotateY(90deg)",
@@ -1106,51 +790,16 @@ export default function GpuSplashScreen({ onComplete }) {
                     gap: 6,
                   }}
                 >
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "rgba(255, 255, 255, 0.85)",
-                    }}
-                  />
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "rgba(168, 85, 247, 0.85)",
-                    }}
-                  />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "rgba(255, 255, 255, 0.85)" }} />
+                  <div style={{ width: 28, height: 4, borderRadius: 2, background: "rgba(168, 85, 247, 0.85)" }} />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
-                    <div
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        fontFamily: "var(--font-mono)",
-                        color: "#ffffff",
-                        letterSpacing: "0.08em",
-                      }}
-                    >
+                    <div style={{ fontSize: 20, fontWeight: 900, fontFamily: "var(--font-mono)", color: "#ffffff", letterSpacing: "0.08em" }}>
                       RTX 5090
                     </div>
-                    <div
-                      style={{
-                        fontSize: 9,
-                        fontWeight: 700,
-                        color: "rgba(255,255,255,0.75)",
-                        letterSpacing: "0.12em",
-                      }}
-                    >
+                    <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.75)", letterSpacing: "0.12em" }}>
                       BLACKWELL ARCHITECTURE — 32GB GDDR7
                     </div>
                   </div>
@@ -1167,20 +816,13 @@ export default function GpuSplashScreen({ onComplete }) {
                   />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: 8,
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
                   <div
                     style={{
                       width: 82,
                       height: 82,
                       borderRadius: "50%",
-                      background:
-                        "radial-gradient(circle, #18181b 30%, #27272a 70%, #09090b 100%)",
+                      background: "radial-gradient(circle, #18181b 30%, #27272a 70%, #09090b 100%)",
                       border: "3px solid rgba(255,255,255,0.3)",
                       display: "flex",
                       alignItems: "center",
@@ -1191,11 +833,7 @@ export default function GpuSplashScreen({ onComplete }) {
                   >
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{
-                        repeat: Infinity,
-                        duration: step === 4 ? 0.7 : 2.5,
-                        ease: "linear",
-                      }}
+                      transition={{ repeat: Infinity, duration: step === 4 ? 0.7 : 2.5, ease: "linear" }}
                       style={{
                         width: 72,
                         height: 72,
@@ -1204,12 +842,7 @@ export default function GpuSplashScreen({ onComplete }) {
                         justifyContent: "center",
                       }}
                     >
-                      <svg
-                        width="66"
-                        height="66"
-                        viewBox="0 0 100 100"
-                        fill="none"
-                      >
+                      <svg width="66" height="66" viewBox="0 0 100 100" fill="none">
                         {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
                           <rect
                             key={i}
@@ -1260,14 +893,10 @@ export default function GpuSplashScreen({ onComplete }) {
                 minHeight: 40,
               }}
             >
-              {step === 1 &&
-                "Neural foundation weights from DeepSeek, Claude, and OpenAI establish the intelligent core base."}
-              {step === 2 &&
-                "High bandwidth memory arrays unlock 4.8 TB per second throughput, eliminating latency bottlenecks."}
-              {step === 3 &&
-                "Multimodal processing engines ignite real-time audio synthesis, 4K video generation, and vision perception."}
-              {step === 4 &&
-                "The flagship Blackwell architecture seals the four-layer stack into an uncompromised enterprise AI factory."}
+              {step === 1 && "Neural foundation weights from DeepSeek, Claude, and OpenAI establish the intelligent core base."}
+              {step === 2 && "High bandwidth memory arrays unlock 4.8 TB per second throughput, eliminating latency bottlenecks."}
+              {step === 3 && "Multimodal processing engines ignite real-time audio synthesis, 4K video generation, and vision perception."}
+              {step === 4 && "The flagship Blackwell architecture seals the four-layer stack into an uncompromised enterprise AI factory."}
             </motion.div>
 
             <div
@@ -1284,23 +913,14 @@ export default function GpuSplashScreen({ onComplete }) {
                 style={{
                   width: `${progress}%`,
                   height: "100%",
-                  background:
-                    "linear-gradient(90deg, #0284c7 0%, #8b5cf6 50%, #ec4899 100%)",
+                  background: "linear-gradient(90deg, #0284c7 0%, #8b5cf6 50%, #ec4899 100%)",
                   boxShadow: "0 0 16px rgba(139, 92, 246, 0.65)",
                   transition: "width 0.1s linear",
                 }}
               />
             </div>
 
-            <div
-              style={{
-                fontSize: 11,
-                fontWeight: 800,
-                fontFamily: "var(--font-mono)",
-                color: "#7e22ce",
-                letterSpacing: "0.06em",
-              }}
-            >
+            <div style={{ fontSize: 11, fontWeight: 800, fontFamily: "var(--font-mono)", color: "#7e22ce", letterSpacing: "0.06em" }}>
               CALIBRATING HARDWARE STACK — {progress}%
             </div>
           </div>

@@ -34,11 +34,9 @@
   --color-silver-mist: var(--color-slate-warm);
 
   /* Typography — Font Families */
-  --font-new-kansas: "DM Serif Display", "new-kansas", Georgia, serif;
-  --font-nunito-sans:
-    "Nunito Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-new-kansas: 'DM Serif Display', 'new-kansas', Georgia, serif;
+  --font-nunito-sans: 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
   /* Typography — Scale */
   --text-caption: 12px;
@@ -107,25 +105,9 @@
   --radius-large-cards: 16px;
 
   /* Warm-tinted layered shadows */
-  --shadow-subtle:
-    rgb(237, 234, 228) 0px 0px 0px 1px,
-    rgba(29, 29, 28, 0.04) 0px 1px 1px -0.5px,
-    rgba(29, 29, 28, 0.04) 0px 3px 3px -1.5px,
-    rgba(29, 29, 28, 0.04) 0px 6px 6px -3px,
-    rgba(29, 29, 28, 0.02) 0px 12px 12px -6px;
-  --shadow-subtle-2:
-    rgba(216, 214, 206, 0.8) 0px 0px 0px 1px,
-    rgba(29, 29, 28, 0.02) 0px 1px 1px -0.5px,
-    rgba(29, 29, 28, 0.02) 0px 3px 3px -1.5px,
-    rgba(29, 29, 28, 0.02) 0px 6px 6px -3px,
-    rgba(29, 29, 28, 0.01) 0px 12px 12px -6px;
-  --shadow-subtle-3:
-    rgba(216, 214, 206, 0.9) 0px 0px 0px 1px,
-    rgba(29, 29, 28, 0.04) 0px 1px 1px -0.5px,
-    rgba(29, 29, 28, 0.04) 0px 3px 3px -1.5px,
-    rgba(29, 29, 28, 0.04) 0px 6px 6px -3px,
-    rgba(29, 29, 28, 0.02) 0px 12px 12px -6px,
-    rgba(29, 29, 28, 0.02) 0px 24px 24px -12px;
+  --shadow-subtle: rgb(237, 234, 228) 0px 0px 0px 1px, rgba(29, 29, 28, 0.04) 0px 1px 1px -0.5px, rgba(29, 29, 28, 0.04) 0px 3px 3px -1.5px, rgba(29, 29, 28, 0.04) 0px 6px 6px -3px, rgba(29, 29, 28, 0.02) 0px 12px 12px -6px;
+  --shadow-subtle-2: rgba(216, 214, 206, 0.8) 0px 0px 0px 1px, rgba(29, 29, 28, 0.02) 0px 1px 1px -0.5px, rgba(29, 29, 28, 0.02) 0px 3px 3px -1.5px, rgba(29, 29, 28, 0.02) 0px 6px 6px -3px, rgba(29, 29, 28, 0.01) 0px 12px 12px -6px;
+  --shadow-subtle-3: rgba(216, 214, 206, 0.9) 0px 0px 0px 1px, rgba(29, 29, 28, 0.04) 0px 1px 1px -0.5px, rgba(29, 29, 28, 0.04) 0px 3px 3px -1.5px, rgba(29, 29, 28, 0.04) 0px 6px 6px -3px, rgba(29, 29, 28, 0.02) 0px 12px 12px -6px, rgba(29, 29, 28, 0.02) 0px 24px 24px -12px;
 
   /* Surfaces */
   --surface-twilight-sky: #190922;
@@ -174,9 +156,7 @@ body {
 }
 
 /* Typography — DM Serif Display Headlines */
-h1,
-h2,
-h3 {
+h1, h2, h3 {
   font-family: var(--font-new-kansas);
   font-weight: 400;
   color: var(--color-ink-black);
@@ -365,9 +345,7 @@ h3 {
   border: 1px solid var(--color-sand-gray);
   padding: 24px;
   box-shadow: var(--shadow-subtle);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-paper-white:hover {
@@ -377,19 +355,13 @@ h3 {
 
 /* Refined Modern Pastel Accent Cards */
 .card-accent-violet {
-  background: linear-gradient(
-    135deg,
-    rgba(243, 232, 255, 0.95) 0%,
-    rgba(216, 180, 254, 0.6) 100%
-  );
+  background: linear-gradient(135deg, rgba(243, 232, 255, 0.95) 0%, rgba(216, 180, 254, 0.6) 100%);
   color: var(--color-ink-black);
   border-radius: var(--radius-cards);
   padding: 24px;
   border: 1px solid rgba(178, 107, 245, 0.3);
   box-shadow: 0 8px 24px rgba(178, 107, 245, 0.08);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-accent-violet:hover {
@@ -398,19 +370,13 @@ h3 {
 }
 
 .card-accent-teal {
-  background: linear-gradient(
-    135deg,
-    rgba(224, 242, 254, 0.95) 0%,
-    rgba(186, 230, 253, 0.6) 100%
-  );
+  background: linear-gradient(135deg, rgba(224, 242, 254, 0.95) 0%, rgba(186, 230, 253, 0.6) 100%);
   color: var(--color-ink-black);
   border-radius: var(--radius-cards);
   padding: 24px;
   border: 1px solid rgba(56, 189, 248, 0.3);
   box-shadow: 0 8px 24px rgba(56, 189, 248, 0.08);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-accent-teal:hover {
@@ -419,19 +385,13 @@ h3 {
 }
 
 .card-accent-tangerine {
-  background: linear-gradient(
-    135deg,
-    rgba(254, 243, 199, 0.95) 0%,
-    rgba(253, 230, 138, 0.6) 100%
-  );
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.95) 0%, rgba(253, 230, 138, 0.6) 100%);
   color: var(--color-ink-black);
   border-radius: var(--radius-cards);
   padding: 24px;
   border: 1px solid rgba(245, 158, 11, 0.3);
   box-shadow: 0 8px 24px rgba(245, 158, 11, 0.08);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-accent-tangerine:hover {
@@ -524,22 +484,10 @@ h3 {
 
 .bg-twilight-sky {
   background: linear-gradient(180deg, #f0f4fe 0%, #f9f5fc 50%, #fdf8fd 100%);
-  background-image:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(244, 114, 182, 0.12) 0%,
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 85% 30%,
-      rgba(147, 197, 253, 0.14) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 50% 80%,
-      rgba(178, 107, 245, 0.1) 0%,
-      transparent 60%
-    ),
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(244, 114, 182, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(147, 197, 253, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(178, 107, 245, 0.10) 0%, transparent 60%),
     linear-gradient(180deg, #f0f4fe 0%, #f9f5fc 50%, #fdf8fd 100%);
   color: var(--color-ink-black);
 }
@@ -607,19 +555,11 @@ h3 {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image:
-    radial-gradient(
-      2px 2px at 20px 30px,
-      rgba(255, 255, 255, 0.4),
-      transparent
-    ),
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.4), transparent),
     radial-gradient(2px 2px at 40px 70px, rgba(168, 85, 247, 0.5), transparent),
     radial-gradient(1px 1px at 90px 40px, rgba(6, 182, 212, 0.6), transparent),
-    radial-gradient(
-      2px 2px at 160px 120px,
-      rgba(236, 72, 153, 0.4),
-      transparent
-    );
+    radial-gradient(2px 2px at 160px 120px, rgba(236, 72, 153, 0.4), transparent);
   background-repeat: repeat;
   background-size: 200px 200px;
   animation: particleFloat 12s linear infinite;
@@ -627,26 +567,18 @@ h3 {
 }
 
 @keyframes particleFloat {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 200px 400px;
-  }
+  0% { background-position: 0 0; }
+  100% { background-position: 200px 400px; }
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
+
 @media (max-width: 900px) {
-  .grid-2col,
-  .grid-3col {
+  .grid-2col, .grid-3col {
     grid-template-columns: 1fr;
   }
 }
