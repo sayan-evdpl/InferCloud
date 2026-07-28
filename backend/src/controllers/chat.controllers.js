@@ -7,23 +7,11 @@ import { scrapeTechPowerUp } from "./gpu.controllers.js";
 
 // Helper functions for tools
 const localSearchGpus = (query) => {
-  if (!query)
-    return {
-      local: localGpus,
-      cloud: cloudProviders,
-      systems: integratedSystems,
-    };
-  const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(escaped, "i");
-  const matchedLocal = localGpus.filter(
-    (g) => regex.test(g.name) || regex.test(g.arch) || regex.test(g.gpuClass),
-  );
-  const matchedCloud = cloudProviders.filter(
-    (c) => regex.test(c.gpu) || regex.test(c.provider),
-  );
-  const matchedSystems = integratedSystems.filter(
-    (s) => regex.test(s.type) || regex.test(s.gpu),
-  );
+  if (!query) return { local: localGpus, cloud: cloudProviders, systems: integratedSystems };
+  const regex = new RegExp(query.trim(), "i");
+  const matchedLocal = localGpus.filter(g => regex.test(g.name) || regex.test(g.arch) || regex.test(g.gpuClass));
+  const matchedCloud = cloudProviders.filter(c => regex.test(c.gpu) || regex.test(c.provider));
+  const matchedSystems = integratedSystems.filter(s => regex.test(s.type) || regex.test(s.gpu));
   return {
     local: matchedLocal,
     cloud: matchedCloud,
@@ -44,12 +32,11 @@ const getTcoData = (hours) => {
   const currentLmb = Math.round(hours * lmbRate);
 
   let profile = hours < 4 ? "Ad-Hoc" : hours < 10 ? "Inflection" : "Production";
-  let verdict =
-    hours < 4
-      ? "Renting is drastically cheaper. Buying physical hardware is a waste of capital."
-      : hours < 10
-        ? `At ${hours} hours, CapEx amortizes nicely. Consider physical hardware if data sovereignty is required.`
-        : "Buying physical hardware yields extreme economic dominance over renting consumer GPUs.";
+  let verdict = hours < 4 
+    ? "Renting is drastically cheaper. Buying physical hardware is a waste of capital."
+    : hours < 10 
+    ? `At ${hours} hours, CapEx amortizes nicely. Consider physical hardware if data sovereignty is required.`
+    : "Buying physical hardware yields extreme economic dominance over renting consumer GPUs.";
 
   return {
     hours,
@@ -100,31 +87,25 @@ export const chatController = asyncHandler(async (req, res) => {
   }
 
   // Extract last user prompt
-  const lastUserMsg = [...rawList]
-    .reverse()
-    .find((m) => m.role === "user" || m.role === "human");
+  const lastUserMsg = [...rawList].reverse().find(m => m.role === "user" || m.role === "human");
   const userQuery = lastUserMsg?.content || "GPU Specs";
 
   // Map messages to Gemini format
   const chatHistory = [];
   for (const msg of rawList) {
-    if (!msg || typeof msg.content !== "string" || !msg.content.trim())
-      continue;
+    if (!msg || typeof msg.content !== "string" || !msg.content.trim()) continue;
     const role = msg.role === "assistant" ? "model" : "user";
-
+    
     // Skip leading model messages until first user message
     if (chatHistory.length === 0 && role !== "user") continue;
-
+    
     // Merge consecutive messages with same role
-    if (
-      chatHistory.length > 0 &&
-      chatHistory[chatHistory.length - 1].role === role
-    ) {
+    if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === role) {
       chatHistory[chatHistory.length - 1].parts[0].text += "\n" + msg.content;
     } else {
       chatHistory.push({
         role,
-        parts: [{ text: msg.content }],
+        parts: [{ text: msg.content }]
       });
     }
   }
@@ -139,88 +120,63 @@ export const chatController = asyncHandler(async (req, res) => {
           functionDeclarations: [
             {
               name: "searchGpus",
-              description:
-                "Search local, cloud, or workstation databases for matching GPUs/providers.",
+              description: "Search local, cloud, or workstation databases for matching GPUs/providers.",
               parameters: {
                 type: "OBJECT",
                 properties: {
-                  query: {
-                    type: "STRING",
-                    description: "Search query e.g. H100, RTX 5090, RunPod",
-                  },
+                  query: { type: "STRING", description: "Search query e.g. H100, RTX 5090, RunPod" }
                 },
-                required: ["query"],
-              },
+                required: ["query"]
+              }
             },
             {
               name: "getTcoAnalysis",
-              description:
-                "Calculate and retrieve annual TCO data comparing local workstations vs cloud renting for a specified daily runtime.",
+              description: "Calculate and retrieve annual TCO data comparing local workstations vs cloud renting for a specified daily runtime.",
               parameters: {
                 type: "OBJECT",
                 properties: {
-                  hours: {
-                    type: "NUMBER",
-                    description: "Daily runtime hours (1 to 24)",
-                  },
+                  hours: { type: "NUMBER", description: "Daily runtime hours (1 to 24)" }
                 },
-                required: ["hours"],
-              },
+                required: ["hours"]
+              }
             },
             {
               name: "getBandwidthSpecs",
-              description:
-                "Retrieve memory bandwidth specs and memory capacities of local physical GPUs.",
+              description: "Retrieve memory bandwidth specs and memory capacities of local physical GPUs.",
               parameters: {
                 type: "OBJECT",
-                properties: {},
-              },
+                properties: {}
+              }
             },
             {
               name: "getDetailedSpecs",
-              description:
-                "Scrape and retrieve detailed hardware specs (transistors, process node, die size, memory type) from TechPowerUp for a specific GPU name.",
+              description: "Scrape and retrieve detailed hardware specs (transistors, process node, die size, memory type) from TechPowerUp for a specific GPU name.",
               parameters: {
                 type: "OBJECT",
                 properties: {
-                  name: {
-                    type: "STRING",
-                    description: "Specific GPU name e.g. RTX 4090, H100, L40S",
-                  },
+                  name: { type: "STRING", description: "Specific GPU name e.g. RTX 4090, H100, L40S" }
                 },
-                required: ["name"],
-              },
-            },
-          ],
-        },
+                required: ["name"]
+              }
+            }
+          ]
+        }
       ];
 
       const systemInstruction = `You are "Flash", an elite AI infrastructure architect integrated into the GPU Scout platform. Your primary job is to assist users exclusively with GPU specifications, AI/ML workload architecture, cloud pricing, hardware procurement, and TCO economics.`;
 
-      const FALLBACK_MODELS = [
-        "gemini-flash-latest",
-        "gemini-2.5-flash",
-        "gemini-2.0-flash",
-      ];
+      const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash"];
       let safeGenerate = async (history) => {
         let lastErr = null;
         for (const mName of FALLBACK_MODELS) {
           try {
-            const m = genAI.getGenerativeModel({
-              model: mName,
-              systemInstruction,
-              tools,
-            });
+            const m = genAI.getGenerativeModel({ model: mName, systemInstruction, tools });
             return await m.generateContent({ contents: history });
           } catch (err) {
             lastErr = err;
-            const isQuotaOrTransient =
-              err.status === 429 ||
-              err.status === 503 ||
-              err.message?.includes("429") ||
-              err.message?.includes("503") ||
-              err.message?.includes("Quota exceeded") ||
-              err.message?.includes("unavailable");
+            const isQuotaOrTransient = err.status === 429 || err.status === 503 || 
+              err.message?.includes("429") || err.message?.includes("503") || 
+              err.message?.includes("Quota exceeded") || err.message?.includes("unavailable");
             if (isQuotaOrTransient) {
               continue;
             }
@@ -251,13 +207,13 @@ export const chatController = asyncHandler(async (req, res) => {
           }
           const fnResponse = {
             name: call.name,
-            response: { result: resultData },
+            response: { result: resultData }
           };
           if (call.id) {
             fnResponse.id = call.id;
           }
           toolResults.push({
-            functionResponse: fnResponse,
+            functionResponse: fnResponse
           });
         }
 
@@ -266,18 +222,18 @@ export const chatController = asyncHandler(async (req, res) => {
         } else {
           chatHistory.push({
             role: "model",
-            parts: functionCalls.map((call) => ({
+            parts: functionCalls.map(call => ({
               functionCall: {
                 name: call.name,
-                args: call.args,
-              },
-            })),
+                args: call.args
+              }
+            }))
           });
         }
 
         chatHistory.push({
           role: "user",
-          parts: toolResults,
+          parts: toolResults
         });
 
         response = await safeGenerate(chatHistory);
@@ -285,19 +241,10 @@ export const chatController = asyncHandler(async (req, res) => {
       }
 
       if (responseText && responseText.trim()) {
-        return res
-          .status(200)
-          .json(
-            new ApiResponse(200, "Chat response retrieved successfully.", {
-              text: responseText,
-            }),
-          );
+        return res.status(200).json(new ApiResponse(200, "Chat response retrieved successfully.", { text: responseText }));
       }
     } catch (error) {
-      console.warn(
-        "Gemini API call failed, utilizing Flash local intelligence fallback engine:",
-        error.message,
-      );
+      console.warn("Gemini API call failed, utilizing Flash local intelligence fallback engine:", error.message);
     }
   }
 
@@ -305,10 +252,7 @@ export const chatController = asyncHandler(async (req, res) => {
   const searchResults = localSearchGpus(userQuery);
   let replyText = `### ⚡ Flash AI Infrastructure Intelligence\n\nHere are the hardware specifications and market pricing matching your query: **"${userQuery}"**:\n\n`;
 
-  if (
-    (searchResults.local && searchResults.local.length > 0) ||
-    (searchResults.cloud && searchResults.cloud.length > 0)
-  ) {
+  if ((searchResults.local && searchResults.local.length > 0) || (searchResults.cloud && searchResults.cloud.length > 0)) {
     if (searchResults.local && searchResults.local.length > 0) {
       replyText += `#### Physical GPU Hardware Specs:\n\n`;
       replyText += `| GPU Model | Architecture | VRAM | Bandwidth | Est. Market Price |\n`;
@@ -340,15 +284,8 @@ export const chatController = asyncHandler(async (req, res) => {
     replyText += `> 💡 **Architectural Note**: RTX 4050 (6GB) and RTX 3050 (8GB) are entry-level GPUs ideal for lightweight quantized inference (INT4 / Q4_K_M). For fine-tuning Llama 3 8B or 70B models, high-bandwidth VRAM (RTX 5090 32GB or H100 80GB) is recommended.`;
   }
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        "Chat response retrieved successfully via Flash engine.",
-        { text: replyText },
-      ),
-    );
+  return res.status(200).json(new ApiResponse(200, "Chat response retrieved successfully via Flash engine.", { text: replyText }));
 });
 
 export const chatHandler = chatController;
+

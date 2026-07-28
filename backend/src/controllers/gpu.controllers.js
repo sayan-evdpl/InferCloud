@@ -563,17 +563,13 @@ export const getCloudProviders = asyncHandler(async (req, res) => {
 
   const groupedGpus = groupOffersByGpu(offers);
 
-  let cheapestH100Offer = null;
-  offers.forEach((o) => {
-    if (
-      o.gpu.toLowerCase().includes("h100") &&
-      (o.kind === "secure" || !cheapestH100Offer)
-    ) {
-      if (!cheapestH100Offer || o.usd_hr < cheapestH100Offer.usd_hr) {
-        cheapestH100Offer = o;
-      }
-    }
-  });
+  const h100Offers = offers.filter((o) => o.gpu.toLowerCase().includes("h100"));
+  const secureH100 = h100Offers.filter((o) => o.kind === "secure");
+  const h100Pool = secureH100.length > 0 ? secureH100 : h100Offers;
+  const cheapestH100Offer = h100Pool.reduce(
+    (min, o) => (!min || o.usd_hr < min.usd_hr ? o : min),
+    null,
+  );
 
   const stats = {
     cheapestH100Rate: cheapestH100Offer ? cheapestH100Offer.usd_hr : 1.99,

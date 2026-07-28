@@ -13,10 +13,7 @@ export default function SystemCard({ system, index }) {
         position: "relative",
       }}
     >
-      <div
-        className="pill-tag pill-tag-violet"
-        style={{ marginBottom: "10px" }}
-      >
+      <div className="pill-tag pill-tag-violet" style={{ marginBottom: "10px" }}>
         {system.icon || "WORKSTATION"}
       </div>
 
@@ -32,67 +29,24 @@ export default function SystemCard({ system, index }) {
       >
         {system.type}
       </h4>
-      <div
-        style={{
-          fontSize: "14px",
-          color: "var(--color-ash-gray)",
-          fontWeight: "500",
-          marginBottom: "12px",
-        }}
-      >
+      <div style={{ fontSize: "14px", color: "var(--color-ash-gray)", fontWeight: "500", marginBottom: "12px" }}>
         {system.gpu}
       </div>
 
       <div style={{ margin: "12px 0" }}>
-        <div
-          style={{
-            padding: "6px 0",
-            borderBottom: "1px solid var(--color-sand-gray)",
-          }}
-        >
-          <div className="caption-text" style={{ marginBottom: "2px" }}>
-            Specifications
-          </div>
-          <div style={{ fontSize: "14px", color: "var(--color-ink-black)" }}>
-            {system.specs}
-          </div>
+        <div style={{ padding: "6px 0", borderBottom: "1px solid var(--color-sand-gray)" }}>
+          <div className="caption-text" style={{ marginBottom: "2px" }}>Specifications</div>
+          <div style={{ fontSize: "14px", color: "var(--color-ink-black)" }}>{system.specs}</div>
         </div>
 
         <div style={{ padding: "6px 0" }}>
-          <div className="caption-text" style={{ marginBottom: "2px" }}>
-            Investment
-          </div>
-          <div
-            style={{
-              fontSize: "18px",
-              fontWeight: "700",
-              color: "var(--color-ink-black)",
-            }}
-          >
-            {system.price}
-          </div>
+          <div className="caption-text" style={{ marginBottom: "2px" }}>Investment</div>
+          <div style={{ fontSize: "18px", fontWeight: "700", color: "var(--color-ink-black)" }}>{system.price}</div>
         </div>
       </div>
 
-      <div
-        style={{
-          marginTop: "12px",
-          padding: "10px 12px",
-          backgroundColor: "var(--color-parchment-cream)",
-          borderRadius: "8px",
-          color: "var(--color-charcoal-stone)",
-          fontSize: "12px",
-        }}
-      >
-        <strong
-          style={{
-            fontWeight: 600,
-            color: "var(--color-ink-black)",
-            marginRight: "4px",
-          }}
-        >
-          Note:
-        </strong>
+      <div style={{ marginTop: "12px", padding: "10px 12px", backgroundColor: "var(--color-parchment-cream)", borderRadius: "8px", color: "var(--color-charcoal-stone)", fontSize: "12px" }}>
+        <strong style={{ fontWeight: 600, color: "var(--color-ink-black)", marginRight: "4px" }}>Note:</strong>
         {system.limit}
       </div>
     </motion.div>

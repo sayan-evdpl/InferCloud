@@ -14,10 +14,7 @@ export default function GpuCard({ gpu, index }) {
       }}
     >
       <div>
-        <div
-          className="pill-tag pill-tag-violet"
-          style={{ marginBottom: "10px" }}
-        >
+        <div className="pill-tag pill-tag-violet" style={{ marginBottom: "10px" }}>
           {gpu.gpuClass} · {gpu.arch}
         </div>
 
@@ -35,87 +32,26 @@ export default function GpuCard({ gpu, index }) {
         </h4>
 
         <div style={{ margin: "12px 0" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "6px 0",
-              fontSize: "14px",
-              borderBottom: "1px solid var(--color-sand-gray)",
-            }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: "14px", borderBottom: "1px solid var(--color-sand-gray)" }}>
             <span style={{ color: "var(--color-ash-gray)" }}>VRAM</span>
-            <span
-              style={{
-                color: "var(--color-ink-black)",
-                fontWeight: "600",
-                fontFamily: "var(--font-mono)",
-              }}
-            >
-              {gpu.vram}
-            </span>
+            <span style={{ color: "var(--color-ink-black)", fontWeight: "600", fontFamily: "var(--font-mono)" }}>{gpu.vram}</span>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "6px 0",
-              fontSize: "14px",
-              borderBottom: "1px solid var(--color-sand-gray)",
-            }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: "14px", borderBottom: "1px solid var(--color-sand-gray)" }}>
             <span style={{ color: "var(--color-ash-gray)" }}>Bandwidth</span>
-            <span
-              style={{
-                color: "var(--color-deep-violet)",
-                fontWeight: "600",
-                fontFamily: "var(--font-mono)",
-              }}
-            >
-              {gpu.bandwidth}
-            </span>
+            <span style={{ color: "var(--color-deep-violet)", fontWeight: "600", fontFamily: "var(--font-mono)" }}>{gpu.bandwidth}</span>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "6px 0",
-              fontSize: "14px",
-            }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: "14px" }}>
             <span style={{ color: "var(--color-ash-gray)" }}>Power (TGP)</span>
-            <span
-              style={{
-                color: "var(--color-charcoal-stone)",
-                fontFamily: "var(--font-mono)",
-              }}
-            >
-              {gpu.tgp}
-            </span>
+            <span style={{ color: "var(--color-charcoal-stone)", fontFamily: "var(--font-mono)" }}>{gpu.tgp}</span>
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-          marginTop: "12px",
-          paddingTop: "10px",
-          borderTop: "1px solid var(--color-sand-gray)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid var(--color-sand-gray)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span className="caption-text">MSRP / Market</span>
-        <span
-          style={{
-            fontSize: "18px",
-            fontWeight: "700",
-            color: "var(--color-ink-black)",
-          }}
-        >
+        <span style={{ fontSize: "18px", fontWeight: "700", color: "var(--color-ink-black)" }}>
           {gpu.price}
         </span>
       </div>
