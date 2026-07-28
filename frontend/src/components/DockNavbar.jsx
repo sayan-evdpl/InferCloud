@@ -27,29 +27,18 @@ export default function NavigationHeader({ onSearchOpen, onAccessOpen }) {
         transform: "translateX(-50%)",
         width: "min(92%, 1100px)",
         zIndex: 1000,
-        backgroundColor: scrolled
-          ? "rgba(248, 247, 242, 0.95)"
-          : "rgba(25, 9, 34, 0.72)",
+        backgroundColor: scrolled ? "rgba(248, 247, 242, 0.95)" : "rgba(25, 9, 34, 0.72)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
-        border: scrolled
-          ? "1px solid var(--color-sand-gray)"
-          : "1px solid rgba(255, 255, 255, 0.18)",
+        border: scrolled ? "1px solid var(--color-sand-gray)" : "1px solid rgba(255, 255, 255, 0.18)",
         borderRadius: "9999px",
         padding: "10px 24px",
-        boxShadow: scrolled
-          ? "var(--shadow-subtle-3)"
-          : "0 12px 36px rgba(0, 0, 0, 0.25)",
+        boxShadow: scrolled ? "var(--shadow-subtle-3)" : "0 12px 36px rgba(0, 0, 0, 0.25)",
         transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        
         {/* Brand Wordmark & Logo */}
         <a
           href="#hero"
@@ -57,12 +46,7 @@ export default function NavigationHeader({ onSearchOpen, onAccessOpen }) {
             e.preventDefault();
             handleNavigate("hero");
           }}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            textDecoration: "none",
-          }}
+          style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
         >
           {/* GPU Scout Logo Icon Badge (Choice 3: Isometric G Lattice) */}
           <img
@@ -82,9 +66,7 @@ export default function NavigationHeader({ onSearchOpen, onAccessOpen }) {
               fontFamily: "var(--font-nunito-sans)",
               fontSize: "16px",
               fontWeight: "700",
-              color: scrolled
-                ? "var(--color-ink-black)"
-                : "var(--color-paper-white)",
+              color: scrolled ? "var(--color-ink-black)" : "var(--color-paper-white)",
               letterSpacing: "-0.015em",
             }}
           >
@@ -112,9 +94,7 @@ export default function NavigationHeader({ onSearchOpen, onAccessOpen }) {
                 fontFamily: "var(--font-nunito-sans)",
                 fontSize: "14px",
                 fontWeight: "500",
-                color: scrolled
-                  ? "var(--color-charcoal-stone)"
-                  : "rgba(248, 247, 242, 0.88)",
+                color: scrolled ? "var(--color-charcoal-stone)" : "rgba(248, 247, 242, 0.88)",
                 textDecoration: "none",
                 transition: "all 0.15s ease",
               }}
@@ -131,9 +111,7 @@ export default function NavigationHeader({ onSearchOpen, onAccessOpen }) {
             style={{
               background: "transparent",
               border: "none",
-              color: scrolled
-                ? "var(--color-charcoal-stone)"
-                : "rgba(248, 247, 242, 0.9)",
+              color: scrolled ? "var(--color-charcoal-stone)" : "rgba(248, 247, 242, 0.9)",
               fontFamily: "var(--font-nunito-sans)",
               fontSize: "13px",
               fontWeight: "500",
@@ -147,16 +125,12 @@ export default function NavigationHeader({ onSearchOpen, onAccessOpen }) {
           <button
             className={scrolled ? "btn-filled-dark" : "btn-filled-white"}
             onClick={onAccessOpen}
-            style={{
-              height: "36px",
-              padding: "0 16px",
-              fontSize: "13px",
-              borderRadius: "9999px",
-            }}
+            style={{ height: "36px", padding: "0 16px", fontSize: "13px", borderRadius: "9999px" }}
           >
             Get access →
           </button>
         </div>
+
       </div>
     </header>
   );

@@ -12,12 +12,9 @@ const cloudProviderSchema = new mongoose.Schema(
     region: { type: String, default: "Global" },
     category: { type: String, default: "cloud", enum: ["cloud"] },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 cloudProviderSchema.index({ provider: "text", gpu: "text", profile: "text" });
 
-export const CloudProvider = mongoose.model(
-  "CloudProvider",
-  cloudProviderSchema,
-);
+export const CloudProvider = mongoose.model("CloudProvider", cloudProviderSchema);

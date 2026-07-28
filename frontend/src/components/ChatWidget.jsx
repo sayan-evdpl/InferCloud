@@ -13,17 +13,67 @@ const SUGGESTIONS = [
 // 15 Minutes Inactivity Limit (15m * 60s * 1000ms = 900,000ms)
 const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
 
-export default function ChatWidget({ searchOpen }) {
+export default function ChatWidget({ searchOpen, isOpenExternal, onCloseExternal, initialPrompt, onSelectCard }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showBubble, setShowBubble] = useState(true);
-  const [bubbleText, setBubbleText] = useState(
-    "Have a query? Don't worry, Flash is ready to help you!",
-  );
+  const [bubbleText, setBubbleText] = useState("Have a query? Don't worry, Flash is ready to help you!");
   const [isHovered, setIsHovered] = useState(false);
   const [isWaving, setIsWaving] = useState(false);
   const [isJumpingOut, setIsJumpingOut] = useState(false);
   const [isListening, setIsListening] = useState(false);
 
+  const processedPromptRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpenExternal) {
+      setIsOpen(true);
+      setShowBubble(false);
+    }
+  }, [isOpenExternal]);
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+    if (onCloseExternal) {
+      onCloseExternal();
+    }
+  };
+
+  const handleExportChat = () => {
+    recordUserActivity();
+    const formattedTranscript = messages
+      .map((m) => `[${m.role.toUpperCase()}]\n${m.content}`)
+      .join("\n\n---\n\n");
+    navigator.clipboard.writeText(formattedTranscript);
+    alert("Chat transcript copied to clipboard!");
+  };
+
+  const extractGpuActionChips = (text) => {
+    if (!text) return [];
+    const knownGpus = [
+      { id: "5090", name: "GeForce RTX 5090", searchKey: "5090" },
+      { id: "4090", name: "GeForce RTX 4090", searchKey: "4090" },
+      { id: "5080", name: "GeForce RTX 5080", searchKey: "5080" },
+      { id: "h100", name: "Enterprise H100", searchKey: "H100" },
+      { id: "h200", name: "Enterprise H200", searchKey: "H200" },
+      { id: "l40s", name: "Enterprise L40S", searchKey: "L40S" },
+      { id: "a100", name: "NVIDIA A100", searchKey: "A100" },
+      { id: "mi300", name: "AMD MI300X", searchKey: "MI300" },
+    ];
+
+    const textUpper = text.toUpperCase();
+    const matches = [];
+
+    knownGpus.forEach((gpu) => {
+      if (textUpper.includes(gpu.searchKey)) {
+        matches.push(gpu);
+      }
+    });
+
+    return matches;
+  };
+
+
+  
   // Persistent Bearer Token State
   const [token, setToken] = useState(() => {
     const savedToken = sessionStorage.getItem("flash_bearer_token");
@@ -42,10 +92,9 @@ export default function ChatWidget({ searchOpen }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content:
-        token === "flashonn"
-          ? "Welcome back! Flash is active. How can I help you today with GPU specs, cloud rates, or TCO economics?"
-          : "Hello! Flash is currently locked. Please enter the password to unlock AI assistance.",
+      content: token === "flashonn"
+        ? "Welcome back! Flash is active. How can I help you today with GPU specs, cloud rates, or TCO economics?"
+        : "Hello! Flash is currently locked. Please enter the password to unlock AI assistance.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -72,13 +121,10 @@ export default function ChatWidget({ searchOpen }) {
   // Web Speech API Voice Recognition Toggle
   const toggleVoiceRecognition = () => {
     recordUserActivity();
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert(
-        "Speech recognition is not supported in your current browser. Please type your prompt.",
-      );
+      alert("Speech recognition is not supported in your current browser. Please type your prompt.");
       return;
     }
 
@@ -136,8 +182,7 @@ export default function ChatWidget({ searchOpen }) {
             ...prev,
             {
               role: "assistant",
-              content:
-                "🔒 Flash has been automatically locked due to 15 minutes of inactivity. Please enter the password to unlock AI assistance.",
+              content: "🔒 Flash has been automatically locked due to 15 minutes of inactivity. Please enter the password to unlock AI assistance.",
             },
           ]);
         }
@@ -207,11 +252,7 @@ export default function ChatWidget({ searchOpen }) {
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        {
-          role: "assistant",
-          content:
-            "⚡ Flash has been successfully activated! (15-minute inactivity bearer timer started). How can I help you today with GPU specs, cloud rates, or TCO economics?",
-        },
+        { role: "assistant", content: "⚡ Flash has been successfully activated! (15-minute inactivity bearer timer started). How can I help you today with GPU specs, cloud rates, or TCO economics?" }
       ];
       setMessages(newMsgList);
       return;
@@ -225,11 +266,7 @@ export default function ChatWidget({ searchOpen }) {
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        {
-          role: "assistant",
-          content:
-            "🔒 Flash has been locked. Please enter the password to unlock again.",
-        },
+        { role: "assistant", content: "🔒 Flash has been locked. Please enter the password to unlock again." }
       ];
       setMessages(newMsgList);
       return;
@@ -237,21 +274,14 @@ export default function ChatWidget({ searchOpen }) {
 
     // Check if token expired before sending
     const savedLastActive = sessionStorage.getItem("flash_last_activity");
-    if (
-      savedLastActive &&
-      Date.now() - parseInt(savedLastActive, 10) >= FIFTEEN_MINUTES_MS
-    ) {
+    if (savedLastActive && Date.now() - parseInt(savedLastActive, 10) >= FIFTEEN_MINUTES_MS) {
       setToken(null);
       sessionStorage.removeItem("flash_bearer_token");
       sessionStorage.removeItem("flash_last_activity");
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        {
-          role: "assistant",
-          content:
-            "🔒 Session expired after 15 minutes of inactivity. Please enter the password to unlock again.",
-        },
+        { role: "assistant", content: "🔒 Session expired after 15 minutes of inactivity. Please enter the password to unlock again." }
       ];
       setMessages(newMsgList);
       return;
@@ -262,11 +292,7 @@ export default function ChatWidget({ searchOpen }) {
       const newMsgList = [
         ...messages,
         { role: "user", content: text },
-        {
-          role: "assistant",
-          content:
-            "Flash is currently locked. Please enter the password to unlock.",
-        },
+        { role: "assistant", content: "Flash is currently locked. Please enter the password to unlock." }
       ];
       setMessages(newMsgList);
       return;
@@ -283,16 +309,20 @@ export default function ChatWidget({ searchOpen }) {
     } catch (err) {
       setMessages([
         ...newMsgList,
-        {
-          role: "assistant",
-          content:
-            "Sorry, I encountered an error retrieving data from the backend server.",
-        },
+        { role: "assistant", content: "Sorry, I encountered an error retrieving data from the backend server." },
       ]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isOpenExternal && initialPrompt && initialPrompt !== processedPromptRef.current) {
+      processedPromptRef.current = initialPrompt;
+      handleSend(initialPrompt);
+    }
+  }, [isOpenExternal, initialPrompt]);
+
 
   const handleKeyPress = (e) => {
     recordUserActivity();
@@ -300,6 +330,232 @@ export default function ChatWidget({ searchOpen }) {
       e.preventDefault();
       handleSend();
     }
+  };
+
+  const renderInlineMarkdown = (text) => {
+    if (!text) return "";
+    const codeParts = text.split(/(`[^`]+`)/g);
+
+    return codeParts.map((part, idx) => {
+      if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
+        return (
+          <code
+            key={idx}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "12px",
+              backgroundColor: "rgba(178, 107, 245, 0.12)",
+              color: "var(--color-electric-violet)",
+              padding: "2px 6px",
+              borderRadius: "4px",
+            }}
+          >
+            {part.slice(1, -1)}
+          </code>
+        );
+      }
+
+      const boldParts = part.split(/(\*\*[^*]+\*\*)/g);
+      return boldParts.map((bPart, bIdx) => {
+        if (bPart.startsWith("**") && bPart.endsWith("**") && bPart.length > 4) {
+          return (
+            <strong key={`${idx}-${bIdx}`} style={{ fontWeight: 700, color: "var(--color-ink-black)" }}>
+              {bPart.slice(2, -2)}
+            </strong>
+          );
+        }
+
+        const italicParts = bPart.split(/(\*[^*]+\*|_[^_]+_)/g);
+        return italicParts.map((iPart, iIdx) => {
+          if ((iPart.startsWith("*") && iPart.endsWith("*")) || (iPart.startsWith("_") && iPart.endsWith("_"))) {
+            if (iPart.length > 2) {
+              return <em key={`${idx}-${bIdx}-${iIdx}`}>{iPart.slice(1, -1)}</em>;
+            }
+          }
+          return iPart;
+        });
+      });
+    });
+  };
+
+  const renderFormattedBlocks = (textBlock, blockKey) => {
+    if (!textBlock) return null;
+
+    const lines = textBlock.split("\n");
+    const blocks = [];
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      // Detect markdown table rows starting and ending with |
+      if (line.trim().startsWith("|") && line.trim().endsWith("|")) {
+        const tableLines = [];
+        while (i < lines.length && lines[i].trim().startsWith("|") && lines[i].trim().endsWith("|")) {
+          tableLines.push(lines[i].trim());
+          i++;
+        }
+
+        if (tableLines.length >= 2) {
+          const headerRow = tableLines[0].split("|").slice(1, -1).map((c) => c.trim());
+          let bodyStartIdx = 1;
+          if (tableLines[1].includes("---") || tableLines[1].includes(":---")) {
+            bodyStartIdx = 2;
+          }
+
+          const bodyRows = tableLines.slice(bodyStartIdx).map((rowStr) =>
+            rowStr.split("|").slice(1, -1).map((c) => c.trim())
+          );
+
+          blocks.push(
+            <div
+              key={`table-${blockKey}-${i}`}
+              style={{
+                margin: "12px 0",
+                overflowX: "auto",
+                borderRadius: "12px",
+                border: "1px solid rgba(178, 107, 245, 0.25)",
+                backgroundColor: "#ffffff",
+                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.04)",
+              }}
+            >
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px", textAlign: "left" }}>
+                <thead>
+                  <tr style={{ backgroundColor: "#f3e8ff", borderBottom: "1.5px solid rgba(178, 107, 245, 0.25)" }}>
+                    {headerRow.map((cellText, cellIdx) => (
+                      <th
+                        key={cellIdx}
+                        style={{
+                          padding: "9px 12px",
+                          fontWeight: 700,
+                          color: "var(--color-ink-black)",
+                          fontFamily: "var(--font-nunito-sans)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {renderInlineMarkdown(cellText)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {bodyRows.map((rowCells, rowIdx) => (
+                    <tr
+                      key={rowIdx}
+                      style={{
+                        borderBottom: rowIdx < bodyRows.length - 1 ? "1px solid rgba(216, 214, 206, 0.5)" : "none",
+                        backgroundColor: rowIdx % 2 === 0 ? "transparent" : "#faf6fe",
+                      }}
+                    >
+                      {rowCells.map((cellText, cellIdx) => (
+                        <td
+                          key={cellIdx}
+                          style={{
+                            padding: "8px 12px",
+                            color: "var(--color-charcoal-stone)",
+                            lineHeight: 1.45,
+                          }}
+                        >
+                          {renderInlineMarkdown(cellText)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+          continue;
+        }
+      }
+
+      // Headings (#, ##, ###)
+      if (line.trim().startsWith("#")) {
+        const headingMatch = line.trim().match(/^(#{1,6})\s+(.*)$/);
+        if (headingMatch) {
+          const level = headingMatch[1].length;
+          const headingText = headingMatch[2];
+          const fontSize = level === 1 ? "17px" : level === 2 ? "15.5px" : "14.5px";
+          blocks.push(
+            <div
+              key={`heading-${blockKey}-${i}`}
+              style={{
+                fontFamily: "var(--font-new-kansas)",
+                fontSize,
+                fontWeight: 600,
+                color: "var(--color-ink-black)",
+                margin: "12px 0 6px 0",
+                lineHeight: 1.35,
+              }}
+            >
+              {renderInlineMarkdown(headingText)}
+            </div>
+          );
+          i++;
+          continue;
+        }
+      }
+
+      // Horizontal Rule (---, ***, ___)
+      if (/^---+$|^\*\*\*+$|^___+$/.test(line.trim())) {
+        blocks.push(
+          <hr
+            key={`hr-${blockKey}-${i}`}
+            style={{
+              border: "none",
+              borderTop: "1px solid rgba(178, 107, 245, 0.25)",
+              margin: "12px 0",
+            }}
+          />
+        );
+        i++;
+        continue;
+      }
+
+      // Bullet / Numbered Lists
+      if (/^[\-*]\s+/.test(line.trim()) || /^\d+\.\s+/.test(line.trim())) {
+        const listItems = [];
+        while (i < lines.length && (/^[\-*]\s+/.test(lines[i].trim()) || /^\d+\.\s+/.test(lines[i].trim()))) {
+          const itemContent = lines[i].trim().replace(/^([\-*]|\d+\.)\s+/, "");
+          listItems.push(itemContent);
+          i++;
+        }
+        blocks.push(
+          <ul
+            key={`ul-${blockKey}-${i}`}
+            style={{
+              margin: "6px 0 10px 0",
+              paddingLeft: "18px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "4px",
+            }}
+          >
+            {listItems.map((itemStr, itemIdx) => (
+              <li key={itemIdx} style={{ fontSize: "13.5px", color: "var(--color-charcoal-stone)", lineHeight: 1.5 }}>
+                {renderInlineMarkdown(itemStr)}
+              </li>
+            ))}
+          </ul>
+        );
+        continue;
+      }
+
+      // Paragraph text
+      if (line.trim() !== "") {
+        blocks.push(
+          <div key={`p-${blockKey}-${i}`} style={{ fontSize: "14px", lineHeight: "1.55", color: "var(--color-ink-black)", marginBottom: "4px" }}>
+            {renderInlineMarkdown(line)}
+          </div>
+        );
+      } else {
+        blocks.push(<div key={`space-${blockKey}-${i}`} style={{ height: "4px" }} />);
+      }
+
+      i++;
+    }
+
+    return blocks;
   };
 
   const renderMessageContent = (content) => {
@@ -310,16 +566,9 @@ export default function ChatWidget({ searchOpen }) {
 
     while ((match = codeBlockRegex.exec(content)) !== null) {
       if (match.index > lastIndex) {
-        parts.push({
-          type: "text",
-          value: content.substring(lastIndex, match.index),
-        });
+        parts.push({ type: "text", value: content.substring(lastIndex, match.index) });
       }
-      parts.push({
-        type: "code",
-        lang: match[1] || "code",
-        value: match[2].trim(),
-      });
+      parts.push({ type: "code", lang: match[1] || "code", value: match[2].trim() });
       lastIndex = match.index + match[0].length;
     }
 
@@ -329,18 +578,7 @@ export default function ChatWidget({ searchOpen }) {
 
     return parts.map((part, i) => {
       if (part.type === "text") {
-        return (
-          <div
-            key={i}
-            style={{
-              whiteSpace: "pre-wrap",
-              fontSize: "14px",
-              lineHeight: "1.5",
-            }}
-          >
-            {part.value}
-          </div>
-        );
+        return <div key={i}>{renderFormattedBlocks(part.value, i)}</div>;
       } else {
         return renderCodeCardBlock(part.lang, part.value, i);
       }
@@ -482,14 +720,7 @@ export default function ChatWidget({ searchOpen }) {
                   maxWidth: "280px",
                 }}
               >
-                <span
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 500,
-                    fontFamily: "var(--font-nunito-sans)",
-                    lineHeight: 1.4,
-                  }}
-                >
+                <span style={{ fontSize: 13, fontWeight: 500, fontFamily: "var(--font-nunito-sans)", lineHeight: 1.4 }}>
                   {bubbleText}
                 </span>
                 <button
@@ -531,8 +762,7 @@ export default function ChatWidget({ searchOpen }) {
               borderRadius: "50%",
               background: "linear-gradient(135deg, #f472b6 0%, #b26bf5 100%)",
               border: "3px solid #ffffff",
-              boxShadow:
-                "0 8px 24px rgba(244, 114, 182, 0.55), 0 0 20px rgba(178, 107, 245, 0.45)",
+              boxShadow: "0 8px 24px rgba(244, 114, 182, 0.55), 0 0 20px rgba(178, 107, 245, 0.45)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -569,8 +799,7 @@ export default function ChatWidget({ searchOpen }) {
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              boxShadow:
-                "0 20px 50px rgba(0, 0, 0, 0.12), 0 0 30px rgba(244, 114, 182, 0.15)",
+              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.12), 0 0 30px rgba(244, 114, 182, 0.15)",
               backgroundColor: "#fcf8fd",
               backgroundImage: `
                 radial-gradient(circle at 10% 10%, rgba(244, 114, 182, 0.10) 0%, transparent 40%),
@@ -597,61 +826,28 @@ export default function ChatWidget({ searchOpen }) {
               }}
             >
               {/* Background Drifting Clouds */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  pointerEvents: "none",
-                  opacity: 0.4,
-                }}
-              >
+              <div style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.4 }}>
                 <motion.div
                   animate={{ x: [-15, 15, -15] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 12,
-                    ease: "easeInOut",
-                  }}
+                  transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
                   style={{ position: "absolute", top: "4px", left: "20%" }}
                 >
-                  <svg
-                    width="60"
-                    height="25"
-                    viewBox="0 0 60 25"
-                    fill="#ffffff"
-                  >
+                  <svg width="60" height="25" viewBox="0 0 60 25" fill="#ffffff">
                     <path d="M 5 20 C 0 20, 0 10, 8 8 C 12 2, 22 2, 28 8 C 34 2, 44 2, 48 8 C 55 10, 55 20, 50 20 Z" />
                   </svg>
                 </motion.div>
                 <motion.div
                   animate={{ x: [15, -15, 15] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 15,
-                    ease: "easeInOut",
-                  }}
+                  transition={{ repeat: Infinity, duration: 15, ease: "easeInOut" }}
                   style={{ position: "absolute", top: "10px", right: "15%" }}
                 >
-                  <svg
-                    width="70"
-                    height="28"
-                    viewBox="0 0 70 28"
-                    fill="#ffffff"
-                  >
+                  <svg width="70" height="28" viewBox="0 0 70 28" fill="#ffffff">
                     <path d="M 6 22 C 0 22, 0 12, 10 10 C 15 3, 28 3, 34 10 C 42 3, 52 3, 58 10 C 66 12, 66 22, 60 22 Z" />
                   </svg>
                 </motion.div>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  position: "relative",
-                  zIndex: 2,
-                }}
-              >
+              <div style={{ display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 2 }}>
                 {/* Robot Avatar Badge */}
                 <img
                   src="/chatbot_avatar.png"
@@ -674,33 +870,52 @@ export default function ChatWidget({ searchOpen }) {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  {token === "flashonn"
-                    ? "FLASH - ACTIVE ⚡"
-                    : "FLASH - LOCKED 🔒"}
+                  {token === "flashonn" ? "FLASH - ACTIVE ⚡" : "FLASH - LOCKED 🔒"}
                 </span>
               </div>
 
-              <button
-                onClick={() => setIsOpen(false)}
-                style={{
-                  background: "rgba(0, 0, 0, 0.05)",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: "28px",
-                  height: "28px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  color: "var(--color-charcoal-stone)",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  position: "relative",
-                  zIndex: 2,
-                }}
-              >
-                ✕
-              </button>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, position: "relative", zIndex: 2 }}>
+                <button
+                  onClick={handleExportChat}
+                  title="Copy Full Chat Transcript"
+                  style={{
+                    background: "rgba(0, 0, 0, 0.05)",
+                    border: "none",
+                    borderRadius: "10px",
+                    padding: "4px 10px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    cursor: "pointer",
+                    color: "var(--color-charcoal-stone)",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    fontFamily: "var(--font-nunito-sans)",
+                  }}
+                >
+                  📋 Export
+                </button>
+
+                <button
+                  onClick={handleCloseModal}
+                  style={{
+                    background: "rgba(0, 0, 0, 0.05)",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: "28px",
+                    height: "28px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    color: "var(--color-charcoal-stone)",
+                    fontSize: 14,
+                    fontWeight: 600,
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
             {/* Message History Body */}
@@ -714,46 +929,106 @@ export default function ChatWidget({ searchOpen }) {
                 gap: 14,
               }}
             >
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    justifyContent:
-                      msg.role === "user" ? "flex-end" : "flex-start",
-                  }}
-                >
+              {messages.map((msg, index) => {
+                const chips = msg.role === "assistant" ? extractGpuActionChips(msg.content) : [];
+                return (
                   <div
+                    key={index}
                     style={{
-                      maxWidth: "88%",
-                      padding: msg.role === "user" ? "10px 18px" : "14px 16px",
-                      borderRadius: msg.role === "user" ? "20px" : "18px",
-                      backgroundColor:
-                        msg.role === "user" ? "#b26bf5" : "#ffffff",
-                      background:
-                        msg.role === "user"
-                          ? "linear-gradient(135deg, #b26bf5 0%, #ec4899 100%)"
-                          : "#ffffff",
-                      color:
-                        msg.role === "user"
-                          ? "#ffffff"
-                          : "var(--color-ink-black)",
-                      border:
-                        msg.role === "user"
-                          ? "none"
-                          : "1px solid rgba(216, 214, 206, 0.7)",
-                      boxShadow:
-                        msg.role === "user"
-                          ? "0 4px 14px rgba(178, 107, 245, 0.35)"
-                          : "0 4px 16px rgba(0, 0, 0, 0.04)",
-                      fontSize: "14px",
-                      lineHeight: "1.5",
+                      display: "flex",
+                      justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
                     }}
                   >
-                    {renderMessageContent(msg.content)}
+                    <div
+                      style={{
+                        maxWidth: msg.role === "user" ? "82%" : "96%",
+                        padding: msg.role === "user" ? "10px 18px" : "14px 16px",
+                        borderRadius: msg.role === "user" ? "20px" : "18px",
+                        backgroundColor:
+                          msg.role === "user"
+                            ? "#b26bf5"
+                            : "#ffffff",
+                        background:
+                          msg.role === "user"
+                            ? "linear-gradient(135deg, #b26bf5 0%, #ec4899 100%)"
+                            : "#ffffff",
+                        color: msg.role === "user" ? "#ffffff" : "var(--color-ink-black)",
+                        border:
+                          msg.role === "user"
+                            ? "none"
+                            : "1px solid rgba(216, 214, 206, 0.7)",
+                        boxShadow:
+                          msg.role === "user"
+                            ? "0 4px 14px rgba(178, 107, 245, 0.35)"
+                            : "0 4px 16px rgba(0, 0, 0, 0.04)",
+                        fontSize: "14px",
+                        lineHeight: "1.5",
+                      }}
+                    >
+                      {renderMessageContent(msg.content)}
+
+                      {/* Interactive Smart Action Chips for Hardware Mentioned in Response */}
+                      {chips.length > 0 && onSelectCard && (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: 6,
+                            flexWrap: "wrap",
+                            marginTop: 12,
+                            paddingTop: 10,
+                            borderTop: "1px stroke rgba(178, 107, 245, 0.2)",
+                          }}
+                        >
+                          {chips.map((chip) => (
+                            <button
+                              key={chip.id}
+                              onClick={() => {
+                                recordUserActivity();
+                                onSelectCard({
+                                  category: "cloud",
+                                  gpu: chip.name,
+                                  name: chip.name,
+                                  arch: "Hardware Architecture",
+                                  vram: "High VRAM",
+                                  bandwidth: "High Bandwidth",
+                                  tgp: "350W-700W",
+                                  onDemandUsd: 2.39,
+                                });
+                              }}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 4,
+                                padding: "4px 10px",
+                                borderRadius: "9999px",
+                                border: "1px solid var(--color-sand-gray)",
+                                backgroundColor: "var(--color-parchment-cream)",
+                                color: "var(--color-ink-black)",
+                                fontSize: 11,
+                                fontWeight: 600,
+                                fontFamily: "var(--font-mono)",
+                                cursor: "pointer",
+                                boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
+                                transition: "all 0.15s ease",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = "var(--color-lilac-mist)";
+                                e.currentTarget.style.borderColor = "var(--color-electric-violet)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = "var(--color-parchment-cream)";
+                                e.currentTarget.style.borderColor = "var(--color-sand-gray)";
+                              }}
+                            >
+                              ✦ View {chip.name} Specs ↗
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {loading && (
                 <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -786,20 +1061,10 @@ export default function ChatWidget({ searchOpen }) {
                   gap: 8,
                 }}
               >
-                <span
-                  className="caption-text"
-                  style={{
-                    fontWeight: 700,
-                    color: "var(--color-charcoal-stone)",
-                    fontSize: "11px",
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <span className="caption-text" style={{ fontWeight: 700, color: "var(--color-charcoal-stone)", fontSize: "11px", letterSpacing: "0.05em" }}>
                   SUGGESTED QUERIES
                 </span>
-                <div
-                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
-                >
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {SUGGESTIONS.map((s, idx) => (
                     <motion.button
                       key={idx}
@@ -844,23 +1109,13 @@ export default function ChatWidget({ searchOpen }) {
                   backgroundColor: "#ffffff",
                   borderRadius: "9999px",
                   padding: "6px 8px 6px 16px",
-                  border: isListening
-                    ? "1.5px solid #ec4899"
-                    : "1px solid rgba(178, 107, 245, 0.3)",
-                  boxShadow: isListening
-                    ? "0 0 16px rgba(236, 72, 153, 0.35)"
-                    : "0 6px 20px rgba(0, 0, 0, 0.06)",
+                  border: isListening ? "1.5px solid #ec4899" : "1px solid rgba(178, 107, 245, 0.3)",
+                  boxShadow: isListening ? "0 0 16px rgba(236, 72, 153, 0.35)" : "0 6px 20px rgba(0, 0, 0, 0.06)",
                   transition: "all 0.2s ease",
                 }}
               >
                 {/* Left Attachment Icon */}
-                <span
-                  style={{
-                    color: "var(--color-ash-gray)",
-                    fontSize: "16px",
-                    cursor: "pointer",
-                  }}
-                >
+                <span style={{ color: "var(--color-ash-gray)", fontSize: "16px", cursor: "pointer" }}>
                   📎
                 </span>
 
@@ -870,8 +1125,8 @@ export default function ChatWidget({ searchOpen }) {
                     isListening
                       ? "Listening... speak now..."
                       : token === "flashonn"
-                        ? "Type your prompt here..."
-                        : "Enter password..."
+                      ? "Type your prompt here..."
+                      : "Enter password..."
                   }
                   value={input}
                   onChange={(e) => {
@@ -896,22 +1151,14 @@ export default function ChatWidget({ searchOpen }) {
                 <motion.button
                   onClick={toggleVoiceRecognition}
                   animate={isListening ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-                  transition={
-                    isListening ? { repeat: Infinity, duration: 1 } : {}
-                  }
-                  title={
-                    isListening
-                      ? "Click to stop listening"
-                      : "Click for voice input"
-                  }
+                  transition={isListening ? { repeat: Infinity, duration: 1 } : {}}
+                  title={isListening ? "Click to stop listening" : "Click for voice input"}
                   style={{
                     width: "34px",
                     height: "34px",
                     borderRadius: "50%",
                     border: "none",
-                    backgroundColor: isListening
-                      ? "#ef4444"
-                      : "rgba(178, 107, 245, 0.12)",
+                    backgroundColor: isListening ? "#ef4444" : "rgba(178, 107, 245, 0.12)",
                     color: isListening ? "#ffffff" : "#b26bf5",
                     display: "flex",
                     alignItems: "center",
@@ -919,9 +1166,7 @@ export default function ChatWidget({ searchOpen }) {
                     cursor: "pointer",
                     fontSize: "15px",
                     transition: "all 0.15s ease",
-                    boxShadow: isListening
-                      ? "0 2px 10px rgba(239, 68, 68, 0.4)"
-                      : "none",
+                    boxShadow: isListening ? "0 2px 10px rgba(239, 68, 68, 0.4)" : "none",
                   }}
                 >
                   🎙️
@@ -936,14 +1181,12 @@ export default function ChatWidget({ searchOpen }) {
                     height: "36px",
                     borderRadius: "50%",
                     border: "none",
-                    background:
-                      "linear-gradient(135deg, #b26bf5 0%, #ec4899 100%)",
+                    background: "linear-gradient(135deg, #b26bf5 0%, #ec4899 100%)",
                     color: "#ffffff",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    cursor:
-                      loading || !input.trim() ? "not-allowed" : "pointer",
+                    cursor: loading || !input.trim() ? "not-allowed" : "pointer",
                     opacity: loading || !input.trim() ? 0.5 : 1,
                     fontSize: "16px",
                     boxShadow: "0 3px 12px rgba(236, 72, 153, 0.4)",

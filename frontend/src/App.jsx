@@ -19,6 +19,11 @@ import DetailModal from "./components/DetailModal";
 import CompareModal from "./components/CompareModal";
 import ChatWidget from "./components/ChatWidget";
 import GpuSplashScreen from "./components/GpuSplashScreen";
+import VramSimulator from "./components/VramSimulator";
+import BandwidthSpeedSimulator from "./components/BandwidthSpeedSimulator";
+import RigBuilder from "./components/RigBuilder";
+import SpotArbitrageRadar from "./components/SpotArbitrageRadar";
+import ProposalGenerator from "./components/ProposalGenerator";
 import "./index.css";
 
 function SiliconLandscape() {
@@ -38,121 +43,54 @@ function SiliconLandscape() {
           trigger: containerRef.current,
           start: "top 80%",
         },
-      },
+      }
     );
   }, []);
 
   return (
-    <section
-      ref={containerRef}
-      id="landscape"
-      className="section-spacing bg-parchment"
-    >
+    <section ref={containerRef} id="landscape" className="section-spacing bg-parchment">
       <div className="section-container">
+        
         {/* Section Header */}
         <div style={{ marginBottom: "48px" }} className="animate-slide-up">
-          <span
-            className="pill-tag pill-tag-violet"
-            style={{ marginBottom: "12px" }}
-          >
+          <span className="pill-tag pill-tag-violet" style={{ marginBottom: "12px" }}>
             ✦ SILICON ARCHITECTURE
           </span>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "36px",
-              alignItems: "flex-start",
-              marginTop: "8px",
-            }}
-          >
-            <h2
-              className="heading-lg"
-              style={{ color: "var(--color-ink-black)" }}
-            >
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "36px", alignItems: "flex-start", marginTop: "8px" }}>
+            <h2 className="heading-lg" style={{ color: "var(--color-ink-black)" }}>
               The Silicon Landscape
             </h2>
             <div>
-              <p
-                className="subheading"
-                style={{ fontSize: "18px", lineHeight: 1.5 }}
-              >
-                LLM throughput is memory bandwidth-bound. The transition to
-                Blackwell and Hopper architectures represents a tectonic shift.
+              <p className="subheading" style={{ fontSize: "18px", lineHeight: 1.5 }}>
+                LLM throughput is memory bandwidth-bound. The transition to Blackwell and Hopper architectures represents a tectonic shift.
               </p>
             </div>
           </div>
         </div>
 
-        <div
-          className="grid-2col animate-slide-up"
-          style={{
-            alignItems: "flex-start",
-            gap: "24px",
-            marginBottom: "48px",
-          }}
-        >
+        <div className="grid-2col animate-slide-up" style={{ alignItems: "flex-start", gap: "24px", marginBottom: "48px" }}>
           <div>
             <BandwidthChart />
           </div>
 
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div className="card-paper-white">
-              <div className="caption-text" style={{ marginBottom: "6px" }}>
-                PARADOX ANALYSIS // BLACKWELL
-              </div>
-              <h4
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "700",
-                  fontFamily: "var(--font-nunito-sans)",
-                  color: "var(--color-ink-black)",
-                  marginBottom: "8px",
-                }}
-              >
+              <div className="caption-text" style={{ marginBottom: "6px" }}>PARADOX ANALYSIS // BLACKWELL</div>
+              <h4 style={{ fontSize: "20px", fontWeight: "700", fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)", marginBottom: "8px" }}>
                 The Blackwell Paradox
               </h4>
-              <p
-                style={{
-                  fontSize: "15px",
-                  color: "var(--color-charcoal-stone)",
-                  lineHeight: 1.5,
-                }}
-              >
-                The RTX 5090 is a consumer marvel with 1.79 TB/s bandwidth.
-                However, it completely lacks NVLink and ECC memory — perfect for
-                localized QLoRA fine-tuning but creates severe latency penalties
-                for massive distributed training.
+              <p style={{ fontSize: "15px", color: "var(--color-charcoal-stone)", lineHeight: 1.5 }}>
+                The RTX 5090 is a consumer marvel with 1.79 TB/s bandwidth. However, it completely lacks NVLink and ECC memory — perfect for localized QLoRA fine-tuning but creates severe latency penalties for massive distributed training.
               </p>
             </div>
 
             <div className="card-paper-white">
-              <div className="caption-text" style={{ marginBottom: "6px" }}>
-                ENTERPRISE SCALING // HOPPER
-              </div>
-              <h4
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "700",
-                  fontFamily: "var(--font-nunito-sans)",
-                  color: "var(--color-ink-black)",
-                  marginBottom: "8px",
-                }}
-              >
+              <div className="caption-text" style={{ marginBottom: "6px" }}>ENTERPRISE SCALING // HOPPER</div>
+              <h4 style={{ fontSize: "20px", fontWeight: "700", fontFamily: "var(--font-nunito-sans)", color: "var(--color-ink-black)", marginBottom: "8px" }}>
                 Hopper Maturity
               </h4>
-              <p
-                style={{
-                  fontSize: "15px",
-                  color: "var(--color-charcoal-stone)",
-                  lineHeight: 1.5,
-                }}
-              >
-                The H200 addresses H100 bottlenecks with 141 GB of HBM3e. By
-                fitting entire 400B parameter models on fewer nodes, it
-                drastically reduces tensor parallel communication overhead.
+              <p style={{ fontSize: "15px", color: "var(--color-charcoal-stone)", lineHeight: 1.5 }}>
+                The H200 addresses H100 bottlenecks with 141 GB of HBM3e. By fitting entire 400B parameter models on fewer nodes, it drastically reduces tensor parallel communication overhead.
               </p>
             </div>
           </div>
@@ -160,6 +98,7 @@ function SiliconLandscape() {
 
         {/* Rainbow Accent Telemetry Grid */}
         <BentoTelemetryGrid />
+
       </div>
     </section>
   );
@@ -167,15 +106,13 @@ function SiliconLandscape() {
 
 function Footer() {
   return (
-    <footer
-      style={{
-        background: "linear-gradient(180deg, #fdf8fd 0%, #f4eff8 100%)",
-        color: "var(--color-charcoal-stone)",
-        padding: "64px 0 80px",
-        textAlign: "center",
-        borderTop: "1px solid rgba(178, 107, 245, 0.2)",
-      }}
-    >
+    <footer style={{
+      background: "linear-gradient(180deg, #fdf8fd 0%, #f4eff8 100%)",
+      color: "var(--color-charcoal-stone)",
+      padding: "64px 0 80px",
+      textAlign: "center",
+      borderTop: "1px solid rgba(178, 107, 245, 0.2)",
+    }}>
       <div className="section-container">
         <img
           src="/logo_choice_3.png"
@@ -190,35 +127,15 @@ function Footer() {
           }}
         />
 
-        <p
-          style={{
-            fontSize: 18,
-            fontWeight: 700,
-            color: "var(--color-ink-black)",
-            fontFamily: "var(--font-nunito-sans)",
-          }}
-        >
+        <p style={{ fontSize: 18, fontWeight: 700, color: "var(--color-ink-black)", fontFamily: "var(--font-nunito-sans)" }}>
           GPU Scout
         </p>
-        <p
-          style={{ fontSize: 14, color: "var(--color-ash-gray)", marginTop: 4 }}
-        >
+        <p style={{ fontSize: 14, color: "var(--color-ash-gray)", marginTop: 4 }}>
           Powered by GPU Scout
         </p>
 
-        <div
-          style={{
-            marginTop: 20,
-            display: "flex",
-            justifyContent: "center",
-            gap: 16,
-          }}
-        >
-          <a
-            href="#hero"
-            className="btn-outlined-violet"
-            style={{ textDecoration: "none", height: "36px", fontSize: "13px" }}
-          >
+        <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 16 }}>
+          <a href="#hero" className="btn-outlined-violet" style={{ textDecoration: "none", height: "36px", fontSize: "13px" }}>
             Back to top ↑
           </a>
         </div>
@@ -236,6 +153,10 @@ export default function App() {
   const [ratesOpen, setRatesOpen] = useState(false);
   const [accessOpen, setAccessOpen] = useState(false);
   const [storyOpen, setStoryOpen] = useState(false);
+  
+  // Chatbot modal state
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatInitialQuery, setChatInitialQuery] = useState("");
 
   // Selected detail overlay and compare list states
   const [selectedItem, setSelectedItem] = useState(null);
@@ -251,6 +172,15 @@ export default function App() {
   const handleRatesOpen = useCallback(() => setRatesOpen(true), []);
   const handleAccessOpen = useCallback(() => setAccessOpen(true), []);
   const handleStoryOpen = useCallback(() => setStoryOpen(true), []);
+
+  const handleChatOpen = useCallback((query = "") => {
+    setChatInitialQuery(query);
+    setChatOpen(true);
+  }, []);
+
+  const handleChatClose = useCallback(() => {
+    setChatOpen(false);
+  }, []);
 
   const handleRevealPlatform = useCallback(() => {
     setShowFullPlatform(true);
@@ -277,14 +207,7 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "var(--color-parchment-cream)",
-        color: "var(--color-ink-black)",
-        minHeight: "100vh",
-        position: "relative",
-      }}
-    >
+    <div style={{ backgroundColor: "var(--color-parchment-cream)", color: "var(--color-ink-black)", minHeight: "100vh", position: "relative" }}>
       {showSplash && <GpuSplashScreen onComplete={handleSplashComplete} />}
 
       <NavigationHeader
@@ -306,17 +229,27 @@ export default function App() {
             <ThinkingPartnerSection
               onSearchOpen={handleSearchOpen}
               onRatesOpen={handleRatesOpen}
+              onChatOpen={handleChatOpen}
             />
 
             <SiliconLandscape />
-
+            
             <DeploymentTabs
               onSelectCard={setSelectedItem}
               compareList={compareList}
               onToggleCompare={handleToggleCompare}
             />
 
+            <SpotArbitrageRadar onRatesOpen={handleRatesOpen} />
+            
+            <VramSimulator />
+
+            <BandwidthSpeedSimulator />
+
+            <RigBuilder />
+
             <TcoAnalysis />
+            <ProposalGenerator />
             <StrategicDirectives />
           </main>
 
@@ -330,7 +263,10 @@ export default function App() {
         onSelectCard={setSelectedItem}
       />
 
-      <GpuRatesModal isOpen={ratesOpen} onClose={() => setRatesOpen(false)} />
+      <GpuRatesModal
+        isOpen={ratesOpen}
+        onClose={() => setRatesOpen(false)}
+      />
 
       <GetAccessModal
         isOpen={accessOpen}
@@ -359,14 +295,7 @@ export default function App() {
           <button
             className="btn-outlined-violet"
             onClick={() => setCompareList([])}
-            style={{
-              padding: "0 12px",
-              height: "32px",
-              fontSize: 13,
-              backgroundColor: "transparent",
-              color: "var(--color-paper-white)",
-              borderColor: "rgba(255,255,255,0.4)",
-            }}
+            style={{ padding: "0 12px", height: "32px", fontSize: 13, backgroundColor: "transparent", color: "var(--color-paper-white)", borderColor: "rgba(255,255,255,0.4)" }}
           >
             Clear
           </button>
@@ -387,7 +316,13 @@ export default function App() {
         />
       )}
 
-      <ChatWidget searchOpen={searchOpen} />
+      <ChatWidget
+        searchOpen={searchOpen}
+        isOpenExternal={chatOpen}
+        onCloseExternal={handleChatClose}
+        initialPrompt={chatInitialQuery}
+        onSelectCard={setSelectedItem}
+      />
     </div>
   );
 }
