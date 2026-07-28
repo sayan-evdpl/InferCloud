@@ -32,29 +32,12 @@ export default function LandingFooter({ onExplorePlatform }) {
           }}
         />
 
-        <h4
-          style={{
-            fontSize: 20,
-            fontWeight: 700,
-            color: "var(--color-ink-black)",
-            fontFamily: "var(--font-nunito-sans)",
-            margin: "0 0 6px 0",
-          }}
-        >
+        <h4 style={{ fontSize: 20, fontWeight: 700, color: "var(--color-ink-black)", fontFamily: "var(--font-nunito-sans)", margin: "0 0 6px 0" }}>
           GPU Scout
         </h4>
 
-        <p
-          style={{
-            fontSize: 14,
-            color: "var(--color-charcoal-stone)",
-            maxWidth: 480,
-            margin: "0 auto 24px auto",
-            lineHeight: 1.5,
-          }}
-        >
-          Managed AI infrastructure telemetry, memory bandwidth analysis, and
-          real-time cloud spot rate intelligence.
+        <p style={{ fontSize: 14, color: "var(--color-charcoal-stone)", maxWidth: 480, margin: "0 auto 24px auto", lineHeight: 1.5 }}>
+          Managed AI infrastructure telemetry, memory bandwidth analysis, and real-time cloud spot rate intelligence.
         </p>
 
         {/* Prominent Explore Platform Button */}
@@ -74,13 +57,7 @@ export default function LandingFooter({ onExplorePlatform }) {
           </button>
         </div>
 
-        <div
-          style={{
-            marginTop: 32,
-            fontSize: 13,
-            color: "var(--color-ash-gray)",
-          }}
-        >
+        <div style={{ marginTop: 32, fontSize: 13, color: "var(--color-ash-gray)" }}>
           Powered by GPU Scout
         </div>
       </div>

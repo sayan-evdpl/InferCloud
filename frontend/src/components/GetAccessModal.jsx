@@ -15,7 +15,7 @@ export default function GetAccessModal({ isOpen, onClose }) {
     e.preventDefault();
     if (!email) return;
     const randomHex = Array.from({ length: 16 }, () =>
-      Math.floor(Math.random() * 16).toString(16),
+      Math.floor(Math.random() * 16).toString(16)
     ).join("");
     setGeneratedKey(`gpuscout_sk_live_${randomHex}`);
   };
@@ -28,62 +28,26 @@ export default function GetAccessModal({ isOpen, onClose }) {
   };
 
   return (
-    <div
-      className="modal-overlay"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+    <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <motion.div
         className="modal-content-passionfroot"
-        style={{
-          maxWidth: 760,
-          padding: 36,
-          backgroundColor: "var(--color-paper-white)",
-          borderRadius: "var(--radius-large-cards)",
-        }}
+        style={{ maxWidth: 760, padding: 36, backgroundColor: "var(--color-paper-white)", borderRadius: "var(--radius-large-cards)" }}
         initial={{ scale: 0.96, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.96, opacity: 0 }}
         transition={{ duration: 0.2 }}
       >
         {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: 24,
-          }}
-        >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
           <div>
-            <span
-              className="pill-tag pill-tag-violet"
-              style={{ marginBottom: 10 }}
-            >
+            <span className="pill-tag pill-tag-violet" style={{ marginBottom: 10 }}>
               ✦ ACCESS PORTAL & API KEYS
             </span>
-            <h2
-              style={{
-                fontFamily: "var(--font-new-kansas)",
-                fontSize: 32,
-                fontWeight: 400,
-                color: "var(--color-ink-black)",
-                margin: "6px 0 6px 0",
-              }}
-            >
+            <h2 style={{ fontFamily: "var(--font-new-kansas)", fontSize: 32, fontWeight: 400, color: "var(--color-ink-black)", margin: "6px 0 6px 0" }}>
               Get Access to GPU Scout
             </h2>
-            <p
-              style={{
-                fontSize: 15,
-                color: "var(--color-charcoal-stone)",
-                maxWidth: 520,
-                lineHeight: 1.45,
-              }}
-            >
-              Provision live telemetry feeds, real-time spot pricing APIs, and
-              TCO breakeven models for your engineering team.
+            <p style={{ fontSize: 15, color: "var(--color-charcoal-stone)", maxWidth: 520, lineHeight: 1.45 }}>
+              Provision live telemetry feeds, real-time spot pricing APIs, and TCO breakeven models for your engineering team.
             </p>
           </div>
 
@@ -116,38 +80,14 @@ export default function GetAccessModal({ isOpen, onClose }) {
                 marginBottom: 24,
               }}
             >
-              <div
-                className="pill-tag"
-                style={{
-                  backgroundColor: "var(--color-mint-wash)",
-                  color: "var(--color-forest-green)",
-                  border: "none",
-                  marginBottom: 12,
-                }}
-              >
+              <div className="pill-tag" style={{ backgroundColor: "var(--color-mint-wash)", color: "var(--color-forest-green)", border: "none", marginBottom: 12 }}>
                 ✓ API KEY GENERATED SUCCESSFULLY
               </div>
-              <h4
-                style={{
-                  fontSize: 18,
-                  fontWeight: 700,
-                  color: "var(--color-ink-black)",
-                  marginBottom: 8,
-                }}
-              >
+              <h4 style={{ fontSize: 18, fontWeight: 700, color: "var(--color-ink-black)", marginBottom: 8 }}>
                 Your Live API Token
               </h4>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "var(--color-charcoal-stone)",
-                  marginBottom: 14,
-                }}
-              >
-                Keep this key secret. Use it in your Authorization header:{" "}
-                <code style={{ fontFamily: "var(--font-mono)", fontSize: 12 }}>
-                  Bearer gpuscout_sk_live_...
-                </code>
+              <p style={{ fontSize: 13, color: "var(--color-charcoal-stone)", marginBottom: 14 }}>
+                Keep this key secret. Use it in your Authorization header: <code style={{ fontFamily: "var(--font-mono)", fontSize: 12 }}>Bearer gpuscout_sk_live_...</code>
               </p>
 
               <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -166,11 +106,7 @@ export default function GetAccessModal({ isOpen, onClose }) {
                     color: "var(--color-ink-black)",
                   }}
                 />
-                <button
-                  className="btn-filled-dark"
-                  onClick={handleCopy}
-                  style={{ height: "40px", fontSize: "13px" }}
-                >
+                <button className="btn-filled-dark" onClick={handleCopy} style={{ height: "40px", fontSize: "13px" }}>
                   {copied ? "Copied! ✓" : "Copy key"}
                 </button>
               </div>
@@ -180,33 +116,14 @@ export default function GetAccessModal({ isOpen, onClose }) {
 
         {/* Tier Selector Grid */}
         <div style={{ marginBottom: 24 }}>
-          <label
-            className="caption-text"
-            style={{ fontWeight: 600, display: "block", marginBottom: 10 }}
-          >
+          <label className="caption-text" style={{ fontWeight: 600, display: "block", marginBottom: 10 }}>
             SELECT ACCESS TIER
           </label>
           <div className="grid-3col" style={{ gap: 14 }}>
             {[
-              {
-                id: "free",
-                title: "Developer",
-                price: "Free",
-                desc: "500 daily API calls & live telemetry",
-              },
-              {
-                id: "pro",
-                title: "Pro Analyst",
-                price: "$49/mo",
-                desc: "Unlimited spot APIs & TCO exports",
-                popular: true,
-              },
-              {
-                id: "enterprise",
-                title: "Enterprise",
-                price: "Custom",
-                desc: "Dedicated clusters & SLA guarantees",
-              },
+              { id: "free", title: "Developer", price: "Free", desc: "500 daily API calls & live telemetry" },
+              { id: "pro", title: "Pro Analyst", price: "$49/mo", desc: "Unlimited spot APIs & TCO exports", popular: true },
+              { id: "enterprise", title: "Enterprise", price: "Custom", desc: "Dedicated clusters & SLA guarantees" },
             ].map((tier) => (
               <div
                 key={tier.id}
@@ -215,55 +132,19 @@ export default function GetAccessModal({ isOpen, onClose }) {
                 style={{
                   padding: 16,
                   cursor: "pointer",
-                  border:
-                    selectedTier === tier.id
-                      ? "2px solid var(--color-electric-violet)"
-                      : "1px solid var(--color-sand-gray)",
-                  backgroundColor:
-                    selectedTier === tier.id
-                      ? "var(--color-lilac-mist)"
-                      : "var(--color-paper-white)",
+                  border: selectedTier === tier.id ? "2px solid var(--color-electric-violet)" : "1px solid var(--color-sand-gray)",
+                  backgroundColor: selectedTier === tier.id ? "var(--color-lilac-mist)" : "var(--color-paper-white)",
                   position: "relative",
                 }}
               >
                 {tier.popular && (
-                  <span
-                    className="pill-tag pill-tag-violet"
-                    style={{
-                      fontSize: 10,
-                      position: "absolute",
-                      top: 10,
-                      right: 10,
-                      padding: "2px 8px",
-                    }}
-                  >
+                  <span className="pill-tag pill-tag-violet" style={{ fontSize: 10, position: "absolute", top: 10, right: 10, padding: "2px 8px" }}>
                     RECOMMENDED
                   </span>
                 )}
-                <div
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: "var(--color-ink-black)",
-                  }}
-                >
-                  {tier.title}
-                </div>
-                <div
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 700,
-                    color: "var(--color-electric-violet)",
-                    margin: "4px 0",
-                  }}
-                >
-                  {tier.price}
-                </div>
-                <div
-                  style={{ fontSize: 12, color: "var(--color-charcoal-stone)" }}
-                >
-                  {tier.desc}
-                </div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: "var(--color-ink-black)" }}>{tier.title}</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: "var(--color-electric-violet)", margin: "4px 0" }}>{tier.price}</div>
+                <div style={{ fontSize: 12, color: "var(--color-charcoal-stone)" }}>{tier.desc}</div>
               </div>
             ))}
           </div>
@@ -272,10 +153,7 @@ export default function GetAccessModal({ isOpen, onClose }) {
         {/* Form Fields */}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 20 }}>
-            <label
-              className="caption-text"
-              style={{ fontWeight: 600, display: "block", marginBottom: 8 }}
-            >
+            <label className="caption-text" style={{ fontWeight: 600, display: "block", marginBottom: 8 }}>
               WORKLOAD INTENT
             </label>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -289,11 +167,7 @@ export default function GetAccessModal({ isOpen, onClose }) {
                   type="button"
                   key={w.id}
                   onClick={() => setWorkload(w.id)}
-                  className={
-                    workload === w.id
-                      ? "btn-filled-dark"
-                      : "btn-outlined-violet"
-                  }
+                  className={workload === w.id ? "btn-filled-dark" : "btn-outlined-violet"}
                   style={{ height: 34, fontSize: 12, padding: "0 14px" }}
                 >
                   {w.label}
@@ -302,19 +176,9 @@ export default function GetAccessModal({ isOpen, onClose }) {
             </div>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 16,
-              marginBottom: 28,
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }}>
             <div>
-              <label
-                className="caption-text"
-                style={{ fontWeight: 600, display: "block", marginBottom: 6 }}
-              >
+              <label className="caption-text" style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>
                 WORK EMAIL
               </label>
               <input
@@ -336,10 +200,7 @@ export default function GetAccessModal({ isOpen, onClose }) {
             </div>
 
             <div>
-              <label
-                className="caption-text"
-                style={{ fontWeight: 600, display: "block", marginBottom: 6 }}
-              >
+              <label className="caption-text" style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>
                 ESTIMATED GPUS NEEDED
               </label>
               <select
@@ -364,19 +225,10 @@ export default function GetAccessModal({ isOpen, onClose }) {
           </div>
 
           <div style={{ display: "flex", justifyContent: "flex-end", gap: 12 }}>
-            <button
-              type="button"
-              className="btn-outlined-violet"
-              onClick={onClose}
-              style={{ height: 42 }}
-            >
+            <button type="button" className="btn-outlined-violet" onClick={onClose} style={{ height: 42 }}>
               Cancel
             </button>
-            <button
-              type="submit"
-              className="btn-filled-dark"
-              style={{ height: 42, padding: "0 24px" }}
-            >
+            <button type="submit" className="btn-filled-dark" style={{ height: 42, padding: "0 24px" }}>
               Request Instant API Key →
             </button>
           </div>
